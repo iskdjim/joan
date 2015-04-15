@@ -62,6 +62,9 @@ gl_FragColor = vec4(vColor, 1.);\n\
 
   var _color = GL.getAttribLocation(SHADER_PROGRAM, "color");
   var _position = GL.getAttribLocation(SHADER_PROGRAM, "position");
+  
+  var _colorv2 = GL.getAttribLocation(SHADER_PROGRAM, "color");
+  var _positionv2 = GL.getAttribLocation(SHADER_PROGRAM, "position");
 
   GL.enableVertexAttribArray(_color);
   GL.enableVertexAttribArray(_position);
@@ -79,12 +82,28 @@ gl_FragColor = vec4(vColor, 1.);\n\
     1,1,  //top right of the viewport
     1,0,0
   ];
+  
+  var triangle_vertexv2=[
+    -1,1, //left top of the viewport
+    1,0,1,
+    1,1, // right top of the viewport
+    1,1,0,
+    -1,-1,  // left bottom of the viewport
+    1,0,0
+  ];
+  
 
-  var TRIANGLE_VERTEX= GL.createBuffer ();
+var TRIANGLE_VERTEX= GL.createBuffer ();
   GL.bindBuffer(GL.ARRAY_BUFFER, TRIANGLE_VERTEX);
   GL.bufferData(GL.ARRAY_BUFFER,
                 new Float32Array(triangle_vertex),
     GL.STATIC_DRAW);
+    
+    var TRIANGLE_VERTEXV2= GL.createBuffer ();
+  GL.bindBuffer(GL.ARRAY_BUFFER, TRIANGLE_VERTEXV2);
+  GL.bufferData(GL.ARRAY_BUFFER,
+                new Float32Array(triangle_vertexv2),
+    GL.STATIC_DRAW); 
 
   //FACES :
   var triangle_faces = [0,1,2];
@@ -108,6 +127,15 @@ gl_FragColor = vec4(vColor, 1.);\n\
 
     GL.vertexAttribPointer(_position, 2, GL.FLOAT, false,4*(2+3),0) ;
     GL.vertexAttribPointer(_color, 3, GL.FLOAT, false,4*(2+3),2*4) ;
+    
+    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, TRIANGLE_FACES);
+    GL.drawElements(GL.TRIANGLES, 3, GL.UNSIGNED_SHORT, 0);   
+     
+    GL.bindBuffer(GL.ARRAY_BUFFER, TRIANGLE_VERTEXV2);
+
+    GL.vertexAttribPointer(_position, 2, GL.FLOAT, false,4*(2+3),0) ;
+    GL.vertexAttribPointer(_color, 3, GL.FLOAT, false,4*(2+3),2*4) ;
+
 
     GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, TRIANGLE_FACES);
     GL.drawElements(GL.TRIANGLES, 3, GL.UNSIGNED_SHORT, 0);

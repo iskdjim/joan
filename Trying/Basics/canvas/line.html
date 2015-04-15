@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+
+
+</head>
+<body>
+
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+
+	var c = document.getElementById("myCanvas");
+	var context = c.getContext("2d");
+	var data_points = new Array(new Array(50, 40),new Array(150, 70),new Array(180, 60),new Array(250, 70),new Array(350, 90));
+	context.beginPath();
+	context.moveTo(50, 150);
+	var counter = 0;
+	setInterval(function(){ 
+		point = data_points[counter];
+		
+     	context.lineTo(point[0],point[1]);
+      	context.stroke();
+      	counter++;
+	},
+	1000);
+
+</script> 
+
+</body>
+</html>

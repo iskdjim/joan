@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+ 
+<head>
+<script type="text/javascript">  
+  window.onload = function(){
+      //try and create a canvas element
+      var testCanvas  = document.createElement('canvas'); 
+       
+      //check if object supports getContext() method  
+      if (testCanvas.getContext !== undefined) {
+        var canvas = document.getElementById("effectsCanvas");
+        var context = canvas.getContext("2d");
+        
+        canvas.style.border = "2px solid blue";
+        
+        var destX = 0;
+        var destY = 0;
+        var imageObj = new Image();
+     
+        imageObj.onload = function(){
+            context.drawImage(imageObj, destX, destY);
+            var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+        	var pixels  = imgData.data;
+        	for (var i = 0, n = pixels.length; i < n; i += 4) {
+            	var grayscale = pixels[i  ] * .3 + pixels[i+1] * .59 + pixels[i+2] * .11;
+            	pixels[i  ] = grayscale; 	// red
+            	pixels[i+1] = grayscale; 	// green
+            	pixels[i+2] = grayscale; 	// blue
+            	// alpha
+        	}
+        	context.putImageData(imgData, 0, 0);
+        };
+        imageObj.src = "images/winter.jpg";
+      }
+      else {
+        document.writeln('You are plum outta luck, cuz your browser does not support the canvas element.');
+      }
+  }; 
+</script> 
+</head>
+<body>
+<h1>HTML5 Canvas Effects Demo</h1>
+<canvas id="effectsCanvas" width="500" height="550" > </canvas>  
+</body>
+</html>
