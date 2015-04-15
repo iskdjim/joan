@@ -3,30 +3,42 @@
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script>
-		var points = "0 0";
+		var points = new Array("0 0");
 		var random_x = 20;
+		var counter = 0;
 		setInterval(function(){ 
-			
+				counter++;
 				var random_y = Math.floor(Math.random() * 500) + 1;
-				random_x = random_x + 20;
-				points += ","+random_x+" "+random_y;
-				jQuery('polyline').attr("points", points); 
+				random_x = random_x + 5;
+				
+				//points += ","+random_x+" "+random_y;
+				points.push(random_x+" "+random_y);
+				if(counter > 3){
+					//points.shift();
+					//console.log(jQuery('polyline').offset().left);
+					//console.log(jQuery('polyline').offset().left-20);
+				
+					//console.log(jQuery('polyline').offset().left);
+				}
+				points_string = points.join(",");
+				
+				jQuery('polyline').attr("points", points_string); 
 		
 			
 			}, 
-		1000);
+		100);
 		
 	</script>
 </head>
 <body>
 
 
-<svg width="500" height="500" top="200">
+<svg width="1500" height="500" top="200">
  
 <polyline points=""
     fill="none"
     stroke="black"
-    stroke-width="4"/>
+    stroke-width="2"/>
   </svg>  
 </body>
 </html>

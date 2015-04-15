@@ -1,25 +1,48 @@
 <?php
 
 
-$csvFile = "data/sensor_data.csv";
+$csvFile = "data/sensor_data_akt.csv";
 $handle = fopen($csvFile,"r");
-$data = array();
-while($data = fgetcsv($handle, 99, ";")){
-	echo $data[0]."<br />";
+$json_data = array();
+$counter = 0;
+$limit = $_GET['limit'];
+while($data = fgetcsv($handle, 9999, ";")){
+	$counter++;
+
+	$dataset = array("time" => $data[0], 
+					 "chanels" => 
+						array(
+							array("chanel" => "1", "value" => $data[5]),
+							array("chanel" => "2", "value" => $data[6]),
+							array("chanel" => "3", "value" => $data[7])
+						)
+					
+					);
+		
+
+	if($counter < $limit){
+		$datas[] = $dataset;	
+		//die();
+	}else{
+		$json_data = array(
+					 "data" => $datas,
+					 "start_time" => "",
+					 "end_time"	 => "",
+					 "count" => $limit,
+					 "limits" => array(
+					 				array("chanel" => "1", "min" => "", "max" => ""),
+									array("chanel" => "2", "min" => "", "max" => ""),
+									array("chanel" => "3", "min" => "", "max" => "")
+								 )
+				);
+		break;
+	}				
 }
 
-/*
-$data = array(
-			"dataset" => array(
-					"time" => "2030",
-					"kanale" => array(
-							"kanal" => "1", "value" => "some wert",
-							"kanal" => "2", "value" => "some wert",
-							"kanal" => "3", "value" => "some wert"
-							)
-			)	
-		);
- * 
- */
-echo json_encode($data);
+$json_file = fopen("data.json", "w");
+fwrite($json_file, json_encode($json_data));
+fclose($json_file);
+
+echo json_encode($json_data);
+
 ?>
