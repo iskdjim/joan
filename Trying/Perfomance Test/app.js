@@ -11,15 +11,13 @@ function getData(){
 }
     
 function getJsonData(){
-	console.log("getJsonData");
-	$(document).ready( function() {
+
+		return "sd";
 		$.getJSON( "api/data.json", function( data ) {
-			$.each(data, function(i,val){
-				console.log(val.time);
-				$('#data').append("<p>"+(i+1)+")"+val.time+"</p>");
-			});
+	
+			return "data";
 			
 		});
-	});    
+
     
 }    
