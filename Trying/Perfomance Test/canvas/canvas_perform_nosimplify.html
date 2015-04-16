@@ -10,7 +10,7 @@
         $(document).ready( function() {
         	
         		stats = stats();
-				mstats = mstats();
+				
 
 				$.getJSON( "../api/data.json", function( data ) {
 					data_count = data.count;
@@ -29,7 +29,7 @@
 						$('#linescount').html(data_count);
 						var random_limit = Math.floor(Math.random() * data_count) + 1;
 					    stats.begin();
-					    mstats.begin();
+					  
 						//console.log(interval_counter);
 					
 							
@@ -61,7 +61,7 @@
 						})
 						$('#counter').html("Redraw Count:"+interval_counter);
 						context.stroke();
-						mstats.end();
+						
 						stats.end();
 						$('#linescount').html(data_count);
 				

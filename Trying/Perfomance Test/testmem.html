@@ -1,53 +1,53 @@
 <!doctype html>
-<html>
-	<head>
-		<title>stats.js - basic example</title>
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				margin: 0px;
-				overflow: hidden;
-			}
-		</style>
-	</head>
-	<body>
-		<script src="stats.js"></script>
-		<script>
 
-			var stats = new Stats();
-			stats.setMode( 0 );
-			document.body.appendChild( stats.domElement );
+<title>memory-stats.js demo</title>
+<script src="memory-stats.js"></script>
 
-			var canvas = document.createElement( 'canvas' );
-			canvas.width = 512;
-			canvas.height = 512;
-			document.body.appendChild( canvas );
+<body>
+<script>
 
-			var context = canvas.getContext( '2d' );
-			context.fillStyle = 'rgba(127,0,255,0.05)';
-			setInterval( function () {
+	// add the monitor into our page and update it on a rAF loop
 
-				var time = Date.now() * 0.001;
+	var stats = new MemoryStats();
+	stats.domElement.style.position	= 'fixed';
+	stats.domElement.style.right		= '0px';
+	stats.domElement.style.bottom		= '0px';
+	document.body.appendChild( stats.domElement );
 
-				context.clearRect( 0, 0, 512, 512 );
 
-				stats.begin();
+	requestAnimationFrame(function rAFloop(){
+		stats.update();
+		requestAnimationFrame(rAFloop);
+	});
+	//# sourceURL=updateStats.js
 
-				for ( var i = 0; i < 2000; i ++ ) {
+</script>
+<script>
 
-					var x = Math.cos( time + i * 0.01 ) * 196 + 256;
-					var y = Math.sin( time + i * 0.01234 ) * 196 + 256;
+	// generate plenty of objects
+	// from in generational GC demo from firefox
+	// https://people.mozilla.org/~wmccloskey/incremental-blog/example-pause.html
+	var garbage 	= [];
+	var garbageSize	= 1024 * 1024 * 6;
+	var garbageIdx	= 0;
 
-					context.beginPath();
-					context.arc( x, y, 10, 0, Math.PI * 2, true );
-					context.fill();
+	// call GC() from console to test a GC
+	function GC(){
+		garbage 	= [];
+		garbageIdx	= 0;
+	}
 
-				}
+	function makeGarbage(amount){
+		for(var i = 0; i < amount; i++){
+			garbage[garbageIdx]	= {};
+			garbageIdx	= (garbageIdx+1) % garbageSize;
+		}
+	}
+	requestAnimationFrame(function rAFloop(){
+		makeGarbage(1024000);
+		requestAnimationFrame(rAFloop);
+	});
 
-				stats.end();
+	//# sourceURL=generateGarbage.js
 
-			}, 1000 / 60 );
-
-		</script>
-	</body>
-</html>
+</script></body>
