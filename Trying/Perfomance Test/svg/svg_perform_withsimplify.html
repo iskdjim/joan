@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="../jquery.min.js"></script>
 	<script src="../stats.js"></script>
-	<script src="../memory-stats.js"></script>
+	<script src="../simplify.js"></script>
 	<script>
 
         $(document).ready( function() {
@@ -32,12 +32,32 @@
 				
 					var aktiv_random = false;
 					var interval_counter = 1;
-
+					
+			
+					
+					
+					//new_line_points = all_line_points;
+					//console.log(all_line_points);
+					//console.log(new_line_points)
 					var update = function () {
-						var line_points = new Array(new Array(0,0));
+						var all_line_points = new Array();
+						var y_range = 10;
+						var filter_counter = 0;
+						$.each(data, function(i,val){
+							if($('#limit_lines').val() < filter_counter){
+								return;
+							}
+							filter_counter++;
+							y_range += 0.02;
+							all_line_points.push({x:y_range, y:(val.chanels[0].value/50)});	
+						})
+						var tolerance = $('#tolerance').val();
+						var highQuality = false;
+						var new_line_points = simplify(all_line_points, tolerance, highQuality);
+						//console.log(new_line_points);
 						$("#container").empty();
 						var counter = 0;
-						var y_range = 10;
+						y_range = 10;
 					    interval_counter++;
 					
 						$('#linescount').html(data_count);
@@ -45,30 +65,28 @@
 					    stats.begin();
 					    mstats.begin();
 						//console.log(interval_counter);
-					
-						$.each(data, function(i,val){
-							if($('#limit_lines').val() < counter){
-								return;
-							}
+						var line_points = new Array(new Array(0,0));
+						$.each(new_line_points, function(i,val){
+							//console.log(val);
+						
 							counter++;
 
 							var random_x = Math.floor(Math.random() * 1000) + 1;
-							
-							y_range += 0.02;
-							
-					
-							line_points.push(new Array( y_range, (val.chanels[0].value/50)));
+							//console.log( val.x+" "+ val.y);
+							line_points.push(new Array( val.x, val.y));
+							//console.log(line_points);
 							if(counter > 1){
 								line_points.shift();
 							}
-							
+					
+					
 							x1 = line_points[0][0];
 							y1 = line_points[0][1];
 							x2 = line_points[1][0];
 							y2 = line_points[1][1];
 						
 							
-							if(false){
+							if(true){
 								var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
 							    newLine.setAttribute('id','time_'+val.time);
 							    newLine.setAttribute('x1',x1);
@@ -82,8 +100,10 @@
 						  					  
 						})
 					
+					
 						mstats.end();
 						stats.end();
+						$('#counter').html(counter);
 						$('#linescount').html(data_count);
 				
 						requestAnimationFrame( update );
@@ -111,7 +131,11 @@
   </svg> 
 
 <p>Data exists for <a id="linescount"></a> Points</p>
-<p>Value for max points:<input id="limit_lines" value="10000" type"name"/></p>
-<p id="counter"></p>  
+<p>Value for max points:<input id="limit_lines" value="25000" type"name"/></p>
+
+<p>Value for Simplyfy Tolerance:<select id="tolerance"><option value="1">100%</option><option value="0.75">75%</option><option value="0.50">50%</option><option value="0.25">25%</option><option value="0">0%</option></select></p>
+
+
+<p>Points left from Simplify: <a id="counter"></a> </p> 
 </body>
 </html>
