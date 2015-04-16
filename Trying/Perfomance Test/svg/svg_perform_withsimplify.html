@@ -2,29 +2,15 @@
 <html>
 <head>
 	<script src="../jquery.min.js"></script>
+	<script src="../app.js"></script>
 	<script src="../stats.js"></script>
 	<script src="../simplify.js"></script>
 	<script>
 
         $(document).ready( function() {
-        	
-        	var stats = new Stats();
-			stats.setMode(0); // 0: fps, 1: ms
-			
-			// align top-left
-			stats.domElement.style.position = 'absolute';
-			stats.domElement.style.left = '0px';
-			stats.domElement.style.top = '0px';
-			
-			var mstats = new Stats();
-			stats.setMode(1); //
-			
-			mstats.domElement.style.position = 'fixed';
-			mstats.domElement.style.right  = '0px';
-			mstats.domElement.style.top   = '0px';
-			
-			document.body.appendChild( stats.domElement );
-			document.body.appendChild( mstats.domElement );
+        		
+				stats = stats();
+				mstats = mstats();
 
 				$.getJSON( "../api/data.json", function( data ) {
 					data_count = data.count;
@@ -33,16 +19,12 @@
 					var aktiv_random = false;
 					var interval_counter = 1;
 					
-			
-					
-					
-					//new_line_points = all_line_points;
-					//console.log(all_line_points);
-					//console.log(new_line_points)
+
 					var update = function () {
 						var all_line_points = new Array();
 						var y_range = 10;
 						var filter_counter = 0;
+						
 						$.each(data, function(i,val){
 							if($('#limit_lines').val() < filter_counter){
 								return;
@@ -54,7 +36,7 @@
 						var tolerance = $('#tolerance').val();
 						var highQuality = false;
 						var new_line_points = simplify(all_line_points, tolerance, highQuality);
-						//console.log(new_line_points);
+				
 						$("#container").empty();
 						var counter = 0;
 						y_range = 10;
@@ -100,7 +82,7 @@
 						  					  
 						})
 					
-					
+						
 						mstats.end();
 						stats.end();
 						$('#counter').html(counter);
@@ -124,7 +106,7 @@
 	</script>
 </head>
 <body>
-
+<h1 style="text-align:center;">SVG Lines - with implify</h1>
 
 <svg width="1600" height="500" top="200" id="container">
 

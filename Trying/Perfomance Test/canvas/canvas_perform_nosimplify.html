@@ -32,41 +32,35 @@
 					    mstats.begin();
 						//console.log(interval_counter);
 					
+							
+						var c = document.getElementById("myCanvas");
+						var context = c.getContext("2d");
+						context.clearRect ( 0 , 0 , c.width, c.height );
+						context.beginPath();
+						context.moveTo(0, 0);
+					
 						$.each(data, function(i,val){
 							if($('#limit_lines').val() < counter){
 								return false;
 							}
 							counter++;
 
-							var random_x = Math.floor(Math.random() * 1000) + 1;
+							var random_x = Math.floor(Math.random() * 100) + 1;
 							
 							y_range += 0.02;
 							
-					
-							line_points.push(new Array( y_range, (val.chanels[0].value/50)));
-							if(counter > 1){
-								line_points.shift();
-							}
-							
-							x1 = line_points[0][0];
-							y1 = line_points[0][1];
-							x2 = line_points[1][0];
-							y2 = line_points[1][1];
-						
-							
-								var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-							    newLine.setAttribute('id','time_'+val.time);
-							    newLine.setAttribute('x1',x1);
-							    newLine.setAttribute('y1',y1);
-							    newLine.setAttribute('x2',x2);
-							    newLine.setAttribute('y2',y2);
-							    newLine.setAttribute('style','stroke:rgb(0,0,0)');
+							x1 = y_range;
+							y1 = (val.chanels[0].value/50);
 
-								$("#container").append(newLine);	
+							//if(random_x > 99){
+								context.lineTo(x1,y1);
+							
+							//}
+      						
 						  					  
 						})
-					
 						$('#counter').html("Redraw Count:"+interval_counter);
+						context.stroke();
 						mstats.end();
 						stats.end();
 						$('#linescount').html(data_count);
@@ -89,11 +83,10 @@
 	</script>
 </head>
 <body>
-<h1 style="text-align:center;">SVG Lines - no simplify</h1>
+<h1 style="text-align:center;">Canvas Lines - no simplify</h1>
 
-<svg width="1600" height="500" top="200" id="container">
-
-  </svg> 
+<canvas id="myCanvas" width="1600" height="500" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
 
 <p>Data exists for <a id="linescount"></a> Points</p>
 <p>Value for max points:<input id="limit_lines" value="25000" type"name"/></p>
