@@ -8,7 +8,19 @@
       	<script src="../app.js"></script>
       	<script src="../stats.js"></script>
     <script type="text/javascript">
-    var points_data,stats,formated_points;
+    var points_data,stats,formated_points,interval_counter,gl;
+    
+      var
+          
+            webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
+            vShaderQuellcode, // String des Vertex-Shader Quellcodes
+            vShader,          // der Shader selbst
+            fShaderQuellcode, // String des Fragment-Shader Quellcodes
+            fShader,          // der Shader selbst
+            vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
+            vVertices,        // Array der Dreieckskoordinaten
+            vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
+    interval_counter=0;
        $(document).ready( function() {
         	
         		stats = stats();
@@ -20,8 +32,7 @@
 					formated_points = createPointsArray();
 				
 					setTimeout(function(){
-						
-						
+
 						meinWebGLStart(); 
 					
 					},1000);
@@ -36,16 +47,7 @@
 	var canvas,points;
     // Diese Funktion wird ausgefuehrt, sobald die HTML-Seite geladen ist :
     function meinWebGLStart() {
-        var
-            gl, // DAS WebGL-Objekt (wird vom Browser abgefragt, falls dieser WebGL unterstützt
-            webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
-            vShaderQuellcode, // String des Vertex-Shader Quellcodes
-            vShader,          // der Shader selbst
-            fShaderQuellcode, // String des Fragment-Shader Quellcodes
-            fShader,          // der Shader selbst
-            vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
-            vVertices,        // Array der Dreieckskoordinaten
-            vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
+      
 
        
 
@@ -108,19 +110,22 @@
         vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");
         // Ein Array mit den Koordinaten, der Eckpunkte des Dreiecks
         // das dargestellt wird.
-       var interval_counter = 0;
-       		
-	       vVertices = formated_points;
-	       
-	       	       
-	     
-		setInterval(function(){
-			interval_counter++;	
+      
+		requestAnimationFrame( drawStuff );
+
+    }
+    
+    function drawStuff(){
+    	  	stats.begin();
+		
+    		interval_counter++;	
 			$('#counter').html(interval_counter);	
 			stats.begin();
+			
+	       vVertices = formated_points;
 	
-	
- 			  // ein WebGL-Buffer-Objekt wird erzeugt:                                          
+	       
+	        // ein WebGL-Buffer-Objekt wird erzeugt:                                          
 	        vertexPosBufferObjekt = gl.createBuffer();
 	        // ...und als aktives Objekt gesetzt:
 	        gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
@@ -132,8 +137,8 @@
 			
 	        gl.drawArrays(gl.LINE_STRIP, 0, vVertices.length/3);
 	        stats.end();
-		},1000);
-		
+	        
+	        requestAnimationFrame( drawStuff );
     }
     
 	function createPointsArray(){
