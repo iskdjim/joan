@@ -20,7 +20,7 @@
             vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
             vVertices,        // Array der Dreieckskoordinaten
             vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
-    interval_counter=0;
+    			interval_counter=0;
        $(document).ready( function() {
         	
         		stats = stats();
@@ -29,6 +29,7 @@
 				$.getJSON( "../api/data.json", function( data ) {
 					 canvas = window.document.getElementById("meineWebGLCanvas");
 					points_data = data.data;
+					$('#linescount').html(data.count)
 					formated_points = createPointsArray();
 				
 					setTimeout(function(){
@@ -88,7 +89,7 @@
             'precision mediump float;\n\
             void main()  \n\
             {     \n\
-                gl_FragColor = vec4(0.0, 0.0, 255.0, 1.0);\n\
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n\
             } \n';
         fShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fShader, fShaderQuellcode);
@@ -119,7 +120,7 @@
     	  	stats.begin();
 		
     		interval_counter++;	
-			$('#counter').html(interval_counter);	
+			$('#counter').html("Redraw Count:"+interval_counter);	
 			stats.begin();
 			
 	       vVertices = formated_points;
@@ -134,14 +135,19 @@
 	        gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
 	        gl.enableVertexAttribArray(vertexAttribLoc);
 	
-			
-	        gl.drawArrays(gl.LINE_STRIP, 0, vVertices.length/3);
+			if($('#limit_lines').val() < vVertices.length/3){
+				draw_count = $('#limit_lines').val();
+			}else{
+				draw_count = vVertices.length/3;
+			}
+	        gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
 	        stats.end();
 	        
 	        requestAnimationFrame( drawStuff );
     }
     
 	function createPointsArray(){
+		
 		var x_range = 0;
 		var points_pixel = points_data;
 
@@ -150,7 +156,7 @@
 		$.each(points_pixel, function(i,val){
 			y_range = (val['chanels'][0].value/50);
 			//console.log(y_range);
-			x_range += 0.2;
+			x_range += 0.01;
 			points_string += ","+pixelToPoints(i,new Array(x_range,y_range))
 		});
     
@@ -177,7 +183,7 @@
 	
 		if(point[1] < canvas.height/2){
 			if(point[1] > 0){
-				y = (100-(((100/(canvas.height/2))*point[1])))*-0.01;
+				y = (100-(((100/(canvas.height/2))*point[1])))*0.01;
 					//console.log("x:"+y);
 				
 			}else{
@@ -204,10 +210,15 @@
     
     </head>
     <body>
+    	<h1 style="text-align:center;">Web GL Path - no simplify</h1>
+
      <canvas id="meineWebGLCanvas" width="1600" height="500">
      	
      </canvas> 
-  Anzahl der durchläufe:<p id="counter"></p>  
+
+<p>Data exists for <a id="linescount"></a> Points</p>
+<p>Value for max points:<input id="limit_lines" value="50000" type"name"/></p>
+<p id="counter"></p>  
      
      
     </body>
