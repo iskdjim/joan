@@ -7,6 +7,7 @@
       <script src="../jquery.min.js"></script>
       	<script src="../app.js"></script>
       	<script src="../stats.js"></script>
+      	
     <script type="text/javascript">
     var points_data,stats,formated_points,interval_counter,gl;
     
@@ -30,7 +31,8 @@
 					 canvas = window.document.getElementById("meineWebGLCanvas");
 					points_data = data.data;
 					$('#linescount').html(data.count)
-					formated_points = createPointsArray();
+					formated_points_one = createPointsArray(0);
+					formated_points_two = createPointsArray(2);
 				
 					setTimeout(function(){
 
@@ -91,6 +93,8 @@
             {     \n\
                 gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n\
             } \n';
+            
+
         fShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fShader, fShaderQuellcode);
         gl.compileShader(fShader);
@@ -109,8 +113,7 @@
         // Die Verknuepfung zwischen JavaScript und dem 
         // Shader-Attribut
         vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");
-        // Ein Array mit den Koordinaten, der Eckpunkte des Dreiecks
-        // das dargestellt wird.
+
       
 		requestAnimationFrame( drawStuff );
 
@@ -122,39 +125,42 @@
     		interval_counter++;	
 			$('#counter').html("Redraw Count:"+interval_counter);	
 			stats.begin();
-			
-	       vVertices = formated_points;
-	
-	       
-	        // ein WebGL-Buffer-Objekt wird erzeugt:                                          
-	        vertexPosBufferObjekt = gl.createBuffer();
-	        // ...und als aktives Objekt gesetzt:
-	        gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
-	         // die Arraydaten werden an den aktiven Puffer uebergeben:
-	        gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
-	        gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
-	        gl.enableVertexAttribArray(vertexAttribLoc);
-	
-			if($('#limit_lines').val() < vVertices.length/3){
-				draw_count = $('#limit_lines').val();
-			}else{
-				draw_count = vVertices.length/3;
-			}
-	        gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+			var points_array = new Array(formated_points_one,formated_points_two);	
+
+			for(var i = 0; i < $("#chanels").val(); i++){
+				vVertices = points_array[i];
+				//console.log("test");
+				
+		        // ein WebGL-Buffer-Objekt wird erzeugt:                                          
+		        vertexPosBufferObjekt = gl.createBuffer();
+		        // ...und als aktives Objekt gesetzt:
+		        gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
+		         // die Arraydaten werden an den aktiven Puffer uebergeben:
+		        gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
+		        gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
+		        gl.enableVertexAttribArray(vertexAttribLoc);
+		
+				if($('#limit_lines').val() < vVertices.length/3){
+					draw_count = $('#limit_lines').val();
+				}else{
+					draw_count = vVertices.length/3;
+				}
+		        gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+	        }
 	        stats.end();
 	        
 	        requestAnimationFrame( drawStuff );
     }
     
-	function createPointsArray(){
-		
+	function createPointsArray(chanel){
+		console.log(chanel);
 		var x_range = 0;
 		var points_pixel = points_data;
 
 		var points_string = "-1.0, 1.0,0.0";
 		points = new Float32Array(points_pixel.length*3);
 		$.each(points_pixel, function(i,val){
-			y_range = (val['chanels'][0].value/50);
+			y_range = (val['chanels'][chanel].value/50);
 			//console.log(y_range);
 			x_range += 0.01;
 			points_string += ","+pixelToPoints(i,new Array(x_range,y_range))
@@ -218,6 +224,7 @@
 
 <p>Data exists for <a id="linescount"></a> Points</p>
 <p>Value for max points:<input id="limit_lines" value="50000" type"name"/></p>
+<p>Channels: <select id="chanels"><option val="0">1</option><option val="1">2</option></select></p>
 <p id="counter"></p>  
      
      
