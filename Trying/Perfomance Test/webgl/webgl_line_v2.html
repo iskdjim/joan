@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-       <title>WebGL Tutorial 1 - Das erste Dreieck</title>
+       <title></title>
       	<script src="../jquery.min.js"></script>
       	<script src="../app.js"></script>
       	<script src="../stats.js"></script>
@@ -11,16 +11,23 @@
     
 		<script id="shader-fs" type="x-shader/x-fragment">
 		    precision mediump float;
+		    
+		    varying vec4 vColor;
+		    
 		    void main(void) {
 		        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 		    }
 		</script>
 		
 		<script id="shader-vs" type="x-shader/x-vertex">
-		    attribute vec4 vPosition;
+		    attribute vec4 aVertexPosition;
+			attribute vec4 aVertexColor;
+			
+			varying vec4 vColor;
 
 		    void main(void) {
-		        gl_Position = vPosition;
+		        gl_Position = aVertexPosition;
+		        vColor  = aVertexColor;
 		    }
 		</script>  
 		
@@ -116,7 +123,8 @@
 	
 	        // Die Verknuepfung zwischen JavaScript und dem 
 	        // Shader-Attribut
-	        vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");
+	        webGLProgramObject.vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "aVertexPosition");
+			webGLProgramObject.vertexColor = gl.getAttribLocation(webGLProgramObject, "aVertexC");
 
 			requestAnimationFrame( drawStuff );
 	
@@ -140,7 +148,7 @@
 			        
 			         // die Arraydaten werden an den aktiven Puffer uebergeben:
 			        gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
-			        gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
+			        gl.vertexAttribPointer(webGLProgramObject.vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
 			        gl.enableVertexAttribArray(vertexAttribLoc);
 			
 					if($('#limit_lines').val() < vVertices.length/3){
