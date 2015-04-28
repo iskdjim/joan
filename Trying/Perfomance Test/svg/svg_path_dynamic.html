@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../jquery.min.js"></script>
+	<script src="../app.js"></script>
+	<script src="../stats.js"></script>
+	<script src="../simplify.js"></script>
+	<style>
+		.scaled{
+			-webkit-transform: scale(2); 
+			-moz-transform: scale(2);
+			-o-transform: scale(2);
+			transform: scale(2)  translate(-8.6px, -100px);
+			
+		}
+		
+		.notscaled{
+			-webkit-transform: scale(1); 
+			-moz-transform: scale(1);
+			-o-transform: scale(1);
+			transform: scale(1);
+		}
+	</style>
+	<script>
+var y_range = 10;
+var swip_range = 10;
+var scale_range = 1;
+        $(document).ready( function() {
+        	
+        		//stats = stats();
+			
+
+				$.getJSON( "../api/data.json", function( data ) {
+					data_count = data.count;
+					data = data.data;
+				
+					var aktiv_random = false;
+					var interval_counter = 1;
+
+					var update = function () {
+						var line_points = "M0 0";
+						//$("#container").empty();
+						var counter = 0;
+						
+					    interval_counter++;
+					
+						$('#linescount').html(data_count);
+						var random_limit = Math.floor(Math.random() * data_count) + 1;
+					   // stats.begin();
+					 
+					
+						//console.log(interval_counter);
+						newpath = document.createElementNS('http://www.w3.org/2000/svg','path');
+						newpath.setAttributeNS(null, "id", "pathIdD"); 
+						
+						$.each(data, function(i,val){
+							
+						
+								
+							setTimeout(function(){ 
+							counter++;
+								//console.log(counter);
+								if(counter > 50){
+									//return false;
+									swip_range+=10;
+									$('#pathIdD').css({background:"red"});
+									$('#holder').attr("transform", "translate(-"+swip_range+",0)  scale("+scale_range+","+scale_range+")");
+								
+								}
+	
+								var random_x = Math.floor(Math.random() * 1000) + 1;
+								
+								y_range += 10;
+								
+								//console.log("test");//line_points.push(new Array( y_range, (val.chanels[0].value/50)));
+								line_points += " L"+y_range+" "+(val.chanels[0].value/50);
+								 
+								newpath.setAttributeNS(null, "d", line_points);  
+								newpath.setAttributeNS(null, "stroke", "black"); 
+								newpath.setAttributeNS(null, "stroke-width",5);  
+								newpath.setAttributeNS(null, "opacity", 1);  
+								newpath.setAttributeNS(null, "fill", "none");
+						 
+						   }, 50*i);	
+					
+						   	  
+						})
+					
+						   
+						$("#holder").hover(function(){
+						 // $(this).addClass("hoverpath");
+						
+						});
+		
+
+								$("#holder").append(newpath);	
+								
+								$('#counter').html("Redraw Count:"+interval_counter);
+				
+						//stats.end();
+						$('#linescount').html(data_count);
+				
+						//requestAnimationFrame( update );
+					
+					};
+							
+					requestAnimationFrame( update );
+
+			});	
+			
+		
+		
+			
+		   
+		});
+			var scaled = true;
+			function callit(e,classname){
+				//console.log();
+				if(scaled){
+					scaled = false;
+					scale_range = 1.2;
+					//$(e.target.parentElement).attr("class", 'scaled');
+					$(e.target.parentElement).attr("transform", "translate(-"+swip_range+",0) scale("+scale_range+","+scale_range+")");
+		
+				}else{
+					scaled = true;
+					scale_range = 1;
+					//$(e.target.parentElement).attr("class", 'notscaled');
+					$(e.target.parentElement).attr("transform", "translate(-"+swip_range+",0) scale("+scale_range+","+scale_range+")");
+				}
+				
+			}
+	</script>
+</head>
+<body>
+<h1 style="text-align:center;">SVG Path - no simplify</h1>
+
+
+<svg width="1600" height="500" top="200" id="container">
+	
+<g id="holder" class="test" onclick="callit(evt);"
+onmouseout="">
+	
+</g>
+
+  </svg> 
+
+
+</body>
+</html>
