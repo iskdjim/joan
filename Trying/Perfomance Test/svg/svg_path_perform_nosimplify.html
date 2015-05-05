@@ -63,7 +63,9 @@
             $("#container").append(newpath);	
 
             var t1 = performance.now();
-            stats_data.push(t1 - t0);
+            fps_value = requestAnimFrame();
+            stats_data_fps.push(fps_value);
+            stats_data_ms.push(t1 - t0);
 
           }						
          
@@ -71,17 +73,11 @@
           
         $('#draw_btn').click(function(){
           iteration_counter = 0;
-          stats_data = new Array();
+          stats_data_fps = new Array();
+          stats_data_ms = new Array();
           drawChart();
-        	
-          var ms = 0;
-          $.each(stats_data, function(i,val){
-            ms = ms+val;
-          });
-          var fps = 1000/ms;
-
-          $('#average_fps').html(fps/$('#iterations').val());
-          $('#average_ms').html((1000/fps)/$('#iterations').val());
+        
+          showStats(stats_data_fps,stats_data_ms);
         });
         
     

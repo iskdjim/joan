@@ -49,3 +49,42 @@ function mSecStats(){
   return 1;
 
 }
+
+var fps;
+var lastCalledTime;
+		
+function requestAnimFrame() {
+		
+  if(!lastCalledTime) {
+    lastCalledTime = Date.now();
+    fps = 0;
+    return 66;
+  }
+  delta = (new Date().getTime() - lastCalledTime)/1000;
+  lastCalledTime = Date.now();
+  fps = 1/delta;
+  if(fps == "Infinity"){
+  	fps=66;
+  }else if(fps > 66){
+  	fps=66;
+  }
+  return fps;
+} 
+
+function showStats(stats_data_fps,stats_data_ms){
+  var fps = 0;
+  var ms = 0;
+    
+  $.each(stats_data_fps, function(i,val){
+    if(i>0){
+      fps = fps+val;
+      ms = ms+stats_data_ms[i];
+    }
+  });
+
+  var fps_av = fps/$('#iterations').val();
+  var ms_av = ms/$('#iterations').val();
+			
+  $('#average_fps').html(fps_av);
+  $('#average_ms').html(ms_av);
+}
