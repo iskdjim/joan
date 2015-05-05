@@ -1,129 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<script src="../jquery.min.js"></script>
-	<script src="../app.js"></script>
-	<script src="../stats.js"></script>
-	<script src="../simplify.js"></script>
-	<script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        $(document).ready( function() {
-        		
-				stats = stats();
-			
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
 
-				$.getJSON( "../api/data.json", function( data ) {
-					data_count = data.count;
-					data = data.data;
-				
-					var aktiv_random = false;
-					var interval_counter = 1;
-					
+  <script src="../js/zepto.js"></script>  
+  <script src="../js/simplify.js"></script>  
+  <script src="../app.js"></script>
 
-					var update = function () {
-						var all_line_points = new Array();
-						var y_range = 10;
-						var filter_counter = 0;
-				
-						$.each(data, function(i,val){
-							if($('#limit_lines').val() < filter_counter){
-								return;
-							}
-							
-							filter_counter++;
-							y_range += 0.02;
-							all_line_points.push({x:y_range, y:(val.chanels[0].value/50), time:val.time});	
-						})
-						var tolerance = $('#tolerance').val();
-						var highQuality = false;
-						var new_line_points = simplify(all_line_points, tolerance, highQuality);
-				
-						$("#container").empty();
-						var counter = 0;
-						y_range = 10;
-					    interval_counter++;
-					
-						$('#linescount').html(data_count);
-						var random_limit = Math.floor(Math.random() * data_count) + 1;
-					    stats.begin();
-			
-					//	console.log(interval_counter);
-						$('#counter').html("Redraw Count:"+interval_counter);
-						var line_points = new Array(new Array(0,0));
-						$.each(new_line_points, function(i,val){
-							//console.log(val);
-						
-							counter++;
-							
-							var random_x = Math.floor(Math.random() * 1000) + 1;
-							//console.log( val.x+" "+ val.y);
-							line_points.push(new Array( val.x, val.y));
-							//console.log(line_points);
-							if(counter > 1){
-								line_points.shift();
-							}
-					
-					
-							x1 = line_points[0][0];
-							y1 = line_points[0][1];
-							x2 = line_points[1][0];
-							y2 = line_points[1][1];
-						
-							
-							if(true){
-								var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-							    newLine.setAttribute('id','time_'+val.time);
-							    newLine.setAttribute('x1',x1);
-							    newLine.setAttribute('y1',y1);
-							    newLine.setAttribute('x2',x2);
-							    newLine.setAttribute('y2',y2);
-							    newLine.setAttribute('style','stroke:rgb(0,0,0)');
+  <script>
+    var stats_data;
+    
+    $(document).ready( function() {
 
-								$("#container").append(newLine);	
-							}
-						  					  
-						})
-					
-						
-			
-						stats.end();
-						$('#counter_simply').html(counter);
-						$('#linescount').html(data_count);
-				
-						
-						requestAnimationFrame( update );
-									
-						//$('line').mouseover(function(){
-							//console.log($(this).attr('id'));
-							//$('#line_timestamp').html($(this).attr('id'));
-						//})
-					};
-							
-					requestAnimationFrame( update );
-		
+      $.getJSON( "../api/data.json", function( data ) {
+	    data_count = data.count;
+        data = data.data;
+        var iteration_counter = 0;
+        $('#linescount').html(data_count);
+        $('#fader').attr({'max':data_count});
 
-			});	
-			
-		
+        function drawChart () {
+          iterations = $('#iterations').val();
+          
+          var all_line_points = new Array();
+          var y_range = 10;
+          var filter_counter = 0;
 				
-		
-		   
-		});
+          $.each(data, function(i,val){
+            if($('#limit_lines').val() < filter_counter){
+              return;
+            }
+
+            filter_counter++;
+            y_range += 0.02;
+            all_line_points.push({x:y_range, y:(val.chanels[0].value/50), time:val.time});	
+          })
+          var tolerance = $('#tolerance').val();
+          var highQuality = false;
+          var new_line_points = simplify(all_line_points, tolerance, highQuality);
+
+          while(iterations > iteration_counter){
+            var t0 = performance.now();
+            var line_points = new Array(new Array(0,0));
+            var counter = 0;
+            y_range = 10;
+          
+            iteration_counter++;          
+            $("#container").empty();
+					
+            $('#linescount').html(data_count);
+            var random_limit = Math.floor(Math.random() * data_count) + 1;
 	
+            $.each(new_line_points, function(i,val){
+
+              if($('#limit_lines').val() < counter){
+                return false;
+              }
+              counter++;
+
+              var random_x = Math.floor(Math.random() * 1000) + 1;
+              y_range += 0.02;
+          
+              line_points.push(new Array( val.x, val.y));
+              if(counter > 1){
+                line_points.shift();
+              }
+							
+              x1 = line_points[0][0];
+              y1 = line_points[0][1];
+              x2 = line_points[1][0];
+              y2 = line_points[1][1];
+
+              var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+              newLine.setAttribute('id','time_'+val.time);
+              newLine.setAttribute('x1',x1);
+              newLine.setAttribute('y1',y1);
+              newLine.setAttribute('x2',x2);
+              newLine.setAttribute('y2',y2);
+              newLine.setAttribute('style','stroke:rgb(0,0,0)');
+
+			
+              $("#container").append(newLine);	
+  					  
+            })
+
+           var t1 = performance.now();
+           stats_data.push(t1 - t0);
+           $('#counter_simply').html(counter);
+
+          }						
+         
+        };
+          
+        $('#draw_btn').click(function(){
+          iteration_counter = 0;
+          stats_data = new Array();
+          drawChart();
+        	
+          var ms = 0;
+          $.each(stats_data, function(i,val){
+            ms = ms+val;
+          });
+          var fps = 1000/ms;
+
+          $('#average_fps').html(fps/$('#iterations').val());
+          $('#average_ms').html((1000/fps)/$('#iterations').val());
+        });
+        
+    
+      });	
+    });
+    
+    var outputUpdate = function(val){
+      $('#limit_lines').val(val);
+    }
+
 	</script>
 </head>
 <body>
-<h1 style="text-align:center;">SVG Lines - with implify</h1>
-
-<svg width="1600" height="500" top="200" id="container">
-
-  </svg> 
-
-<p>Data exists for <a id="linescount"></a> Points</p>
-<p>Value for max points:<input id="limit_lines" value="25000" type"name"/></p>
-<p>Value for Simplyfy Tolerance:<select id="tolerance"><option value="1">100%</option><option value="0.75">75%</option><option value="0.50">50%</option><option value="0.25">25%</option><option value="0">0%</option></select></p>
-<p id="counter"></p>  
-<p>Points left from Simplify: <a id="counter_simply"></a> </p> 
-<!--<p>Mouserover: <a id="line_timestamp"></a></p>-->
+  <h1 style="text-align:center;">SVG Lines - with simplify</h1>
+  <p>Data exists for <a id="linescount"></a> Points</p>
+  <table>
+    <tr> 
+      <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="0" type"name"/></td>
+      <td>Iterations for chart drawing:<input id="iterations" style="width:5rem;" value="10" type"name"/></td>
+      <td><input type="submit" id="draw_btn" value="draw" /></td>
+    </tr>
+    <tr>
+      <td>Value for Simplyfy Tolerance:<select id="tolerance"><option value="1">100%</option><option value="0.75">75%</option><option value="0.50">50%</option><option value="0.25">25%</option><option value="0">0%</option></select></td>
+      <td>Points left from Simplify: <a id="counter_simply"></a></td>
+   	  <td></td>
+    </tr>
+  </table>
+  
+  <br />
+  <svg class="svg_holder" id="container"></svg> 
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average FPS: <span id="average_fps"></span></p>
+    <p>Average MS: <span id="average_ms"></span></p>
+  </div>
+  <div class="download">
+  	<a href='svg_lpws_source.zip'>Download source</a>
+  </div>  
 </body>
 </html>

@@ -4,7 +4,7 @@ html{
 }
 
 table tr td{
-  padding-right:1rem;
+  padding:0.3rem 1rem 0rem 0rem;
 }
 
 
@@ -22,6 +22,12 @@ table tr td{
   float:left;
 }
 
+.canvas_holder{
+  border:0.1em solid #000000;
+  width:600px;
+  height:400px;
+  float:left;	
+}
 
 .download{
   border:0.1rem solid #000;
