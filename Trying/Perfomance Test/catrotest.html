@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PocketStats</title>
+    <script src="phonegap.js"></script>
+    <script src="jquery.min.js"></script>
+
+   
+    <script language="javascript" type="text/javascript">
+      (function($){
+        $(document).ready( function() {
+
+			jQuery.getJSON( "https://pocketcode.org/api/projects/mostViewed.json?limit=5&offset=0", function( data ) {
+	 			 console.log(data);
+	  
+			});
+			
+			   $.get('https://pocketcode.org/api/projects/mostViewed.json?limit=5&offset=0' , function(data) {
+               	console.log(data);
+            }, 'json');
+
+		
+		
+		})
+		
+	
+	 })(jQuery);
+
+	</script>
+</head>
+<body>
+
+
+
+</body>
+</html>

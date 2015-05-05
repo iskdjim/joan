@@ -6,6 +6,10 @@
 	<script src="../stats.js"></script>
 	<script src="../simplify.js"></script>
 	<style>
+		.pathholder{
+			cursor:pointer;
+		}
+	
 		.scaled{
 			-webkit-transform: scale(2); 
 			-moz-transform: scale(2);
@@ -133,12 +137,12 @@ var scale_range = 1;
 	</script>
 </head>
 <body>
-<h1 style="text-align:center;">SVG Path - no simplify</h1>
+<h1 style="text-align:center;">SVG Path dynamic with Zoom event</h1>
 
 
 <svg width="1600" height="500" top="200" id="container">
 	
-<g id="holder" class="test" onclick="callit(evt);"
+<g id="holder" class="pathholder" onclick="callit(evt);"
 onmouseout="">
 	
 </g>
