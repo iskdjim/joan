@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+
+  <script src="../js/zepto.js"></script>  
+  <script src="../js/app.js"></script>
+
+  <script>
+    var stats_data;
+    
+    $(document).ready( function() {
+
+      $.getJSON( "../api/data.json", function( data ) {
+	    data_count = data.count;
+        data = data.data;
+        var iteration_counter = 0;
+        $('#linescount').html(data_count);
+        $('#fader').attr({'max':data_count});
+
+        function drawChart () {
+          iterations = $('#iterations').val();
+
+          while(iterations > iteration_counter){
+            var t0 = performance.now();
+            var line_points = "M0 0";
+            var counter = 0;
+            var y_range = 10;
+          
+            iteration_counter++;          
+            $("#container").empty();
+					
+            $('#linescount').html(data_count);
+            var random_limit = Math.floor(Math.random() * data_count) + 1;
+	
+            $.each(data, function(i,val){
+
+              if($('#limit_lines').val() < counter){
+                return false;
+              }
+              counter++;
+
+              var random_x = Math.floor(Math.random() * 1000) + 1;
+              y_range += 0.02;
+              line_points += " L"+y_range+" "+(val.chanels[0].value/50);
+          
+            })
+            
+            newpath = document.createElementNS('http://www.w3.org/2000/svg','path');
+            newpath.setAttributeNS(null, "id", "pathIdD");  
+            newpath.setAttributeNS(null, "d", line_points);  
+            newpath.setAttributeNS(null, "stroke", "black"); 
+            newpath.setAttributeNS(null, "stroke-width", 1);  
+            newpath.setAttributeNS(null, "opacity", 1);  
+            newpath.setAttributeNS(null, "fill", "none");
+            
+            $("#container").append(newpath);	
+
+            var t1 = performance.now();
+            fps_value = requestAnimFrame();
+            stats_data_fps.push(fps_value);
+            stats_data_ms.push(t1 - t0);
+
+          }						
+         
+        };
+          
+        $('#draw_btn').click(function(){
+          iteration_counter = 0;
+          stats_data_fps = new Array();
+          stats_data_ms = new Array();
+          drawChart();
+        
+          showStats(stats_data_fps,stats_data_ms);
+        });
+        
+    
+      });	
+    });
+    
+    var outputUpdate = function(val){
+      $('#limit_lines').val(val);
+    }
+
+	</script>
+</head>
+<body>
+  <h1 style="text-align:center;">SVG Paths - no simplify</h1>
+  <p>Data exists for <a id="linescount"></a> Points</p>
+  <table>
+    <tr> 
+      <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="0" type"name"/></td>
+      <td>Iterations for chart drawing:<input id="iterations" style="width:5rem;" value="10" type"name"/></td>
+      <td><input type="submit" id="draw_btn" value="draw" /></td>
+    </tr>
+  </table>
+  <br />
+  <svg class="svg_holder" id="container"></svg> 
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average FPS: <span id="average_fps"></span></p>
+    <p>Average MS: <span id="average_ms"></span></p>
+  </div>
+  <div class="download">
+  	<a href='svg_path_nosimplify.zip'>Download source</a>
+  </div>  
+</body>
+</html>

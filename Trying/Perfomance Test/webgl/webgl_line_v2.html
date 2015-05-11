@@ -1,223 +1,233 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-       <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-       <title>WebGL Tutorial 1 - Das erste Dreieck</title>
-      	<script src="../jquery.min.js"></script>
-      	<script src="../app.js"></script>
-      	<script src="../stats.js"></script>
-      
-    
-		<script id="shader-fs" type="x-shader/x-fragment">
-		    precision mediump float;
-		    void main(void) {
-		        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-		    }
-		</script>
-		
-		<script id="shader-vs" type="x-shader/x-vertex">
-		    attribute vec4 vPosition;
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		    void main(void) {
-		        gl_Position = vPosition;
-		    }
-		</script>  
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+
+  <script src="../js/zepto.js"></script>  
+  <script src="../js/app.js"></script>
+  <script id="shader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+    void main(void) {
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+  </script>
 		
-		<script>
-			function getShader(gl, id) {
-		        var shaderScript = document.getElementById(id);
-		        if (!shaderScript) {
-		            return null;
-		        }
-		        var str = "";
-		        var k = shaderScript.firstChild;
-		        while (k) {
-		            if (k.nodeType == 3) {
-		                str += k.textContent;
-		            }
-		            k = k.nextSibling;
-		        }
-		        var shader;
-		        if (shaderScript.type == "x-shader/x-fragment") {
-		            shader = gl.createShader(gl.FRAGMENT_SHADER);
-		        } else if (shaderScript.type == "x-shader/x-vertex") {
-		            shader = gl.createShader(gl.VERTEX_SHADER);
-		        } else {
-		            return null;
-		        }
-		        gl.shaderSource(shader, str);
-		        gl.compileShader(shader);
-		        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-		            alert(gl.getShaderInfoLog(shader));
-		            return null;
-		        }
-		        return shader;
-		    }
-	</script>
-      	
-    <script>
-		var points_data,stats,formated_points,interval_counter,gl;
-		var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
-            vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
-            vVertices,        // Array der Dreieckskoordinaten
-            vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
-    		interval_counter=0;  
+  <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    void main(void) {
+      gl_Position = vPosition;
+      }
+  </script>  
+		
+  <script>
+    function getShader(gl, id) {
+      var shaderScript = document.getElementById(id);
+      if (!shaderScript) {
+        return null;
+      }
+      var str = "";
+      var k = shaderScript.firstChild;
+      while (k) {
+        if (k.nodeType == 3) {
+          str += k.textContent;
+        }
+        k = k.nextSibling;
+      }
+      var shader;
+      if (shaderScript.type == "x-shader/x-fragment") {
+        shader = gl.createShader(gl.FRAGMENT_SHADER);
+      } else if (shaderScript.type == "x-shader/x-vertex") {
+        shader = gl.createShader(gl.VERTEX_SHADER);
+      } else {
+        return null;
+      }
+      gl.shaderSource(shader, str);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        alert(gl.getShaderInfoLog(shader));
+        return null;
+      }
+      return shader;
+    }
+  </script>
+  <script>
+    var points_data,formated_points,gl;
+    var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
+    vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
+    vVertices,        // Array der Dreieckskoordinaten
+    vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
     		 
-       $(document).ready( function() {
-    		stats = stats();
-			$.getJSON( "../api/data.json", function( data ) {
-				canvas = window.document.getElementById("webglcanvas");
-				points_data = data.data;
-				$('#linescount').html(data.count)
-				formated_points_one = createPointsArray(0);
-				formated_points_two = createPointsArray(2);
-			
-				setTimeout(function(){
-					meinWebGLStart(); 
-				},1000);
-			
-			})
-				
-		});	
+    $(document).ready( function() {
+      $.getJSON( "../api/data.json", function( data ) {
+        canvas = window.document.getElementById("webglcanvas");
+        points_data = data.data;
+        data_count = data.count;
+        $('#linescount').html(data.count)
+        formated_points_one = createPointsArray(0);
+        formated_points_two = createPointsArray(2);
+        $('#fader').attr({'max':data_count});
+        			
+        $('#draw_btn').click(function(){
+          iteration_counter = 0;
+          stats_data_fps = new Array();
+          stats_data_ms = new Array();
+          drawChart();
 
+          showStats(stats_data_fps,stats_data_ms);
+        });
     
-		var canvas,points;
-
-		function meinWebGLStart(){
-
-	        try {
-	            gl = canvas.getContext("experimental-webgl");
-	        } catch (e) {}
-	        if (!gl) {
-	            window.alert("Fehler: WebGL-Context nicht gefunden");
-	        }
-
-	        var fragmentShader = getShader(gl,"shader-fs");   
-	        var vertexShader = getShader(gl,"shader-vs");   
+      });	
+    });
+      	
+    var canvas,points;
+    function drawChart(){
+      try {
+        gl = canvas.getContext("experimental-webgl");
+      } catch (e) {}
+      if (!gl) {
+        window.alert("Fehler: WebGL-Context nicht gefunden");
+      }
+      
+      var fragmentShader = getShader(gl,"shader-fs");   
+      var vertexShader = getShader(gl,"shader-vs");   
 	        
-	        webGLProgramObject = gl.createProgram();
+      webGLProgramObject = gl.createProgram();
 	       
-	        gl.attachShader(webGLProgramObject, fragmentShader);
-			gl.attachShader(webGLProgramObject, vertexShader);
+      gl.attachShader(webGLProgramObject, fragmentShader);
+      gl.attachShader(webGLProgramObject, vertexShader);
 	
-	        // Das Shader-Program-Objekt ist vollstaendig und muss
-	        // gelinkt werden.
-	        gl.linkProgram(webGLProgramObject);
+      // Das Shader-Program-Objekt ist vollstaendig und muss
+      // gelinkt werden.
+      gl.linkProgram(webGLProgramObject);
 	        
-	        // Da theoretisch mehrere Shader-Program-Objekte moeglich  
-	        // sind, muss angegeben werden, welches benutzt werden soll.
-	        gl.useProgram(webGLProgramObject);
+      // Da theoretisch mehrere Shader-Program-Objekte moeglich  
+      // sind, muss angegeben werden, welches benutzt werden soll.
+      gl.useProgram(webGLProgramObject);
 	        
-	        // RGB-Alpha Farbe zum loeschen des Hintergrundes:
-	        gl.clearColor(255.0, 255.0,255.0, 1.0);
-	        // Hintergrund loeschen
-	        gl.clear(gl.COLOR_BUFFER_BIT);
+      // RGB-Alpha Farbe zum loeschen des Hintergrundes:
+      gl.clearColor(255.0, 255.0,255.0, 1.0);
+      // Hintergrund loeschen
+      gl.clear(gl.COLOR_BUFFER_BIT);
 	
-	        // Die Verknuepfung zwischen JavaScript und dem 
-	        // Shader-Attribut
-	        vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");
-
-			requestAnimationFrame( drawStuff );
-	
-	    }
-	    
-	    function drawStuff(){
-	    	  	stats.begin();
-			
-	    		interval_counter++;	
-				$('#counter').html("Redraw Count:"+interval_counter);	
-				stats.begin();
-				var points_array = new Array(formated_points_one,formated_points_two);	
-	
-				for(var i = 0; i < $("#chanels").val(); i++){
-					vVertices = points_array[i];
+      // Die Verknuepfung zwischen JavaScript und dem 
+      // Shader-Attribut
+      vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");
+      drawStuff();
+    }
+      
+    function drawStuff(){
+      var points_array = new Array(formated_points_one,formated_points_two);
+      iterations = $('#iterations').val();
+      while(iterations > iteration_counter){	
+        iteration_counter++;  
+        var t0 = performance.now();
+       
+        for(var i = 0; i < $("#chanels").val(); i++){
+          vVertices = points_array[i];
                                   
-                    // Buffer wird erstellt...GPU   
-			        vertexPosBufferObjekt = gl.createBuffer();
-			        // ...und als aktives Objekt gesetzt:
-			        gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
+          // Buffer wird erstellt...GPU   
+          vertexPosBufferObjekt = gl.createBuffer();
+          // ...und als aktives Objekt gesetzt:
+          gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
 			        
-			         // die Arraydaten werden an den aktiven Puffer uebergeben:
-			        gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
-			        gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
-			        gl.enableVertexAttribArray(vertexAttribLoc);
+          // die Arraydaten werden an den aktiven Puffer uebergeben:
+          gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
+          gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
+          gl.enableVertexAttribArray(vertexAttribLoc);
 			
-					if($('#limit_lines').val() < vVertices.length/3){
-						draw_count = $('#limit_lines').val();
-					}else{
-						draw_count = vVertices.length/3;
-					}
-			        gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
-		        }
-		        stats.end();
-		        
-		        requestAnimationFrame( drawStuff );
-	    }
+          if($('#limit_lines').val() < vVertices.length/3){
+            draw_count = $('#limit_lines').val();
+          }else{
+            draw_count = vVertices.length/3;
+          }
+          gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+        }
+        
+        var t1 = performance.now();
+        fps_value = requestAnimFrame();
+
+        stats_data_fps.push(fps_value);
+        stats_data_ms.push(t1-t0);
+      }
+    }
 	    
-		function createPointsArray(chanel){
-			console.log(chanel);
-			var x_range = 0;
-			var points_pixel = points_data;
+    function createPointsArray(chanel){
+      var x_range = 0;
+      var points_pixel = points_data;
 	
-			var points_string = "-1.0, 1.0,0.0";
-			points = new Float32Array(points_pixel.length*3);
-			$.each(points_pixel, function(i,val){
-				y_range = (val['chanels'][chanel].value/50);
-				//console.log(y_range);
-				x_range += 0.01;
-				points_string += ","+pixelToPoints(i,new Array(x_range,y_range))
-			});
-	    
-			return points             
-		};
+      var points_string = "-1.0, 1.0,0.0";
+      points = new Float32Array(points_pixel.length*3);
+      $.each(points_pixel, function(i,val){
+        y_range = (val['chanels'][chanel].value/50);
+        x_range += 0.01;
+        points_string += ","+pixelToPoints(i,new Array(x_range,y_range))
+      });
+      return points             
+    };
 		
-		// helpfer function for point generation - by Michi
-		function pixelToPoints(index,point){
-			var x = 0;
-			var y = 0;
-			if(point[0] < canvas.width/2){
-				if(point[0] > 0){
-					x = (100-(((100/(canvas.width/2))*point[0])))*-0.01;
-				}else{
-					x = -1;
-				}	
-			}else if(point[0] > canvas.width/2){
-				x = ((((100/(canvas.width/2))*point[0])))*0.01;
-			}
-		
-			if(point[1] < canvas.height/2){
-				if(point[1] > 0){
-					y = (100-(((100/(canvas.height/2))*point[1])))*0.01;
-				}else{
-					y = -1;
-				}	
-			}else if(point[1] > canvas.height/2){
-				y = (100-(((100/(canvas.height/2))*point[1])))*0.01;
-			}
-	
-			points[(index*3)] = x;
-			points[(index*3)+1] = y;
-			points[(index*3)+2] = 0.0;
-	
-		}
+    // helpfer function for point generation - by Michi
+    function pixelToPoints(index,point){
+      var x = 0;
+      var y = 0;
+      if(point[0] < canvas.width/2){
+        if(point[0] > 0){
+          x = (100-(((100/(canvas.width/2))*point[0])))*-0.01;
+        }else{
+          x = -1;
+        }	
+      }else if(point[0] > canvas.width/2){
+        x = ((((100/(canvas.width/2))*point[0])))*0.01;
+      }
+        
+      if(point[1] < canvas.height/2){
+        if(point[1] > 0){
+          y = (100-(((100/(canvas.height/2))*point[1])))*0.01;
+        }else{
+          y = -1;
+        }	
+      }else if(point[1] > canvas.height/2){
+        y = (100-(((100/(canvas.height/2))*point[1])))*0.01;
+      }
 
-    </script>
-    
-    </head>
-    <body>
-    	<h1 style="text-align:center;">Web GL Path - no simplify</h1>
+      points[(index*3)] = x;
+      points[(index*3)+1] = y;
+      points[(index*3)+2] = 0.0;
+    }
 
-     <canvas id="webglcanvas" width="1600" height="500">
-     	
-     </canvas> 
-
-<p>Data exists for <a id="linescount"></a> Points</p>
-<p>Value for max points:<input id="limit_lines" value="50000" type"name"/></p>
-<p>Channels: <select id="chanels"><option val="0">1</option><option val="1">2</option></select></p>
-<p id="counter"></p>  
-     
-     
-    </body>
+    var outputUpdate = function(val){
+      $('#limit_lines').val(val);
+    }
+  </script>
+</head>
+<body>
+  <h1 style="text-align:center;">Canvas Draw Lines - no simplify</h1>
+  <p>Data exists for <a id="linescount"></a> Points</p>
+  <table>
+    <tr> 
+      <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="1000" type"name"/></td>
+      <td>Iterations for chart drawing:<input id="iterations" style="width:5rem;" value="10" type"name"/></td>
+      <td>Channels: <select id="chanels"><option val="0">1</option><option val="1">2</option></select></td>
+      <td><input type="submit" id="draw_btn" value="draw" /></td>
+    </tr>
+  </table>
+  <br />
+<canvas id="webglcanvas" width="600" height="400" style="float:left;border:1px solid #000;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average FPS: <span id="average_fps"></span></p>
+    <p>Average MS: <span id="average_ms"></span></p>
+  </div>
+  <div class="download">
+  	<a href='webgl_line_nosimplify.zip'>Download source</a>
+  </div>  
+</body>
 </html>
+
 
