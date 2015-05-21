@@ -29,28 +29,11 @@
         function drawChart () {
           iterations = $('#iterations').val();
           
-          var all_line_points = new Array();
-          var y_range = 10;
-          var filter_counter = 0;
-				
-          $.each(data, function(i,val){
-            if($('#limit_lines').val() < filter_counter){
-              return;
-            }
-
-            filter_counter++;
-            y_range += 0.02;
-            all_line_points.push({x:y_range, y:(val.chanels[0].value/50), time:val.time});	
-          })
-          var tolerance = $('#tolerance').val();
-          var highQuality = false;
-          var new_line_points = simplify(all_line_points, tolerance, highQuality);
-
-          
+          var line_points = prepareData(data,$('#limit_lines').val(),$('#tolerance').val());
+				          
           while(iterations > iteration_counter){
           	
             var t0 = performance.now();
-            var line_points = new Array(new Array(0,0));
             var counter = 0;
             y_range = 10;
           
@@ -66,7 +49,7 @@
             context.beginPath();
             context.moveTo(0, 0);
 					
-            $.each(new_line_points, function(i,val){
+            $.each(line_points, function(i,val){
               if($('#limit_lines').val() < counter){
                 return false;
               }
