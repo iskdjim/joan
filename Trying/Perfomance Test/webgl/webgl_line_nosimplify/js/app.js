@@ -84,7 +84,8 @@ function showStats(stats_data_fps,stats_data_ms){
 
   var fps_av = fps/($('#iterations').val()-1);
   var ms_av = ms/($('#iterations').val()-1);
-			
+				
   $('#average_fps').html(fps_av);
   $('#average_ms').html(ms_av);
+  $('#sum_ms').html(ms_av*$('#iterations').val());
 }

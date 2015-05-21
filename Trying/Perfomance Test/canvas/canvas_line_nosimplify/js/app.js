@@ -87,4 +87,5 @@ function showStats(stats_data_fps,stats_data_ms){
 			
   $('#average_fps').html(fps_av);
   $('#average_ms').html(ms_av);
+  $('#sum_ms').html(ms_av*$('#iterations').val());
 }
