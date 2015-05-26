@@ -9,70 +9,33 @@
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/styles.css"/>
 
-  <script src="../js/zepto.js"></script>  
-  <script src="../js/simplify.js"></script>  
-  <script src="../js/inits.js"></script>  
-  <script src="../js/app.js"></script>
+  <script src="../libs/zepto.js"></script>  
+  <script src="../libs/simplify.js"></script>  
+  <script src="../js/app-ts.js"></script>
 
   <script>
-    var stats_data;
-    
     $(document).ready( function() {
-
       $.getJSON( "../api/data.json", function( data ) {
 	    data_count = data.count;
-        data = data.data;
+	    raw_data = data.data;
         var iteration_counter = 0;
         $('#linescount').html(data_count);
         $('#fader').attr({'max':data_count});
-        var interval_counter = 1;
-        
-        function drawChart () {
-          iterations = $('#iterations').val();
-          var simplify_options = new Array(false,false);
-                    
-          if($('#tolerance').val() != "0"){
-            var simplify_options = new Array(true,$('#tolerance').val());
-          }
-            
-          var prepared_data = prepareData(data,"canvas",$('#limit_lines').val(),simplify_options);
-				          
-          while(iterations > iteration_counter){
-            var t0 = performance.now();
-            iteration_counter++;          
-            $("#container").empty();
-					
-  			var context = initCanvasContext('myCanvas');
-            drawCanvasPath(prepared_data, context);
-                  
-            var t1 = performance.now();
-            fps_value = requestAnimFrame();
-
-            stats_data_fps.push(fps_value);
-            stats_data_ms.push(t1-t0);
-            $('#counter_simply').html(prepared_data.length);
-		  }	
- 					
-          
-        };
-          
-        $('#draw_btn').click(function(){
-          iteration_counter = 0;
-          stats_data_fps = new Array();
-          stats_data_ms = new Array();
-          drawChart();
-          
-          showStats(stats_data_fps,stats_data_ms);
-        });
     
       });	
+
+      $('form').submit(function(e){
+        init("canvas");
+        return false;
+      });
     });
 
-	</script>
+  </script>
 </head>
 <body>
-  <h1 style="text-align:center;">Canvas Draw Lines - with simplify</h1>
+  <h1 style="text-align:center;">Canvas Performance</h1>
   <p>Data exists for <a id="linescount"></a> Points</p>
+  <form id="drawing">
   <table>
     <tr> 
       <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="0" type"name"/></td>
@@ -85,6 +48,7 @@
    	  <td></td>
     </tr>
   </table>
+  </form>
   <br />
 <canvas id="myCanvas" width="600" height="400" style="float:left;border:1px solid #000;">
 Your browser does not support the HTML5 canvas tag.</canvas>

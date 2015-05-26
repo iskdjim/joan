@@ -1,0 +1,20 @@
+{
+  "name": "prototype",
+  "version": "1.0.0",
+  "description": "dipl arbeit",
+  "main": "app.js",
+  "scripts": {
+    "test": "df"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "typescript": "~1.4.1",
+    "grunt-typescript": "~0.6.2",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-connect": "~0.10.1",
+    "grunt-open": "~0.2.3"
+  },
+  "repository": "",
+  "author": "Pilz",
+  "license": "ISC"
+}

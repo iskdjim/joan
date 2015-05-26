@@ -9,71 +9,33 @@
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/styles.css"/>
 
-  <script src="../js/zepto.js"></script>  
-  <script src="../js/simplify.js"></script>  
-  <script src="../js/app.js"></script>
-
+  <script src="../libs/zepto.js"></script>  
+  <script src="../libs/simplify.js"></script>  
+  <script src="../js/app-ts.js"></script>
+  
   <script> 
     $(document).ready( function() {
       $.getJSON( "../api/data.json", function( data ) {
 	    data_count = data.count;
-        data = data.data;
+	    raw_data = data.data;
         var iteration_counter = 0;
         $('#linescount').html(data_count);
         $('#fader').attr({'max':data_count});
-
-        function drawChart () {
-          iterations = $('#iterations').val();
-          var simplify_options = new Array(false,false);
-          
-          if($('#tolerance').val() != "0"){
-          	var simplify_options = new Array(true,$('#tolerance').val());
-          }
-  
-          var prepared_data = prepareData(data,"svg",$('#limit_lines').val(),simplify_options);
-          $('#counter_simply').html((prepared_data.length-1));
-          
-          while(iterations > iteration_counter){
-            var t0 = performance.now();
-            var line_points = new Array(new Array(0,0));
-	
-            iteration_counter++;          
-            $("#container").empty(); 
-
-	        if($('#draw_type').val() == "lines"){
-	      	  drawSvgLines(prepared_data, $("#container"));
-	        }else{
-	          drawSvgPath(prepared_data, $("#container"));	
-	        }
-          
-            var t1 = performance.now();
-            fps_value = requestAnimFrame();
-            stats_data_fps.push(fps_value);
-            stats_data_ms.push(t1 - t0);
-
-          }						
-                    
-        };
-          
-        $('#draw_btn').click(function(){
-          iteration_counter = 0;
-          stats_data_fps = new Array();
-          stats_data_ms = new Array();
-          drawChart();
-        
-          showStats(stats_data_fps,stats_data_ms);
-        });
-        
     
       });	
+
+      $('form').submit(function(e){
+        init("svg");
+        return false;
+      });     
     });
 
-
-	</script>
+  </script>
 </head>
 <body>
-  <h1 style="text-align:center;">SVG Lines - with simplify</h1>
+  <h1 style="text-align:center;">SVG Performance</h1>
   <p>Data exists for <a id="linescount"></a> Points</p>
+  <form id="drawing">
   <table>
     <tr> 
       <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="0" type"name"/></td>
@@ -86,12 +48,12 @@
    	  <td></td>
     </tr>
    <tr>
-     <td>Object Typ:<select id="draw_type" onchange="checkType(value)"><option value="lines">Lines</option><option value="path">Path</option></select></td>
+     <td>Object Typ:<select id="draw_type"><option value="lines">Lines</option><option value="path">Path</option></select></td>
      <td></td>
      <td></td>
    </tr>
   </table>
-  
+  </form>
   <br />
   <svg class="svg_holder" id="container"></svg> 
   <div class="stats">

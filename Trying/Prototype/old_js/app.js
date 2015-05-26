@@ -7,6 +7,8 @@ function getData(){
     }   
   }, 'json');
 }
+
+
     
 function getJsonData(){
   return "test";
@@ -169,23 +171,6 @@ function drawSvgPath(prepare_data, target){
   target.append(newpath);	 
 
 }
-
-
-function drawCanvasPath(prepared_data, context_data){
-  context = context_data[0]
-  context.clearRect ( 0 , 0 , context_data[1], context_data[2] );
-  context.beginPath();
-  context.moveTo(0, 0);
-  var x_range = 0; // some day its the time value    
-  $.each(prepared_data, function(i,val){
-    x1 = val.x;
-    y1 = val.y;
-    context.lineTo(x1,y1);
-  })
-
-  context.stroke();
-}
-
 
 	    
 function createPointsArray(chanel){
