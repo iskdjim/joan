@@ -206,6 +206,10 @@ function webglStuff(desternation) {
 }
 function drawWebGlLines(data) {
     vVertices = data;
+    var new_vertices = new Float32Array([1, 1, 0,
+        1, 0, 0,
+        0, 0, 0]);
+    // vVertices = new_vertices;      
     // Buffer wird erstellt...GPU   
     vertexPosBufferObjekt = gl.createBuffer();
     // ...und als aktives Objekt gesetzt:
@@ -221,6 +225,7 @@ function drawWebGlLines(data) {
     else {
         draw_count = vVertices.length / 3;
     }
+    // gl.drawArrays(gl.TRIANGLES, 0, draw_count);
     gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
 }
 function pixelToPoints(index, point) {
@@ -251,7 +256,7 @@ function pixelToPoints(index, point) {
     }
     webgl_points[(index * 3)] = x;
     webgl_points[(index * 3) + 1] = y;
-    webgl_points[(index * 3) + 2] = 0.0;
+    //webgl_points[(index*3)+2] = 0.0;
 }
 function getShader(gl, id) {
     var shaderScript = document.getElementById(id);
