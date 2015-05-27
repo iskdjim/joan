@@ -34,3 +34,11 @@ table tr td{
   margin-left:1rem;
   margin-top:1rem;
 }
+
+table#result_table{
+  width:100%;
+}
+
+table#result_table,#result_table th,#result_table td {
+  border:1px solid #000;
+}
