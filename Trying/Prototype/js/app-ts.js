@@ -1,5 +1,5 @@
 /// <reference path="../libs/jquery.d.ts" />
-var iteration_counter, stats_data_fps, stats_data_ms, raw_data, webgl_points;
+var iteration_counter, stats_data_fps, stats_data_ms, raw_data, webgl_points, line_type;
 function init(typ) {
     iteration_counter = 0;
     stats_data_fps = new Array();
@@ -50,21 +50,46 @@ function prepareData(data, typ, range, simplify_options) {
     var ranged_points = new Array();
     var range_counter = 0;
     var x_range = 0; // some day its the time value  
+    var x_range_value = 0.02;
+    var index = 0;
     var high_quality = false;
-    var points_string = "-1.0, 1.0,0.0";
+    var points_string = "-1.0, 0.0,0.0";
+    var last_point_x = 0;
+    var last_point_y = 0;
+    var line_width = 3;
     webgl_points = new Float32Array(data.length * 3);
+    if (typ == "webgl" && line_type != "line") {
+        webgl_points = new Float32Array(data.length * 3 * 6);
+    }
     for (var i in data) {
         if (range < range_counter) {
             break;
         }
         if (typ == "webgl") {
-            points_string += "," + pixelToPoints(i, new Array(x_range, (data[i].chanels[0].value / 50)));
+            if (range_counter > 0 && line_type != "line") {
+                var p_triangles = new Array();
+                p_triangles[0] = new Array(last_point_x, last_point_y);
+                p_triangles[1] = new Array(x_range + line_width, (data[i].chanels[0].value / 50) + line_width);
+                p_triangles[2] = new Array(x_range, (data[i].chanels[0].value / 50));
+                p_triangles[3] = new Array(last_point_x, last_point_y);
+                p_triangles[4] = new Array(last_point_x + line_width, (data[i].chanels[0].value / 50) + line_width);
+                p_triangles[5] = new Array(x_range + line_width, (data[i].chanels[0].value / 50) + line_width);
+                for (var j = 0; j < p_triangles.length; j++) {
+                    points_string += "," + pixelToPoints(index, new Array(p_triangles[j][0], p_triangles[j][1]));
+                    index++;
+                }
+            }
+            else {
+                points_string += "," + pixelToPoints(i, new Array(x_range, (data[i].chanels[0].value / 50)));
+            }
+            last_point_x = x_range;
+            last_point_y = (data[i].chanels[0].value / 50);
         }
         else {
             ranged_points.push({ x: x_range, y: (data[i].chanels[0].value / 50), time: data[i].time });
         }
         range_counter++;
-        x_range += 0.02;
+        x_range += x_range_value;
     }
     if (typ == "webgl") {
         return webgl_points;
@@ -173,7 +198,7 @@ function drawSvgPath(prepare_data, target) {
     newpath.setAttributeNS(null, "fill", "none");
     target.append(newpath);
 }
-var canvas, points;
+var canvas, points, linerange;
 var points_data, formated_points, gl;
 var webGLProgramObject, vertexAttribLoc, vVertices, vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
 function webglStuff(desternation) {
@@ -206,10 +231,8 @@ function webglStuff(desternation) {
 }
 function drawWebGlLines(data) {
     vVertices = data;
-    var new_vertices = new Float32Array([1, 1, 0,
-        1, 0, 0,
-        0, 0, 0]);
-    // vVertices = new_vertices;      
+    console.log(vVertices.length);
+    //  vVertices = new_vertices;      
     // Buffer wird erstellt...GPU   
     vertexPosBufferObjekt = gl.createBuffer();
     // ...und als aktives Objekt gesetzt:
@@ -225,8 +248,12 @@ function drawWebGlLines(data) {
     else {
         draw_count = vVertices.length / 3;
     }
-    // gl.drawArrays(gl.TRIANGLES, 0, draw_count);
-    gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+    if (line_type != "line") {
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, draw_count * 6);
+    }
+    else {
+        gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+    }
 }
 function pixelToPoints(index, point) {
     var x = 0;
@@ -254,8 +281,8 @@ function pixelToPoints(index, point) {
     else if (point[1] > canvas.height / 2) {
         y = (range_value - (((range_value / (canvas.height / 2)) * point[1]))) * 0.01;
     }
-    webgl_points[(index * 3)] = x;
-    webgl_points[(index * 3) + 1] = y;
+    webgl_points[(index * 3)] = x + linerange;
+    webgl_points[(index * 3) + 1] = y + linerange;
     //webgl_points[(index*3)+2] = 0.0;
 }
 function getShader(gl, id) {

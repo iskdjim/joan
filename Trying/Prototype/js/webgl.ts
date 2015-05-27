@@ -1,4 +1,4 @@
-var canvas, points;
+var canvas, points,linerange;
 var points_data,formated_points,gl;
 var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
   vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
@@ -44,12 +44,8 @@ function webglStuff(desternation){
 
 function drawWebGlLines(data){
   vVertices = data;
-
-  var new_vertices = new Float32Array([1, 1,0,
-  	 1, 0,0,
-  	  0, 0,0]);
-  
-    // vVertices = new_vertices;      
+  console.log(vVertices.length);
+   //  vVertices = new_vertices;      
   // Buffer wird erstellt...GPU   
   vertexPosBufferObjekt = gl.createBuffer();
   // ...und als aktives Objekt gesetzt:
@@ -67,8 +63,11 @@ function drawWebGlLines(data){
     draw_count = vVertices.length/3;
   }
   
-  // gl.drawArrays(gl.TRIANGLES, 0, draw_count);
-  gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+  if(line_type != "line"){
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, draw_count*6);
+  }else{
+    gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+  }
   
 }
 
@@ -97,8 +96,8 @@ function pixelToPoints(index,point){
     y = (range_value-(((range_value/(canvas.height/2))*point[1])))*0.01;
   }
 
-  webgl_points[(index*3)] = x;
-  webgl_points[(index*3)+1] = y;
+  webgl_points[(index*3)] = x+linerange;
+  webgl_points[(index*3)+1] = y+linerange;
   //webgl_points[(index*3)+2] = 0.0;
 }
 
