@@ -42,6 +42,7 @@
       });
 
       $('form').submit(function(e){
+      	e.preventDefault();      	
     	webglStuff('webglcanvas');
     	// "change" line width with line redraw
     	for(var i=-0.001; i<0;i=i+0.001){
@@ -50,7 +51,6 @@
           init("webgl");
     	}
 
-        return false;
       });
     });
 
@@ -83,7 +83,7 @@ Your browser does not support the HTML5 canvas tag.</canvas>
     <p>Sum MS: <span id="sum_ms"></span></p>    
   </div>
   <div class="download">
-  	<a href='webgl_line_nosimplify.zip'>Download source</a>
+  	<a href='../Prototype.zip'>Download source</a>
   </div>  
 </body>
 </html>

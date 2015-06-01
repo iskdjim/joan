@@ -25,9 +25,9 @@
       });	
 
       $('form').submit(function(e){
+      	e.preventDefault();
         init("svg");
-        return false;
-      });     
+      });    
     });
 
   </script>
@@ -63,7 +63,7 @@
     <p>Sum MS: <span id="sum_ms"></span></p> 
   </div>
   <div class="download">
-  	<a href='svg_line_withsimplify.zip'>Download source</a>
+  	<a href='../Prototype.zip'>Download source</a>
   </div>  
 </body>
 </html>

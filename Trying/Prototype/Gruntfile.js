@@ -3,6 +3,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
+  	grunt.loadNpmTasks('grunt-contrib-compress');
  
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -32,9 +33,25 @@ module.exports = function (grunt) {
             dev: {
                 path: 'http://localhost/www/Diplarbeit/joan/Trying/Prototype/'
             }
+        },
+        compress: {
+			 main: {
+			    options: {
+			      archive: 'Prototype.zip'
+			    },
+			    files: [
+			      {src: ['svg/**'], dest: '/'}, 
+			      {src: ['canvas/**'], dest: '/'}, 
+			      {src: ['webgl/**'], dest: '/'}, 
+			      {src: ['api/**'], dest: '/'}, 
+			      {src: ['css/**'], dest: '/'}, 
+			      {src: ['libs/**'], dest: '/'}, 
+			      {src: ['js/**'], dest: '/'}, 
+			    ]
+			  }
         }
     });
  
-    grunt.registerTask('default', ['connect', 'open', 'watch']);
+    grunt.registerTask('default', ['connect', 'open', 'watch', 'compress']);
  
 }

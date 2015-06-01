@@ -35,10 +35,24 @@ table tr td{
   margin-top:1rem;
 }
 
-table#result_table{
-  width:100%;
+table tr td{
+	padding:0.15rem;
 }
 
-table#result_table,#result_table th,#result_table td {
+table#result_table{
+  width:100%;
+  font-size: 0.7rem;
+}
+
+table#result_table, tr.table_border, tr.table_border td{
   border:1px solid #000;
+}
+
+tr.table_border td td{
+  border:0px solid #000;
+
+}
+
+table .header{
+	font-weight:bold;
 }

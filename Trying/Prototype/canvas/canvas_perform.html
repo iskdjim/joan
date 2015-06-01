@@ -25,8 +25,8 @@
       });	
 
       $('form').submit(function(e){
+      	e.preventDefault();   	
         init("canvas");
-        return false;
       });
     });
 
@@ -59,7 +59,7 @@ Your browser does not support the HTML5 canvas tag.</canvas>
     <p>Sum MS: <span id="sum_ms"></span></p>     
   </div>
   <div class="download">
-  	<a href='canvas_line_withsimplify.zip'>Download source</a>
+  	<a href='../Prototype.zip'>Download source</a>
   </div>  
 </body>
 </html>

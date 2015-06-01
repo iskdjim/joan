@@ -28,17 +28,96 @@
 <h3>Perfomance Result:</h3>
 <p>Tested with 25000 data points and 5 iterations.</p>
 <table id="result_table">
-  <tr>
-    <td>Device</td>
+  <tr class="table_border header">
+    <td></td>
     <td>Best SVG Performance</td> 
     <td>Worst SVG Performance</td>     
     <td>Best Canvas Performance</td>
     <td>Worst Canvas Performance</td>
     <td>Best WebGL Performance</td>     
     <td>Worst WebGL Performance</td> 
+  </tr >
+  <tr class="table_border">
+    <td class="header"><u>Samsung Galaxy Grande Neo</u> <br /> Prozessor 1.2GHz quad-core <br /> Arbeitsspeicher 1GB <br /> Android 4.2</td>
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Path - best simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>66</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>4.24</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>21.24</td>  
+      	</tr>
+      </table></td> 
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - no simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>0.16</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>6243.09</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>31215.47</td>  
+      	</tr>
+      </table>
+    <td>      
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - best simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>66</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>1.77</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>8.887</td>  
+      	</tr>
+      </table>
+    </td>
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - no simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>6.36</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>157.66</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>788.34</td>  
+      	</tr>
+      </table>    	
+    </td>     
+    <td>
+      no webgl support
+    </td>    
+    <td>
+      no webgl support   	
+    </td>    
   </tr>
-  <tr>
-    <td>Samsung</td>
+  <tr class="table_border">
+    <td class="header"><u>Tablet</u></td>
     <td></td> 
     <td></td>
     <td></td> 
@@ -46,8 +125,8 @@
     <td></td>
     <td></td> 
   </tr>
-  <tr>
-    <td>Tablet</td>
+  <tr class="table_border">
+    <td class="header"><u>Iphone</u></td>
     <td></td> 
     <td></td>
     <td></td> 
@@ -55,25 +134,124 @@
     <td></td>
     <td></td> 
   </tr>
-  <tr>
-    <td>Iphone</td>
+  <tr class="table_border">
+    <td class="header"><u>Ipad</u></td>
     <td></td> 
     <td></td>
     <td></td> 
     <td></td>
     <td></td>
     <td></td> 
+  </tr>  
+  <tr class="table_border">
+    <td class="header"><u>Thinkpad S540</u> <br /> Intel(R) Core(TM) i5-4200 <br /> CPU @ 1.60 GHz 2.30 GHz <br /> 8GB Arbeitsspeicher <br />AMD Radeon HD 8670M 2GB <br /> Windows 8 mit Chrome</td>
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Path - best simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>66</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>0.456</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>2.2</td>  
+      	</tr>
+      </table></td> 
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - no simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>0.26</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>3751</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>18754.8</td>  
+      	</tr>
+      </table>
+    <td>      
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - best simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>66</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>0.22</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>1.13</td>  
+      	</tr>
+      </table>
+    </td>
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - no simplify: </td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>46.2</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>22.23</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>111.44</td>  
+      	</tr>
+      </table>    	
+    </td>     
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Lines - no simplify</td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>66</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>6.18</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>30.913</td>  
+      	</tr>
+      </table>    	
+    </td>    
+    <td>
+      <table class="performanc_stats">
+      	<tr>
+      		<td colspan="2">Polygon - no simplify</td>
+      	</tr>
+      	<tr>
+      	  <td>Average FPS:</td>
+      	  <td>34.8</td>  
+      	</tr>
+      	<tr>
+      	  <td>Average MS:</td>
+      	  <td>33.26</td>  
+      	<tr>
+      	  <td>Sum MS:</td>
+      	  <td>166.30</td>  
+      	</tr>
+      </table>    	
+    </td>    
   </tr>
-  <tr>
-    <td>Laptop</td>
-    <td></td> 
-    <td></td> 
-    <td></td> 
-    <td></td>
-    <td></td>
-    <td></td> 
-  </tr>
-  
 </table>
 
 <!--<br /><br />
