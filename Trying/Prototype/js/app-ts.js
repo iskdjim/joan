@@ -24,7 +24,7 @@ function drawChart(type) {
         iterationCounter++;
         $("#container").empty();
         if (type == "svg") {
-            if ($('#draw-type').val() == "lines") {
+            if ($('#drawType').val() == "lines") {
                 drawSvgLines(preparedData, $("#container"));
             }
             else {
