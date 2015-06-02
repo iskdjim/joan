@@ -1,107 +1,102 @@
 var canvas, points,linerange;
-var points_data,formated_points,gl;
-var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
-  vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
-  vVertices,        // Array der Dreieckskoordinaten
-  vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
-    
-function webglStuff(desternation){
-	
-  canvas = document.getElementById(desternation);
+var pointsData,GL;
+var webGLProgramObject, // "GPU-program", for calucation of the graphics
+  vertexAttribLoc,  // connection between javascript and vertex-shader
+  vVertices,        // Array for triangle coordinats
+  vertexPosBufferObjekt; // The WebGL-buffer for the triangles
+
+function webglStuff(destination){
+  canvas = document.getElementById(destination);
   try {
-    gl = canvas.getContext("experimental-webgl");
+    GL = canvas.getContext("experimental-webgl");
   } catch (e) {}
-  
-  if (!gl) {
-    window.alert("Fehler: WebGL-Context nicht gefunden");
+
+  if (!GL) {
+    window.alert("Fehler: WebGL-context not found");
   }
-      
-  var fragmentShader = getShader(gl,"shader-fs");   
-  var vertexShader = getShader(gl,"shader-vs");   
-	        
-  webGLProgramObject = gl.createProgram();
-	       
-  gl.attachShader(webGLProgramObject, fragmentShader);
-  gl.attachShader(webGLProgramObject, vertexShader);
+
+  var fragmentShader = getShader(GL,"shader-fs");
+  var vertexShader = getShader(GL,"shader-vs");
+
+  webGLProgramObject = GL.createProgram();
+
+  GL.attachShader(webGLProgramObject, fragmentShader);
+  GL.attachShader(webGLProgramObject, vertexShader);
+
+  // Shader-program-object is complete and has to be linked
+  GL.linkProgram(webGLProgramObject);
+  
+  
+  // it is posible to use more than one shader program, so tell the program which one should be used
+  GL.useProgram(webGLProgramObject);
+
+  // background color
+  GL.clearColor(255.0, 255.0,255.0, 1.0);
+  // delete background
+  GL.clear(GL.COLOR_BUFFER_BIT);
 	
-  // Das Shader-Program-Objekt ist vollstaendig und muss
-  // gelinkt werden.
-  gl.linkProgram(webGLProgramObject);
-	        
-  // Da theoretisch mehrere Shader-Program-Objekte moeglich  
-  // sind, muss angegeben werden, welches benutzt werden soll.
-  gl.useProgram(webGLProgramObject);
-	        
-  // RGB-Alpha Farbe zum loeschen des Hintergrundes:
-  gl.clearColor(255.0, 255.0,255.0, 1.0);
-  // Hintergrund loeschen
-  gl.clear(gl.COLOR_BUFFER_BIT);
-	
-  // Die Verknuepfung zwischen JavaScript und dem 
-  // Shader-Attribut
-  vertexAttribLoc = gl.getAttribLocation(webGLProgramObject, "vPosition");		
+  // Conntection between javascript and the shader-attribut
+  vertexAttribLoc = GL.getAttribLocation(webGLProgramObject, "vPosition");
 }
 
 function drawWebGlLines(data){
   vVertices = data;
-  console.log(vVertices.length);
-   //  vVertices = new_vertices;      
-  // Buffer wird erstellt...GPU   
-  vertexPosBufferObjekt = gl.createBuffer();
-  // ...und als aktives Objekt gesetzt:
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBufferObjekt);
-			        
-  // die Arraydaten werden an den aktiven Puffer uebergeben:
-  gl.bufferData(gl.ARRAY_BUFFER, vVertices, gl.STATIC_DRAW);
-  gl.vertexAttribPointer(vertexAttribLoc, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vertexAttribLoc);
-			
-  var draw_count;		
-  if($('#limit_lines').val() < vVertices.length/3){
-    draw_count = $('#limit_lines').val();
-  }else{
-    draw_count = vVertices.length/3;
-  }
   
-  if(line_type != "line"){
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, draw_count*6);
+  // create buffer...GPU   
+  vertexPosBufferObjekt = GL.createBuffer();
+  // ...and set as active object
+  GL.bindBuffer(GL.ARRAY_BUFFER, vertexPosBufferObjekt);
+		        
+  // give array data to active buffer
+  GL.bufferData(GL.ARRAY_BUFFER, vVertices, GL.STATIC_DRAW);
+  GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, 0, 0);
+  GL.enableVertexAttribArray(vertexAttribLoc);
+
+  var drawCount;
+  if($('#limitLines').val() < vVertices.length/3){
+    drawCount = $('#limitLines').val();
   }else{
-    gl.drawArrays(gl.LINE_STRIP, 0, draw_count);
+    drawCount = vVertices.length/3;
   }
-  
+
+  if(linetype != "line"){
+    GL.drawArrays(GL.TRIANGLE_STRIP, 0, drawCount*6);
+  }else{
+    GL.drawArrays(GL.LINE_STRIP, 0, drawCount);
+  }
 }
 
 function pixelToPoints(index,point){
   var x = 0;
   var y = 0;
-  
-  var range_value = 100;
+
+  var rangeValue = 100;
   if(point[0] < canvas.width/2){
     if(point[0] > 0){
-      x = (range_value-(((range_value/(canvas.width/2))*point[0])))*-0.01;
+      x = (rangeValue-(((rangeValue/(canvas.width/2))*point[0])))*-0.01;
     }else{
       x = -1;
-    }	
+    }
   }else if(point[0] > canvas.width/2){
-    x = ((((range_value/(canvas.width/2))*point[0])))*0.01;
-  }
-        
-  if(point[1] < canvas.height/2){
-    if(point[1] > 0){
-      y = (range_value-(((range_value/(canvas.height/2))*point[1])))*0.01;
-    }else{
-      y = -1;
-    }	
-  }else if(point[1] > canvas.height/2){
-    y = (range_value-(((range_value/(canvas.height/2))*point[1])))*0.01;
+    x = ((((rangeValue/(canvas.width/2))*point[0])))*0.01;
   }
 
-  webgl_points[(index*3)] = x+linerange;
-  webgl_points[(index*3)+1] = y+linerange;
+  if(point[1] < canvas.height/2){
+    if(point[1] > 0){
+      y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
+    }else{
+      y = -1;
+    }
+  }else if(point[1] > canvas.height/2){
+    y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
+  }
+
+  webGLPoints[(index*3)] = x+linerange;
+  webGLPoints[(index*3)+1] = y+linerange;
   //webgl_points[(index*3)+2] = 0.0;
 }
 
-function getShader(gl, id) {
+function getShader(GL, id) {
   var shaderScript : any = document.getElementById(id);
   if (!shaderScript) {
     return null;
@@ -114,19 +109,22 @@ function getShader(gl, id) {
     }
     k = k.nextSibling;
   }
+  
   var shader;
   if (shaderScript.type == "x-shader/x-fragment") {
-    shader = gl.createShader(gl.FRAGMENT_SHADER);
+    shader = GL.createShader(GL.FRAGMENT_SHADER);
   } else if (shaderScript.type == "x-shader/x-vertex") {
-    shader = gl.createShader(gl.VERTEX_SHADER);
+    shader = GL.createShader(GL.VERTEX_SHADER);
   } else {
     return null;
   }
-  gl.shaderSource(shader, str);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    alert(gl.getShaderInfoLog(shader));
+  
+  GL.shaderSource(shader, str);
+  GL.compileShader(shader);
+  if (!GL.getShaderParameter(shader, GL.COMPILE_STATUS)) {
+    alert(GL.getShaderInfoLog(shader));
     return null;
   }
+  
   return shader;
 }

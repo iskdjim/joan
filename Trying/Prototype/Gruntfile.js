@@ -37,13 +37,17 @@ module.exports = function (grunt) {
         compress: {
 			 main: {
 			    options: {
-			      archive: 'Prototype.zip'
+			      archive: 'perf.zip'
 			    },
 			    files: [
+			      {src: ['index.html'], dest: '/'},  
+			      {src: ['package.json'], dest: '/'}, 
+			      {src: ['Gruntfile.js'], dest: '/'}, 
 			      {src: ['svg/**'], dest: '/'}, 
-			      {src: ['canvas/**'], dest: '/'}, 
+			      {src: ['canvas2d/**'], dest: '/'}, 
 			      {src: ['webgl/**'], dest: '/'}, 
-			      {src: ['api/**'], dest: '/'}, 
+			      {src: ['api/data.json'], dest: '/'}, 
+			      {src: ['api/data.min.js'], dest: '/'}, 			      
 			      {src: ['css/**'], dest: '/'}, 
 			      {src: ['libs/**'], dest: '/'}, 
 			      {src: ['js/**'], dest: '/'}, 

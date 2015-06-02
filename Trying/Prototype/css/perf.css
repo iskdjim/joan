@@ -1,0 +1,133 @@
+html{
+  font-size:1rem;
+  width:70em;
+}
+
+table tr td{
+  padding:0.3rem 1rem 0rem 0rem;
+}
+
+.stats{
+  border:0.1rem solid #000;
+  width:20rem;
+  float:left;
+  margin-left:1rem;
+}
+
+.svgHolder{
+  border:0.1em solid #000000;
+  width:40rem;
+  height:25rem;
+  float:left;
+}
+
+.canvasHolder{
+  border:0.1em solid #000000;
+  float:left;
+}
+
+.download{
+  border:0.1rem solid #000;
+  width:20rem;
+  float:left;
+  margin-left:1rem;
+  margin-top:1rem;
+}
+
+h1{
+  text-align:center;
+}
+
+table tr td{
+  padding:0.15rem;
+}
+
+table#resultTable{
+  width:100%;
+  font-size: 0.7rem;
+}
+
+table#resultTable, tr.tableBorder, tr.tableBorder td{
+  border:1px solid #000;
+}
+
+tr.tableBorder td td{
+  border:0px solid #000;
+}
+
+table .header{
+  font-weight:bold;
+}
+
+#myCanvas{
+  float:left;
+  border:1px solid #000;
+}
+
+#limitLines, #iterations{
+  width:5rem;
+}
+
+#iterations, #fader, #tolerance, #drawType{
+  margin-left:0.5rem;
+}
+
+#limitLines{
+  margin-right:1rem;
+}
+
+#webGLCanvas{
+  float:left;
+  border:1px solid #000;
+}
+
+#polyWidth{
+  width:5rem;
+}
+
+.alignRight{
+  text-align:right;
+}
+
+.tableAxe{
+  width:100%;
+  display:block;
+}
+
+.width10{
+  width:10%;
+}
+
+.width15{
+  width:15%;
+}
+
+.width15 table{
+  width:100%;
+}
+
+.legend{
+  margin-top:1em;
+}
+
+p + p {
+  text-indent: 0em;
+}
+.stats p + p {
+  text-indent: 1em;
+}
+
+.legend p{
+  margin:0px;
+  font-size:0.6rem;
+}
+
+#resultTable .ms{
+  text-align:center;
+  display:block;
+  width:100%;
+}
+
+#resultTable .tableBorder.header{
+  text-align:center;
+}

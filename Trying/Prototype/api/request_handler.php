@@ -12,9 +12,7 @@ while($data = fgetcsv($handle, 9999, ";")){
 	$dataset = array("time" => $data[0], 
 					 "chanels" => 
 						array(
-							array("chanel" => "1", "value" => $data[5]),
-							array("chanel" => "2", "value" => $data[6]),
-							array("chanel" => "3", "value" => $data[7])
+							array("chanel" => "1", "value" => $data[5])
 						)
 					
 					);
@@ -30,19 +28,23 @@ while($data = fgetcsv($handle, 9999, ";")){
 					 "end_time"	 => "",
 					 "count" => $limit,
 					 "limits" => array(
-					 				array("chanel" => "1", "min" => "", "max" => ""),
-									array("chanel" => "2", "min" => "", "max" => ""),
-									array("chanel" => "3", "min" => "", "max" => "")
+					 				array("chanel" => "1", "min" => "", "max" => "")
 								 )
 				);
 		break;
 	}				
 }
 
-$json_file = fopen("data.json", "w");
-fwrite($json_file, json_encode($json_data));
+$json_file = fopen("data.min.js", "w");
+fwrite($json_file, "var jsonData = ".json_encode($json_data));
 fclose($json_file);
 
-echo json_encode($json_data);
+$json_file2 = fopen("data.json", "w");
+fwrite($json_file2, json_encode($json_data, JSON_PRETTY_PRINT));
+fclose($json_file2);
+
+
+
+var_dump(json_encode($json_data, JSON_PRETTY_PRINT));
 
 ?>
