@@ -128,6 +128,10 @@ p + p {
   width:100%;
 }
 
+#resultTable .ms.best{
+  font-weight:bold; 
+}
+
 #resultTable .tableBorder.header{
   text-align:center;
 }
