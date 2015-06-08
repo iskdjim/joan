@@ -3,6 +3,7 @@ var pointsData,GL;
 var webGLProgramObject, // "GPU-program", for calucation of the graphics
   vertexAttribLoc,  // connection between javascript and vertex-shader
   vVertices,        // Array for triangle coordinats
+  vertexColorAttribute,
   vertexPosBufferObjekt; // The WebGL-buffer for the triangles
 
 function webglStuff(destination){
@@ -36,12 +37,14 @@ function webglStuff(destination){
   GL.clear(GL.COLOR_BUFFER_BIT);
 	
   // Conntection between javascript and the shader-attribut
+  vertexColorAttribute = GL.getAttribLocation(webGLProgramObject, "aVertexColor");
+
   vertexAttribLoc = GL.getAttribLocation(webGLProgramObject, "vPosition");
 }
 
 function drawWebGlLines(data){
   vVertices = data;
-  
+
   // create buffer...GPU   
   vertexPosBufferObjekt = GL.createBuffer();
   // ...and set as active object
@@ -49,15 +52,27 @@ function drawWebGlLines(data){
 		        
   // give array data to active buffer
   GL.bufferData(GL.ARRAY_BUFFER, vVertices, GL.STATIC_DRAW);
-  GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, 0, 0);
-  GL.enableVertexAttribArray(vertexAttribLoc);
+  
+    
+  var itemSize = 7; // x,y,z + r,g,b,a
 
   var drawCount;
-  if($('#limitLines').val() < vVertices.length/3){
+  if($('#limitLines').val() < vVertices.length/itemSize){
     drawCount = $('#limitLines').val();
   }else{
-    drawCount = vVertices.length/3;
+    drawCount = vVertices.length/itemSize;
   }
+
+  var step = Float32Array.BYTES_PER_ELEMENT;
+  var total = 3+4;
+  var stride = step * total;
+
+  GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, stride, 0);
+  
+  GL.vertexAttribPointer(vertexColorAttribute, 4, GL.FLOAT, false, stride, step * 3);
+  
+  GL.enableVertexAttribArray(vertexColorAttribute);
+  GL.enableVertexAttribArray(vertexAttribLoc);
 
   if(linetype != "line"){
     GL.drawArrays(GL.TRIANGLE_STRIP, 0, drawCount*6);
@@ -91,9 +106,19 @@ function pixelToPoints(index,point){
     y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
   }
 
-  webGLPoints[(index*3)] = x+linerange;
-  webGLPoints[(index*3)+1] = y+linerange;
-  //webgl_points[(index*3)+2] = 0.0;
+  webGLPoints[(index*7)] = x+linerange;
+  webGLPoints[(index*7)+1] = y+linerange;
+  webGLPoints[(index*7)+2] = 0;
+  webGLPoints[(index*7)+3] = 0;
+  webGLPoints[(index*7)+4] = 0;
+  webGLPoints[(index*7)+5] = 0;
+  webGLPoints[(index*7)+6] = 1;  
+  
+
+  
+  if(mouseEvent){
+	checkMouseHit($('#webGLCanvas'),mouseEvent);
+  }  
 }
 
 function getShader(GL, id) {

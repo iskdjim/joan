@@ -1,5 +1,6 @@
 /// <reference path="../libs/jquery.d.ts" />
-var iterationCounter, statsDataFps, statsDataMs, rawData, webGLPoints, linetype, lineWidth;
+var iterationCounter, statsDataFps, statsDataMs, rawData, webGLPoints, linetype, lineWidth, mouseEvent;
+var polygoneLinePoints = new Array();
 function doDrawing(type) {
     iterationCounter = 0;
     statsDataFps = new Array();
@@ -49,15 +50,16 @@ function prepareData(data, type, range, simplifyOptions) {
     var rangedPoints = new Array();
     var rangeCounter = 0;
     var xRange = 0; // some day its the time value
-    var xRangeValue = 0.02;
+    var xRangeValue = 80;
+    polygoneLinePoints = new Array();
     var index = 0;
     var highQuality = false;
     var pointsString = "-1.0, 0.0,0.0";
     var lastPointX = 0;
     var lastPointY = 0;
-    webGLPoints = new Float32Array(data.length * 3);
+    webGLPoints = new Float32Array(data.length * 7);
     if (type == "webgl" && linetype != "line") {
-        webGLPoints = new Float32Array(data.length * 3 * 6);
+        webGLPoints = new Float32Array(data.length * 7 * 6);
     }
     for (var i in data) {
         if (range < rangeCounter) {
@@ -72,6 +74,8 @@ function prepareData(data, type, range, simplifyOptions) {
                 pTriangles[3] = new Array(lastPointX, lastPointY);
                 pTriangles[4] = new Array(lastPointX + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
                 pTriangles[5] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+                //polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[2],pTriangles[1],pTriangles[4]));
+                polygoneLinePoints.push(new Array(pTriangles[0], pTriangles[1], pTriangles[2], pTriangles[3], pTriangles[4], pTriangles[5]));
                 for (var j = 0; j < pTriangles.length; j++) {
                     pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
                     index++;
@@ -90,6 +94,7 @@ function prepareData(data, type, range, simplifyOptions) {
         xRange += xRangeValue;
     }
     if (type == "webgl") {
+        console.log(webGLPoints);
         return webGLPoints;
     }
     if (simplifyOptions[0]) {
@@ -139,6 +144,60 @@ function showStats(statsDataFps, statsDataMs) {
     $('#averageMs').html((Math.round(msAv * 100) / 100).toString());
     //var sumMs = msAv*$('#iterations').val();
     //$('#sumMs').html(sumMs.toString());
+}
+function checkMouseHit(target, e) {
+    var offset = target.offset();
+    var mouse_x = e.pageX - offset.left;
+    var mouse_y = e.pageY - offset.top;
+    console.log("x:" + mouse_x + " y:" + mouse_y);
+    console.log(polygoneLinePoints[0]);
+    $.each(polygoneLinePoints, function (i, val) {
+        if (mouse_x > val[0][0] && mouse_x < val[2][0] && mouse_y > val[0][1] && mouse_y < val[4][1]) {
+            console.log("hit for line:" + (i + 1));
+            console.log(i);
+            $.each(val, function (j, point) {
+                if (j == "0") {
+                    webGLPoints[(((0) + j) * 7) + 3] = 1;
+                    webGLPoints[(((0) + j) * 7) + 4] = 0;
+                    webGLPoints[(((0) + j) * 7) + 5] = 0;
+                    webGLPoints[(((0) + j) * 7) + 6] = 1;
+                }
+                else if (j == "1") {
+                    webGLPoints[(((1) + j) * 7) + 3] = 0;
+                    webGLPoints[(((1) + j) * 7) + 4] = 1;
+                    webGLPoints[(((1) + j) * 7) + 5] = 0;
+                    webGLPoints[(((1) + j) * 7) + 6] = 1;
+                }
+                else if (j == "2") {
+                    webGLPoints[(((2) + j) * 7) + 3] = 0;
+                    webGLPoints[(((2) + j) * 7) + 4] = 0;
+                    webGLPoints[(((2) + j) * 7) + 5] = 1;
+                    webGLPoints[(((2) + j) * 7) + 6] = 1;
+                }
+                else if (j == "4") {
+                    webGLPoints[(((2) + j) * 7) + 3] = 1;
+                    webGLPoints[(((2) + j) * 7) + 4] = 0;
+                    webGLPoints[(((2) + j) * 7) + 5] = 0;
+                    webGLPoints[(((2) + j) * 7) + 6] = 1;
+                }
+                else if (j == "5") {
+                    webGLPoints[(((2) + j) * 7) + 3] = 0;
+                    webGLPoints[(((2) + j) * 7) + 4] = 1;
+                    webGLPoints[(((2) + j) * 7) + 5] = 0;
+                    webGLPoints[(((2) + j) * 7) + 6] = 1;
+                }
+                else if (j == "6") {
+                    webGLPoints[(((2) + j) * 7) + 3] = 0;
+                    webGLPoints[(((2) + j) * 7) + 4] = 0;
+                    webGLPoints[(((2) + j) * 7) + 5] = 1;
+                    webGLPoints[(((2) + j) * 7) + 6] = 1;
+                }
+            });
+        }
+        else {
+            console.log("no hit for line:" + (i + 1));
+        }
+    });
 }
 function initCanvasContext(desternation) {
     var c = document.getElementById(desternation);
@@ -198,7 +257,7 @@ function drawSvgPath(prepareData, target) {
 }
 var canvas, points, linerange;
 var pointsData, GL;
-var webGLProgramObject, vertexAttribLoc, vVertices, vertexPosBufferObjekt; // The WebGL-buffer for the triangles
+var webGLProgramObject, vertexAttribLoc, vVertices, vertexColorAttribute, vertexPosBufferObjekt; // The WebGL-buffer for the triangles
 function webglStuff(destination) {
     canvas = document.getElementById(destination);
     try {
@@ -222,6 +281,7 @@ function webglStuff(destination) {
     // delete background
     GL.clear(GL.COLOR_BUFFER_BIT);
     // Conntection between javascript and the shader-attribut
+    vertexColorAttribute = GL.getAttribLocation(webGLProgramObject, "aVertexColor");
     vertexAttribLoc = GL.getAttribLocation(webGLProgramObject, "vPosition");
 }
 function drawWebGlLines(data) {
@@ -232,15 +292,21 @@ function drawWebGlLines(data) {
     GL.bindBuffer(GL.ARRAY_BUFFER, vertexPosBufferObjekt);
     // give array data to active buffer
     GL.bufferData(GL.ARRAY_BUFFER, vVertices, GL.STATIC_DRAW);
-    GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, 0, 0);
-    GL.enableVertexAttribArray(vertexAttribLoc);
+    var itemSize = 7; // x,y,z + r,g,b,a
     var drawCount;
-    if ($('#limitLines').val() < vVertices.length / 3) {
+    if ($('#limitLines').val() < vVertices.length / itemSize) {
         drawCount = $('#limitLines').val();
     }
     else {
-        drawCount = vVertices.length / 3;
+        drawCount = vVertices.length / itemSize;
     }
+    var step = Float32Array.BYTES_PER_ELEMENT;
+    var total = 3 + 4;
+    var stride = step * total;
+    GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, stride, 0);
+    GL.vertexAttribPointer(vertexColorAttribute, 4, GL.FLOAT, false, stride, step * 3);
+    GL.enableVertexAttribArray(vertexColorAttribute);
+    GL.enableVertexAttribArray(vertexAttribLoc);
     if (linetype != "line") {
         GL.drawArrays(GL.TRIANGLE_STRIP, 0, drawCount * 6);
     }
@@ -274,9 +340,16 @@ function pixelToPoints(index, point) {
     else if (point[1] > canvas.height / 2) {
         y = (rangeValue - (((rangeValue / (canvas.height / 2)) * point[1]))) * 0.01;
     }
-    webGLPoints[(index * 3)] = x + linerange;
-    webGLPoints[(index * 3) + 1] = y + linerange;
-    //webgl_points[(index*3)+2] = 0.0;
+    webGLPoints[(index * 7)] = x + linerange;
+    webGLPoints[(index * 7) + 1] = y + linerange;
+    webGLPoints[(index * 7) + 2] = 0;
+    webGLPoints[(index * 7) + 3] = 0;
+    webGLPoints[(index * 7) + 4] = 0;
+    webGLPoints[(index * 7) + 5] = 0;
+    webGLPoints[(index * 7) + 6] = 1;
+    if (mouseEvent) {
+        checkMouseHit($('#webGLCanvas'), mouseEvent);
+    }
 }
 function getShader(GL, id) {
     var shaderScript = document.getElementById(id);
