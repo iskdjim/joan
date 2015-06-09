@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/normalise.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/detect.css"/>
 
   <script src="../libs/zepto.js"></script>
   <script src="../js/app-ts.js"></script>
@@ -71,18 +72,18 @@
   </script>
 </head>
 <body>
-  <h1>WebGL performance</h1>
-  <p>Data exists for <span id="linesCount"></span> points</p>
+  <h1>WebGL line detection</h1>
+  <p class="hider">Data exists for <span id="linesCount"></span> points</p>
   <form id="drawing">
   <table>
     <tr> 
-      <td>Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="25" type"name"/></td>
-      <td>Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
+      <td class="hider" >Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="25" type"name"/></td>
+      <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
     <tr> 
-      <td>Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
-      <td>Line Width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.4" /></td>
+      <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
+      <td>Line Width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /></td>
       <td></td>
     </tr>
   </table>
@@ -96,7 +97,7 @@ Your browser does not support the HTML5 canvas tag.</canvas>
     <p>Average ms: <span id="averageMs"></span></p>  
   </div>
   <div class="download">
-  	<a href='../perf.zip'>Download source</a>
+  	<a href='../detect.zip'>Download source</a>
   </div>  
 </body>
 </html>
