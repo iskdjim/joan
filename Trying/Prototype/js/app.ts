@@ -2,8 +2,10 @@
 
 declare function simplify(points, tolerance, quality);
 
-var iterationCounter,statsDataFps,statsDataMs,rawData,webGLPoints,linetype,lineWidth,mouseEvent;
+var iterationCounter,statsDataFps,statsDataMs,rawData,webGLPoints,linetype,lineWidth,mouseEvent,lineDetect;
 var polygoneLinePoints = new Array();
+var xValueRange = 0.02;
+var canvasLineWidth = 1;
 
 function doDrawing(type){
   iterationCounter = 0;
@@ -42,7 +44,11 @@ function drawChart (type) {
       }
     }else if(type == "canvas"){
       var context = initCanvasContext('myCanvas');
-      drawCanvasPath(preparedData, context);
+      if($('#drawType').val() == "lines"){
+        drawCanvasLines(preparedData, context);
+      }else{
+        drawCanvasPath(preparedData, context);
+      }
     }else{
       drawWebGlLines(preparedData);
     }
@@ -61,7 +67,7 @@ function prepareData(data,type,range,simplifyOptions){
   var rangedPoints = new Array();
   var rangeCounter = 0;
   var xRange = 0; // some day its the time value
-  var xRangeValue = 25;
+  var xRangeValue = xValueRange;
   polygoneLinePoints = new Array();  
   var index = 0;
   var highQuality = false;
@@ -84,15 +90,13 @@ function prepareData(data,type,range,simplifyOptions){
         var pTriangles = new Array();
 
         pTriangles[0] = new Array(lastPointX,lastPointY-lineWidth);
-        pTriangles[1] = new Array(xRange,(data[i].chanels[0].value/50));	 			
+        pTriangles[1] = new Array(xRange+lineWidth,(data[i].chanels[0].value/50));	 			
         pTriangles[2] = new Array(xRange,(data[i].chanels[0].value/50)-lineWidth);
 
         pTriangles[3] = new Array(lastPointX,lastPointY-lineWidth);
-        pTriangles[4] = new Array(xRange,(data[i].chanels[0].value/50));	 			
+        pTriangles[4] = new Array(xRange+lineWidth,(data[i].chanels[0].value/50));	 			
         pTriangles[5] = new Array(lastPointX,(data[i].chanels[0].value/50));
-        //pTriangles[5] = new Array(xRange,(data[i].chanels[0].value/50)); why is this wrong? and -lineWidth not right?
 
-        //polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[2],pTriangles[1],pTriangles[4]));
         polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[1],pTriangles[2],pTriangles[3],pTriangles[4],pTriangles[5], index));
         
         for(var j=0;j<pTriangles.length;j++){
@@ -102,7 +106,7 @@ function prepareData(data,type,range,simplifyOptions){
               
       }else{
       	//polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
-        //pointsString += ","+pixelToPoints(i,new Array(xRange,(data[i].chanels[0].value/50)));
+        pointsString += ","+pixelToPoints(i,new Array(xRange,(data[i].chanels[0].value/50)));
         //index++;
       }
 	  lastPointX = xRange;

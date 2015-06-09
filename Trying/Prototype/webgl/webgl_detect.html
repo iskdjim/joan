@@ -34,7 +34,7 @@
   </script>
 
   <script>
-    var pointsData,gl;
+    var pointsData,GL;
     var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
     vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
     vVertices,        // Array der Dreieckskoordinaten
@@ -43,7 +43,8 @@
     $(document).ready( function() {
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
-      var iterationCounter = 0;
+      xValueRange = 20;
+	  var iterationCounter = 0;
       $('#linesCount').html(dataCount);
       $('#fader').attr({'max':dataCount});
 
@@ -57,15 +58,14 @@
     	  linetype = $('#drawType').val();
     	  doDrawing("webgl");
     	}
-
       });
       
-      $( "#webGLCanvas" ).mousemove(function(){
+      $("#webGLCanvas").mousemove(function(){
         console.log("moved");
       });
     
       $("#webGLCanvas").click(function(e){
-    	  mouseEvent = e;
+    	mouseEvent = e;
         $('form').trigger('submit');
       });
     });
@@ -73,6 +73,7 @@
 </head>
 <body>
   <h1>WebGL line detection</h1>
+  <p>Polygon detection for mouse click</p>
   <p class="hider">Data exists for <span id="linesCount"></span> points</p>
   <form id="drawing">
   <table>
@@ -83,7 +84,7 @@
     </tr>
     <tr> 
       <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
-      <td>Line Width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /></td>
+      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /></td>
       <td></td>
     </tr>
   </table>

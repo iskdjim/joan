@@ -63,16 +63,17 @@ function drawWebGlLines(data){
     drawCount = vVertices.length/itemSize;
   }
 
+
   var step = Float32Array.BYTES_PER_ELEMENT;
   var total = 3+4;
   var stride = step * total;
 
   GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, stride, 0);
-  
   GL.vertexAttribPointer(vertexColorAttribute, 4, GL.FLOAT, false, stride, step * 3);
-  
-  GL.enableVertexAttribArray(vertexColorAttribute);
+
   GL.enableVertexAttribArray(vertexAttribLoc);
+  GL.enableVertexAttribArray(vertexColorAttribute);  
+
 
   if(linetype != "line"){
     GL.drawArrays(GL.TRIANGLES, 0, drawCount*6);

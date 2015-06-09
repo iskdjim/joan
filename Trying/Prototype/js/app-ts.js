@@ -1,6 +1,8 @@
 /// <reference path="../libs/jquery.d.ts" />
-var iterationCounter, statsDataFps, statsDataMs, rawData, webGLPoints, linetype, lineWidth, mouseEvent;
+var iterationCounter, statsDataFps, statsDataMs, rawData, webGLPoints, linetype, lineWidth, mouseEvent, lineDetect;
 var polygoneLinePoints = new Array();
+var xValueRange = 0.02;
+var canvasLineWidth = 1;
 function doDrawing(type) {
     iterationCounter = 0;
     statsDataFps = new Array();
@@ -34,7 +36,12 @@ function drawChart(type) {
         }
         else if (type == "canvas") {
             var context = initCanvasContext('myCanvas');
-            drawCanvasPath(preparedData, context);
+            if ($('#drawType').val() == "lines") {
+                drawCanvasLines(preparedData, context);
+            }
+            else {
+                drawCanvasPath(preparedData, context);
+            }
         }
         else {
             drawWebGlLines(preparedData);
@@ -50,7 +57,7 @@ function prepareData(data, type, range, simplifyOptions) {
     var rangedPoints = new Array();
     var rangeCounter = 0;
     var xRange = 0; // some day its the time value
-    var xRangeValue = 25;
+    var xRangeValue = xValueRange;
     polygoneLinePoints = new Array();
     var index = 0;
     var highQuality = false;
@@ -69,13 +76,11 @@ function prepareData(data, type, range, simplifyOptions) {
             if (rangeCounter > 0 && linetype != "line") {
                 var pTriangles = new Array();
                 pTriangles[0] = new Array(lastPointX, lastPointY - lineWidth);
-                pTriangles[1] = new Array(xRange, (data[i].chanels[0].value / 50));
+                pTriangles[1] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50));
                 pTriangles[2] = new Array(xRange, (data[i].chanels[0].value / 50) - lineWidth);
                 pTriangles[3] = new Array(lastPointX, lastPointY - lineWidth);
-                pTriangles[4] = new Array(xRange, (data[i].chanels[0].value / 50));
+                pTriangles[4] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50));
                 pTriangles[5] = new Array(lastPointX, (data[i].chanels[0].value / 50));
-                //pTriangles[5] = new Array(xRange,(data[i].chanels[0].value/50)); why is this wrong? and -lineWidth not right?
-                //polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[2],pTriangles[1],pTriangles[4]));
                 polygoneLinePoints.push(new Array(pTriangles[0], pTriangles[1], pTriangles[2], pTriangles[3], pTriangles[4], pTriangles[5], index));
                 for (var j = 0; j < pTriangles.length; j++) {
                     pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
@@ -83,6 +88,8 @@ function prepareData(data, type, range, simplifyOptions) {
                 }
             }
             else {
+                //polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
+                pointsString += "," + pixelToPoints(i, new Array(xRange, (data[i].chanels[0].value / 50)));
             }
             lastPointX = xRange;
             lastPointY = (data[i].chanels[0].value / 50);
@@ -174,8 +181,6 @@ function drawCanvasPath(preparedData, contextData) {
     var context = contextData[0];
     context.clearRect(0, 0, contextData[1], contextData[2]);
     context.beginPath();
-    context.moveTo(0, 0);
-    var xRange = 0; // some day its the time value
     var data = preparedData;
     for (var i in data) {
         var x1 = data[i].x;
@@ -183,6 +188,35 @@ function drawCanvasPath(preparedData, contextData) {
         context.lineTo(x1, y1);
     }
     context.stroke();
+}
+function drawCanvasLines(preparedData, contextData) {
+    var context = contextData[0];
+    context.clearRect(0, 0, contextData[1], contextData[2]);
+    context.beginPath();
+    var lastx = 0;
+    var lasty = 0;
+    context.lineWidth = canvasLineWidth;
+    var data = preparedData;
+    for (var i in data) {
+        var x1 = data[i].x;
+        var y1 = data[i].y;
+        context.beginPath();
+        context.moveTo(lastx, lasty);
+        context.lineTo(x1, y1);
+        context.strokeStyle = '#000000';
+        var offset = $('#myCanvas').offset();
+        if (mouseEvent) {
+            var mouse_x = mouseEvent.pageX - offset.left;
+            var mouse_y = mouseEvent.pageY - offset.top;
+            if (mouse_x > lastx && mouse_x < x1 && mouse_y > lasty - (canvasLineWidth / 2) && mouse_y < y1 + (canvasLineWidth / 2)) {
+                context.strokeStyle = '#FF0000';
+            }
+        }
+        context.stroke();
+        context.closePath();
+        lastx = x1;
+        lasty = y1;
+    }
 }
 function drawSvgLines(prepareData, target) {
     var shiftCounter = 0;
@@ -272,8 +306,8 @@ function drawWebGlLines(data) {
     var stride = step * total;
     GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, stride, 0);
     GL.vertexAttribPointer(vertexColorAttribute, 4, GL.FLOAT, false, stride, step * 3);
-    GL.enableVertexAttribArray(vertexColorAttribute);
     GL.enableVertexAttribArray(vertexAttribLoc);
+    GL.enableVertexAttribArray(vertexColorAttribute);
     if (linetype != "line") {
         GL.drawArrays(GL.TRIANGLES, 0, drawCount * 6);
     }

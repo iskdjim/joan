@@ -15,21 +15,25 @@
   <script src="../api/data.min.js"></script>   
 
   <script id="shader-fs" type="x-shader/x-fragment">
-    precision mediump float;
+	varying lowp vec4 vColor;
     void main(void) {
-      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = vColor;
     }
   </script>
 
   <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec4 vPosition;
+	attribute vec4 aVertexColor;
+
+	varying lowp vec4 vColor;
     void main(void) {
      gl_Position = vPosition;
+     vColor = aVertexColor;
     }
   </script>
 
   <script>
-    var pointsData,gl;
+    var pointsData,GL;
     var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
     vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
     vVertices,        // Array der Dreieckskoordinaten
@@ -69,7 +73,7 @@
     </tr>
     <tr> 
       <td>Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
-      <td>Line Width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.0625" /></td>
+      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.0625" /></td>
       <td></td>
     </tr>
   </table>
