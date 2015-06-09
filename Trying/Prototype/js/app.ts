@@ -61,11 +61,11 @@ function prepareData(data,type,range,simplifyOptions){
   var rangedPoints = new Array();
   var rangeCounter = 0;
   var xRange = 0; // some day its the time value
-  var xRangeValue = 80;
+  var xRangeValue = 25;
   polygoneLinePoints = new Array();  
   var index = 0;
   var highQuality = false;
-  var pointsString = "-1.0, 0.0,0.0";
+  var pointsString = "-1.0, 0.0, 0.0";
   var lastPointX = 0;
   var lastPointY = 0;
 
@@ -83,25 +83,26 @@ function prepareData(data,type,range,simplifyOptions){
 	  if(rangeCounter > 0 && linetype != "line"){
         var pTriangles = new Array();
 
-        pTriangles[0] = new Array(lastPointX,lastPointY);
-        pTriangles[1] = new Array(xRange+lineWidth,(data[i].chanels[0].value/50)+lineWidth);	 			
-        pTriangles[2] = new Array(xRange,(data[i].chanels[0].value/50));
+        pTriangles[0] = new Array(lastPointX,lastPointY-lineWidth);
+        pTriangles[1] = new Array(xRange,(data[i].chanels[0].value/50));	 			
+        pTriangles[2] = new Array(xRange,(data[i].chanels[0].value/50)-lineWidth);
 
-        pTriangles[3] = new Array(lastPointX,lastPointY);
-        pTriangles[4] = new Array(lastPointX+lineWidth,(data[i].chanels[0].value/50)+lineWidth);	 			
-        pTriangles[5] = new Array(xRange+lineWidth,(data[i].chanels[0].value/50)+lineWidth);
+        pTriangles[3] = new Array(lastPointX,lastPointY-lineWidth);
+        pTriangles[4] = new Array(xRange,(data[i].chanels[0].value/50));	 			
+        pTriangles[5] = new Array(lastPointX,(data[i].chanels[0].value/50));
+        //pTriangles[5] = new Array(xRange,(data[i].chanels[0].value/50)); why is this wrong? and -lineWidth not right?
 
         //polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[2],pTriangles[1],pTriangles[4]));
-        polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[1],pTriangles[2],pTriangles[3],pTriangles[4],pTriangles[5]));
+        polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[1],pTriangles[2],pTriangles[3],pTriangles[4],pTriangles[5], index));
         
         for(var j=0;j<pTriangles.length;j++){
           pointsString += ","+pixelToPoints(index,new Array(pTriangles[j][0],pTriangles[j][1]));
           index++;
         }
-      
-        
+              
       }else{
-        pointsString += ","+pixelToPoints(i,new Array(xRange,(data[i].chanels[0].value/50)));
+      	//polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
+        //pointsString += ","+pixelToPoints(i,new Array(xRange,(data[i].chanels[0].value/50)));
         //index++;
       }
 	  lastPointX = xRange;
@@ -114,7 +115,6 @@ function prepareData(data,type,range,simplifyOptions){
   }
 
   if(type == "webgl"){
-  	  console.log(webGLPoints);
   	return webGLPoints;
   }
 
@@ -177,25 +177,22 @@ function checkMouseHit(target,e){
   var offset = target.offset();
   var mouse_x = e.pageX - offset.left;
   var mouse_y = e.pageY - offset.top;
-  console.log("x:"+mouse_x+" y:"+mouse_y);
-  console.log(polygoneLinePoints[0]);
+  //console.log("x:"+mouse_x+" y:"+mouse_y);
+  //console.log(polygoneLinePoints[0]);
 
   $.each(polygoneLinePoints, function(i, val){
-    if(mouse_x > val[0][0] && mouse_x < val[2][0] && mouse_y > val[0][1] && mouse_y < val[4][1]){
-      console.log("hit for line:"+(i+1));
-	  console.log(i);
-
-
-        webGLPoints[((1)*7)+3] = 1;
-	    webGLPoints[((1)*7)+4] = 0;
-	    webGLPoints[((1)*7)+5] = 0;
-	    webGLPoints[((1)*7)+6] = 1;
-	
+    if(mouse_x > val[0][0] && mouse_x < val[2][0] && mouse_y > val[0][1] && mouse_y < val[5][1]){
+      var index = (i*6);
+      $.each(val, function(j, points){
+        if(j < 6){
+          webGLPoints[((index+j)*7)+3] = 1;
+	      webGLPoints[((index+j)*7)+4] = 0;
+	      webGLPoints[((index+j)*7)+5] = 0;
+	      webGLPoints[((index+j)*7)+6] = 1;
+        }
       });
-
-      		     
     }else{
-      console.log("no hit for line:"+(i+1));
+      //console.log("no hit for line:"+(i+1));
     }
   });
 

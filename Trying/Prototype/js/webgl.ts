@@ -45,7 +45,7 @@ function webglStuff(destination){
 function drawWebGlLines(data){
   vVertices = data;
 
-  // create buffer...GPU   
+  // create buffer...GPU
   vertexPosBufferObjekt = GL.createBuffer();
   // ...and set as active object
   GL.bindBuffer(GL.ARRAY_BUFFER, vertexPosBufferObjekt);
@@ -75,7 +75,7 @@ function drawWebGlLines(data){
   GL.enableVertexAttribArray(vertexAttribLoc);
 
   if(linetype != "line"){
-    GL.drawArrays(GL.TRIANGLE_STRIP, 0, drawCount*6);
+    GL.drawArrays(GL.TRIANGLES, 0, drawCount*6);
   }else{
     GL.drawArrays(GL.LINE_STRIP, 0, drawCount);
   }
@@ -106,8 +106,8 @@ function pixelToPoints(index,point){
     y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
   }
 
-  webGLPoints[(index*7)] = x+linerange;
-  webGLPoints[(index*7)+1] = y+linerange;
+  webGLPoints[(index*7)] = x;
+  webGLPoints[(index*7)+1] = y;
   webGLPoints[(index*7)+2] = 0;
   webGLPoints[(index*7)+3] = 0;
   webGLPoints[(index*7)+4] = 0;
