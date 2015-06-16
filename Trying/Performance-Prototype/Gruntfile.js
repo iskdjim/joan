@@ -31,7 +31,7 @@ module.exports = function (grunt) {
         },
         open: {
             dev: {
-                path: 'http://localhost/www/Diplarbeit/joan/Trying/Prototype/'
+                path: 'http://localhost/www/Diplarbeit/joan/Trying/Performance-Prototype/'
             }
         },
         compress: {
