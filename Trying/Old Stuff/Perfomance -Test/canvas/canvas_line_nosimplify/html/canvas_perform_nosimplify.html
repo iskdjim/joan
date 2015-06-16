@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+
+  <script src="../js/zepto.js"></script>  
+  <script src="../js/app.js"></script>
+
+  <script>
+    var stats_data;
+    
+    $(document).ready( function() {
+
+      $.getJSON( "../api/data.json", function( data ) {
+	    data_count = data.count;
+        data = data.data;
+        var iteration_counter = 0;
+        $('#linescount').html(data_count);
+        $('#fader').attr({'max':data_count});
+        var interval_counter = 1;
+        
+        function drawChart () {
+          iterations = $('#iterations').val();
+          while(iterations > iteration_counter){
+          	
+            var t0 = performance.now();
+            var line_points = new Array(new Array(0,0));
+            var counter = 0;
+            var y_range = 10;
+          
+            iteration_counter++;          
+            $("#container").empty();
+					
+            $('#linescount').html(data_count);
+            var random_limit = Math.floor(Math.random() * data_count) + 1;
+	
+            var c = document.getElementById("myCanvas");
+            var context = c.getContext("2d");
+            context.clearRect ( 0 , 0 , c.width, c.height );
+            context.beginPath();
+            context.moveTo(0, 0);
+					
+            $.each(data, function(i,val){
+              if($('#limit_lines').val() < counter){
+                return false;
+              }
+              counter++;
+							
+              y_range += 0.02;
+							
+              x1 = y_range;
+              y1 = (val.chanels[0].value/50);
+              context.lineTo(x1,y1);
+				  
+            })
+
+           
+           context.stroke();
+           var t1 = performance.now();
+           fps_value = requestAnimFrame();
+
+           stats_data_fps.push(fps_value);
+           stats_data_ms.push(t1-t0);
+		  }	
+ 					
+          
+        };
+          
+        $('#draw_btn').click(function(){
+          iteration_counter = 0;
+          stats_data_fps = new Array();
+          stats_data_ms = new Array();
+          drawChart();
+
+          
+          showStats(stats_data_fps,stats_data_ms);
+        });
+    
+      });	
+    });
+    
+    var outputUpdate = function(val){
+      $('#limit_lines').val(val);
+    }
+
+	</script>
+</head>
+<body>
+  <h1 style="text-align:center;">Canvas Draw Lines - no simplify</h1>
+  <p>Data exists for <a id="linescount"></a> Points</p>
+  <table>
+    <tr> 
+      <td>Value for shown points:  <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limit_lines" style="width:5rem;" value="0" type"name"/></td>
+      <td>Iterations for chart drawing:<input id="iterations" style="width:5rem;" value="10" type"name"/></td>
+      <td><input type="submit" id="draw_btn" value="draw" /></td>
+    </tr>
+  </table>
+  <br />
+<canvas id="myCanvas" width="600" height="400" style="float:left;border:1px solid #000;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average FPS: <span id="average_fps"></span></p>
+    <p>Average MS: <span id="average_ms"></span></p>
+    <p>Sum MS: <span id="sum_ms"></span></p>     
+  </div>
+  <div class="download">
+  	<a href='canvas_line_nosimplify.zip'>Download source</a>
+  </div>  
+</body>
+</html>

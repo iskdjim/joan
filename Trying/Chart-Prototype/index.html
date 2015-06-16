@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/reset.css"/>
+  <link rel="stylesheet" href="css/normalise.css"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/perf.css"/>
+</head>
+<body>
+<h1>Performance Check for Line drawing with SVG, Canavs2D and WebGL</h1>
+
+<h3>SVG:</h3>
+<a href="svg/svg_perf.html">SVG Performance Test</a>
+<p>Drawing with Lines vs Paths. Possibility for simplify</p>
+
+<h3>Canvas2D:</h3>
+<a href="canvas2d/canvas2d_perf.html">Canvas2D Performance Test</a>
+<p>Drawing with Lines. Possibility for simplify</p>
+
+<h3>WebGL:</h3>
+<a href="webgl/webgl_perf.html">WebGL Performance Test</a>
+<p>Drawing with Lines vs Polygons</p>
+
+<br />
+<h3>Perfomance Result:</h3>
+<p>Tested with 1000,10000 and 100000 data points for 10 iterations.</p>
+<p>Results are average milliseconds (ms)</p>
+
+<table id="resultTable">
+  <tr class="tableBorder header">
+    <td></td>
+    <td>Laptop (1)</td>   
+    <td>IPhone (2)</td>
+    <td>IPad (3)</td>
+    <td>Samsung Smartphone (4)</td>
+    <td>Tablet (5)</td>     
+  </tr >
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">SVG Path:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">1.03</span>
+      <span class="ms">12.89</span>
+      <span class="ms">164.12</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">8.34</span>
+      <span class="ms">104.5</span>
+      <span class="ms">1375.85</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>    
+  </tr >
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">SVG Lines:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">28.76</span>
+      <span class="ms">678.32</span>
+      <span class="ms">2687.21</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">234.45</span>
+      <span class="ms">2876.38</span>
+      <span class="ms">error</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td> 
+  </tr >
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">Canvas2D Path:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">0.39</span>
+      <span class="ms">3.94</span>
+      <span class="ms">56.1</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms best">4.33</span>
+      <span class="ms best">46.17</span>
+      <span class="ms best">530.74</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td> 
+  </tr > 
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">Canvas2D Lines:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td> 
+  </tr >
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">WebGL Polygones:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">34.69</span>
+      <span class="ms">37.76</span>
+      <span class="ms">38.84</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">not supported</span>
+      <span class="ms">not supported</span>
+      <span class="ms">not supported</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td> 
+  </tr >
+  <tr class="tableBorder">
+    <td class="width15">
+      <span class="tableAxe">WebGL Lines:</span>
+      <span class="tableAxe alignRight">1000</span>
+      <span class="tableAxe alignRight">10000</span>
+      <span class="tableAxe alignRight">100000</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms best">0.38</span>
+      <span class="ms best">0.45</span>
+      <span class="ms best">1.06</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">not supported</span>
+      <span class="ms">not supported</span>
+      <span class="ms">not supported</span>
+    </td>
+    <td>
+      <span class="ms">&nbsp</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+      <span class="ms">x</span>
+    </td> 
+  </tr >
+</table>
+<div class="legend">
+  <p>(1) Processor 1.2GHz quad-core, 1GB RAM , Android 4.2 with Chrome version 43</p>
+  <p>(2) IPhone</p>
+  <p>(3) IPad</p>
+  <p>(4) Intel(R) Core(TM) i5-4200, CPU @ 1.60 GHz 2.30 GHz, 8GB RAM, AMD Radeon HD 8670M 2GB, Windows 8 whit Chrome version 43</p>
+  <p>(5) Tablet</p>
+</div>
+<!--<br /><br />
+<h1>Some Try outs SVG, Canavs and WebGL</h1>
+<a href="svg/svg_path_dynamic.html">SVG - Dynamic path and line detect</a> <br />
+<a href="canvas/canvas_detect_line.html">Canvas - Line detect</a>
+
+<br /><br />
+<h1>Some Links</h1>
+<a href="http://visjs.org/examples/graph2d/15_streaming_data.html" target="_blank">Graph 2D - Streaming Data</a>
+SVG Path with Streaming Data - Zoom and Slide. 
+<br /><br />
+<a href="http://caniuse.com/#feat=webgl" target="_blank">Mobile WebGL Support</a>
+<br /><br />
+<a href="http://www.pixijs.com/" target="_blank">Pixi.js</a> WebGL Lib
+<br /><br />
+<a href="http://d3js.org/" target="_blank">d3.js</a> SVG Lib  -->
+</body>
+</html>
