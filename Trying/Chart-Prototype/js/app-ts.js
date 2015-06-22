@@ -73,13 +73,13 @@ function prepareData(data, type, range, simplifyOptions) {
     webGLPoints = new Float32Array(range * 7);
     if (type == "webgl" && linetype != "line") {
         webGLPoints = new Float32Array(range * 7 * 6);
-    }
-    // no left data     
-    if (startIndex < 0) {
-        var newStart = ((startIndex / 10) * -5) * xRangeValue;
-        xRange = xRange + newStart;
-        console.log("hello:" + xRange);
-        endIndex = 100;
+        // no left data     
+        if (startIndex < 0) {
+            var newStart = ((startIndex / 10) * -5) * xRangeValue;
+            xRange = xRange + newStart;
+            console.log("hello:" + xRange);
+            endIndex = 100;
+        }
     }
     for (var i in data) {
         if (range < rangeCounter) {

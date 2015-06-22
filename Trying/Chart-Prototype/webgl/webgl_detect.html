@@ -78,11 +78,11 @@
     <tr> 
       <td class="hider" >Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="25" type"name"/></td>
       <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
-      <td><input type="submit" id="drawBtn" value="draw" /></td>
+      <td></td>
     </tr>
     <tr> 
       <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
-      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /></td>
+      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /> <span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
       <td></td>
     </tr>
   </table>
