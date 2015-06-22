@@ -43,7 +43,8 @@
     $(document).ready( function() {
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
-      xValueRange = 15;
+      xValueRange = 0.08;
+      endIndex = dataCount;
 	  var iterationCounter = 0;
       $('#linesCount').html(dataCount);
       $('#fader').attr({'max':dataCount});

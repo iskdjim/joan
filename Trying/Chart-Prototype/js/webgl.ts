@@ -86,16 +86,7 @@ function pixelToPoints(index,point){
   var y = 0;
 
   var rangeValue = 100;
-  if(point[0] < canvas.width/2){
-    if(point[0] > 0){
-      x = (rangeValue-(((rangeValue/(canvas.width/2))*point[0])))*-0.01;
-    }else{
-      x = -1;
-    }
-  }else if(point[0] > canvas.width/2){
-    x = ((((rangeValue/(canvas.width/2))*point[0])))*0.01;
-  }
-
+  x = point[0];
   
   if(point[1] < canvas.height/2){
     if(point[1] > 0){
@@ -132,13 +123,18 @@ function pixelToPointsNew(index,point){
 
   x = point[0];
   
-  if(point[1] < (50/2)){
-  	y = ((100/(50/2))*point[1])*(-0.01);
+  if(point[1] < (y_reach/2)){
+  	y = ((100/(y_reach/2))*point[1])*(-0.01);
   }else if(point[1] == 0){
   	y = 0;
   }else{
-  	y = (100/(50/2))*(point[1]-(50/2))*(0.01);
+  	y = (100/(y_reach/2))*(point[1]-(y_reach/2))*(0.01);
   }
+  
+  console.log(x);
+  console.log(y);
+  console.log(point[1]);
+  console.log("-------------");  
 
   webGLPoints[(index*7)] = x;
   webGLPoints[(index*7)+1] = y;

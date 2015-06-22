@@ -4,6 +4,11 @@ var polygoneLinePoints = new Array();
 var xValueRange = 0.02;
 var canvasLineWidth = 1;
 var zoomFaktor = 1;
+var pointDivisor = 50;
+var startIndex = 0;
+var endIndex;
+var isZoom = false;
+var zoomCount;
 function doDrawing(type) {
     iterationCounter = 0;
     statsDataFps = new Array();
@@ -57,7 +62,7 @@ function drawChart(type) {
 function prepareData(data, type, range, simplifyOptions) {
     var rangedPoints = new Array();
     var rangeCounter = 0;
-    var xRange = 0; // some day its the time value
+    var xRange = -1; // some day its the time value
     var xRangeValue = xValueRange * zoomFaktor;
     polygoneLinePoints = new Array();
     var index = 0;
@@ -73,28 +78,46 @@ function prepareData(data, type, range, simplifyOptions) {
         if (range < rangeCounter) {
             break;
         }
+        if (i < startIndex || i > endIndex) {
+            continue;
+        }
         if (type == "webgl") {
             if (rangeCounter > 0 && linetype != "line") {
                 var pTriangles = new Array();
                 pTriangles[0] = new Array(lastPointX, lastPointY);
-                pTriangles[1] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
-                pTriangles[2] = new Array(xRange, (data[i].chanels[0].value / 50));
-                pTriangles[3] = new Array(lastPointX, lastPointY);
-                pTriangles[4] = new Array(lastPointX + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
-                pTriangles[5] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+                pTriangles[1] = new Array(xRange, (data[i].chanels[0].value / pointDivisor));
+                pTriangles[2] = new Array(lastPointX, lastPointY + lineWidth);
+                pTriangles[3] = new Array(lastPointX, lastPointY + lineWidth);
+                pTriangles[4] = new Array(xRange, (data[i].chanels[0].value / pointDivisor));
+                pTriangles[5] = new Array(xRange, (data[i].chanels[0].value / pointDivisor) + lineWidth);
+                polygoneLinePoints.push(new Array(pTriangles[0], pTriangles[1], pTriangles[2], pTriangles[3], pTriangles[4], pTriangles[5], index));
                 for (var j = 0; j < pTriangles.length; j++) {
-                    pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
+                    if (isZoom) {
+                        pointsString += "," + pixelToPointsNew(index, new Array(pTriangles[j][0], pTriangles[j][1]));
+                    }
+                    else {
+                        pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
+                    }
                     index++;
                 }
+                lastPointX = pTriangles[4][0];
+                lastPointY = pTriangles[4][1];
             }
             else {
-                pointsString += "," + pixelToPoints(i, new Array(xRange, (data[i].chanels[0].value / 50)));
+                //polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
+                if (isZoom) {
+                    pointsString += "," + pixelToPointsNew(i, new Array(xRange, (data[i].chanels[0].value / pointDivisor)));
+                }
+                else {
+                    pointsString += "," + pixelToPoints(i, new Array(xRange, (data[i].chanels[0].value / pointDivisor)));
+                }
+                //index++;
+                lastPointX = xRange;
+                lastPointY = (data[i].chanels[0].value / pointDivisor);
             }
-            lastPointX = xRange;
-            lastPointY = (data[i].chanels[0].value / 50);
         }
         else {
-            rangedPoints.push({ x: xRange, y: (data[i].chanels[0].value / 50), time: data[i].time });
+            rangedPoints.push({ x: xRange, y: (data[i].chanels[0].value / pointDivisor), time: data[i].time });
         }
         rangeCounter++;
         xRange += xRangeValue;
@@ -154,8 +177,17 @@ function checkMouseHit(target, e) {
     var offset = target.offset();
     var mouse_x = e.pageX - offset.left;
     var mouse_y = e.pageY - offset.top;
-    //console.log("x:"+mouse_x+" y:"+mouse_y);
-    //console.log(polygoneLinePoints[0]);
+    var x_reach = 600;
+    if (mouse_x < (x_reach / 2)) {
+        mouse_x = ((100 / (x_reach / 2)) * mouse_x) * (-0.01);
+        mouse_x = (1 + mouse_x) * -1;
+    }
+    else if (mouse_x == 0) {
+        mouse_x = 0;
+    }
+    else {
+        mouse_x = (100 / (x_reach / 2)) * (mouse_x - (x_reach / 2)) * (0.01);
+    }
     $.each(polygoneLinePoints, function (i, val) {
         if (mouse_x > val[0][0] && mouse_x < val[1][0] && mouse_y > val[0][1] && mouse_y < val[5][1]) {
             var index = (i * 6);
@@ -194,7 +226,7 @@ function drawCanvasLines(preparedData, contextData) {
     context.clearRect(0, 0, contextData[1], contextData[2]);
     context.beginPath();
     var lastx = 0;
-    var lasty = 0;
+    var lasty = 290;
     context.lineWidth = canvasLineWidth;
     var data = preparedData;
     for (var i in data) {
@@ -319,17 +351,7 @@ function pixelToPoints(index, point) {
     var x = 0;
     var y = 0;
     var rangeValue = 100;
-    if (point[0] < canvas.width / 2) {
-        if (point[0] > 0) {
-            x = (rangeValue - (((rangeValue / (canvas.width / 2)) * point[0]))) * -0.01;
-        }
-        else {
-            x = -1;
-        }
-    }
-    else if (point[0] > canvas.width / 2) {
-        x = ((((rangeValue / (canvas.width / 2)) * point[0]))) * 0.01;
-    }
+    x = point[0];
     if (point[1] < canvas.height / 2) {
         if (point[1] > 0) {
             y = (rangeValue - (((rangeValue / (canvas.height / 2)) * point[1]))) * 0.01;
@@ -358,15 +380,19 @@ function pixelToPointsNew(index, point) {
     var x_reach = 100;
     var y_reach = 50;
     x = point[0];
-    if (point[1] < (50 / 2)) {
-        y = ((100 / (50 / 2)) * point[1]) * (-0.01);
+    if (point[1] < (y_reach / 2)) {
+        y = ((100 / (y_reach / 2)) * point[1]) * (-0.01);
     }
     else if (point[1] == 0) {
         y = 0;
     }
     else {
-        y = (100 / (50 / 2)) * (point[1] - (50 / 2)) * (0.01);
+        y = (100 / (y_reach / 2)) * (point[1] - (y_reach / 2)) * (0.01);
     }
+    console.log(x);
+    console.log(y);
+    console.log(point[1]);
+    console.log("-------------");
     webGLPoints[(index * 7)] = x;
     webGLPoints[(index * 7) + 1] = y;
     webGLPoints[(index * 7) + 2] = 0;

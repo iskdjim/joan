@@ -12,7 +12,7 @@ while($data = fgetcsv($handle, 9999, ";")){
 	$dataset = array("time" => $data[0], 
 					 "chanels" => 
 						array(
-							array("chanel" => "1", "value" => $data[5])
+							array("chanel" => "1", "value" => rand(5, 40))
 						)
 					
 					);
@@ -35,11 +35,12 @@ while($data = fgetcsv($handle, 9999, ";")){
 	}				
 }
 
-$json_file = fopen("data.min.js", "w");
+
+$json_file = fopen("data_clean.min.js", "w");
 fwrite($json_file, "var jsonData = ".json_encode($json_data));
 fclose($json_file);
 
-$json_file2 = fopen("data.json", "w");
+$json_file2 = fopen("data_clean.json", "w");
 fwrite($json_file2, json_encode($json_data, JSON_PRETTY_PRINT));
 fclose($json_file2);
 

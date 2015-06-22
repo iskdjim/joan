@@ -25,7 +25,7 @@ function drawCanvasLines(preparedData, contextData){
   context.beginPath();
 
   var lastx = 0;
-  var lasty = 0;
+  var lasty = 290;
   context.lineWidth = canvasLineWidth;
   var data = preparedData;
   for(var i in data) {

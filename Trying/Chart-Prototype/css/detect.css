@@ -1,3 +1,7 @@
 .hider{
+  display:none;
+}
 
+.marginSpan{
+	margin-left:20px;
 }
