@@ -8,7 +8,9 @@ var pointDivisor = 50;
 var startIndex = 0;
 var endIndex;
 var isZoom = false;
-var zoomCount;
+var zoomCount = 1;
+var xAxeStart = 0;
+var xAxeStep = 60;
 function doDrawing(type) {
     iterationCounter = 0;
     statsDataFps = new Array();
@@ -77,7 +79,6 @@ function prepareData(data, type, range, simplifyOptions) {
         if (startIndex < 0) {
             var newStart = ((startIndex / 10) * -5) * xRangeValue;
             xRange = xRange + newStart;
-            console.log("hello:" + xRange);
             endIndex = 100;
         }
     }
@@ -211,6 +212,13 @@ function checkMouseHit(target, e) {
         else {
         }
     });
+}
+function xAxeLabel() {
+    console.log(xAxeStart);
+    for (var i = 0; i < 10; i++) {
+        var labelValue = (xAxeStart) + (i * (xAxeStep / zoomCount)); // start value * zoom faktor + steps with zoop faktor half
+        $('#x' + i).html("<span>" + Math.round(labelValue) + "</span>");
+    }
 }
 function initCanvasContext(desternation) {
     var c = document.getElementById(desternation);
@@ -396,8 +404,6 @@ function pixelToPointsNew(index, point) {
     else {
         y = (100 / (y_reach / 2)) * (point[1] - (y_reach / 2)) * (0.01);
     }
-    console.log(x);
-    console.log("-------------");
     webGLPoints[(index * 7)] = x;
     webGLPoints[(index * 7) + 1] = y;
     webGLPoints[(index * 7) + 2] = 0;

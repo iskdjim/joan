@@ -11,7 +11,9 @@ var pointDivisor = 50;
 var startIndex = 0;
 var endIndex;
 var isZoom = false;
-var zoomCount;
+var zoomCount = 1;
+var xAxeStart = 0;
+var xAxeStep = 60;
 
 function doDrawing(type){
   iterationCounter = 0;
@@ -90,7 +92,6 @@ function prepareData(data,type,range,simplifyOptions){
     if(startIndex < 0){
   	  var newStart = ((startIndex/10)*-5)*xRangeValue;
       xRange = xRange+newStart;
-      console.log("hello:"+xRange);
       endIndex = 100;
     }
   }
@@ -245,4 +246,12 @@ function checkMouseHit(target,e){
     }
   });
 
+}
+
+function xAxeLabel(){
+      	console.log(xAxeStart);
+  for(var i=0;i<10;i++){ 	
+  	var labelValue = (xAxeStart)+(i*(xAxeStep/zoomCount)); // start value * zoom faktor + steps with zoop faktor half
+    $('#x'+i).html("<span>"+Math.round(labelValue)+"</span>");
+  }
 }

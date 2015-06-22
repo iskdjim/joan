@@ -130,9 +130,6 @@ function pixelToPointsNew(index,point){
   }else{
   	y = (100/(y_reach/2))*(point[1]-(y_reach/2))*(0.01);
   }
-  
-  console.log(x);
-  console.log("-------------");  
 
   webGLPoints[(index*7)] = x;
   webGLPoints[(index*7)+1] = y;
