@@ -77,26 +77,21 @@ function prepareData(data, type, range, simplifyOptions) {
             if (rangeCounter > 0 && linetype != "line") {
                 var pTriangles = new Array();
                 pTriangles[0] = new Array(lastPointX, lastPointY);
-                pTriangles[1] = new Array(xRange, (data[i].chanels[0].value / 50));
-                pTriangles[2] = new Array(lastPointX, lastPointY + lineWidth);
-                pTriangles[3] = new Array(lastPointX, lastPointY + lineWidth);
-                pTriangles[4] = new Array(xRange, (data[i].chanels[0].value / 50));
-                pTriangles[5] = new Array(xRange, (data[i].chanels[0].value / 50) + lineWidth);
-                polygoneLinePoints.push(new Array(pTriangles[0], pTriangles[1], pTriangles[2], pTriangles[3], pTriangles[4], pTriangles[5], index));
+                pTriangles[1] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+                pTriangles[2] = new Array(xRange, (data[i].chanels[0].value / 50));
+                pTriangles[3] = new Array(lastPointX, lastPointY);
+                pTriangles[4] = new Array(lastPointX + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+                pTriangles[5] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
                 for (var j = 0; j < pTriangles.length; j++) {
                     pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
                     index++;
                 }
-                lastPointX = pTriangles[4][0];
-                lastPointY = pTriangles[4][1];
             }
             else {
-                //polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
                 pointsString += "," + pixelToPoints(i, new Array(xRange, (data[i].chanels[0].value / 50)));
-                //index++;
-                lastPointX = xRange;
-                lastPointY = (data[i].chanels[0].value / 50);
             }
+            lastPointX = xRange;
+            lastPointY = (data[i].chanels[0].value / 50);
         }
         else {
             rangedPoints.push({ x: xRange, y: (data[i].chanels[0].value / 50), time: data[i].time });
@@ -306,7 +301,6 @@ function drawWebGlLines(data) {
     else {
         drawCount = vVertices.length / itemSize;
     }
-    console.log(drawCount);
     var step = Float32Array.BYTES_PER_ELEMENT;
     var total = 3 + 4;
     var stride = step * total;
@@ -346,6 +340,32 @@ function pixelToPoints(index, point) {
     }
     else if (point[1] > canvas.height / 2) {
         y = (rangeValue - (((rangeValue / (canvas.height / 2)) * point[1]))) * 0.01;
+    }
+    webGLPoints[(index * 7)] = x;
+    webGLPoints[(index * 7) + 1] = y;
+    webGLPoints[(index * 7) + 2] = 0;
+    webGLPoints[(index * 7) + 3] = 0;
+    webGLPoints[(index * 7) + 4] = 0;
+    webGLPoints[(index * 7) + 5] = 0;
+    webGLPoints[(index * 7) + 6] = 1;
+    if (mouseEvent) {
+        checkMouseHit($('#webGLCanvas'), mouseEvent);
+    }
+}
+function pixelToPointsNew(index, point) {
+    var x = 0;
+    var y = 0;
+    var x_reach = 100;
+    var y_reach = 50;
+    x = point[0];
+    if (point[1] < (50 / 2)) {
+        y = ((100 / (50 / 2)) * point[1]) * (-0.01);
+    }
+    else if (point[1] == 0) {
+        y = 0;
+    }
+    else {
+        y = (100 / (50 / 2)) * (point[1] - (50 / 2)) * (0.01);
     }
     webGLPoints[(index * 7)] = x;
     webGLPoints[(index * 7) + 1] = y;

@@ -82,46 +82,33 @@ function prepareData(data,type,range,simplifyOptions){
     webGLPoints = new Float32Array(range*7*6);
   }
 
-  for(var i in data) {
-    if(range < rangeCounter){
+  for (var i in data) {
+    if (range < rangeCounter) {
       break;
     }
-
-	if(type == "webgl"){
-	  if(rangeCounter > 0 && linetype != "line"){
+    if (type == "webgl") {
+      if (rangeCounter > 0 && linetype != "line") {
         var pTriangles = new Array();
-
-        pTriangles[0] = new Array(lastPointX,lastPointY);
-        pTriangles[1] = new Array(xRange,(data[i].chanels[0].value/50));
-        pTriangles[2] = new Array(lastPointX,lastPointY+lineWidth);
-
-        pTriangles[3] = new Array(lastPointX,lastPointY+lineWidth);
-        pTriangles[4] = new Array(xRange,(data[i].chanels[0].value/50));
-        pTriangles[5] = new Array(xRange,(data[i].chanels[0].value/50)+lineWidth);
-
-        polygoneLinePoints.push(new Array(pTriangles[0],pTriangles[1],pTriangles[2],pTriangles[3],pTriangles[4],pTriangles[5], index));
-        
-        for(var j=0;j<pTriangles.length;j++){
-          pointsString += ","+pixelToPoints(index,new Array(pTriangles[j][0],pTriangles[j][1]));
+        pTriangles[0] = new Array(lastPointX, lastPointY);
+        pTriangles[1] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+        pTriangles[2] = new Array(xRange, (data[i].chanels[0].value / 50));
+        pTriangles[3] = new Array(lastPointX, lastPointY);
+        pTriangles[4] = new Array(lastPointX + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+        pTriangles[5] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+        for (var j = 0; j < pTriangles.length; j++) {
+          pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
           index++;
         }
-        lastPointX = pTriangles[4][0];
-	    lastPointY = pTriangles[4][1];
-              
       }else{
-      	//polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
-        pointsString += ","+pixelToPoints(i,new Array(xRange,(data[i].chanels[0].value/50)));
-        //index++;
-        lastPointX = xRange;
-	    lastPointY = (data[i].chanels[0].value/50);
+        pointsString += "," + pixelToPoints(i, new Array(xRange, (data[i].chanels[0].value / 50)));
       }
-
-	}else{
-      rangedPoints.push({x:xRange, y:(data[i].chanels[0].value/50), time:data[i].time});
+      lastPointX = xRange;
+      lastPointY = (data[i].chanels[0].value / 50);
+    }else{
+      rangedPoints.push({ x: xRange, y: (data[i].chanels[0].value / 50), time: data[i].time });
     }
     rangeCounter++;
     xRange += xRangeValue;
-
   }
 
   if(type == "webgl"){

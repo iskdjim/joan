@@ -63,7 +63,7 @@ function drawWebGlLines(data){
     drawCount = vVertices.length/itemSize;
   }
 
-  console.log(drawCount);
+
   var step = Float32Array.BYTES_PER_ELEMENT;
   var total = 3+4;
   var stride = step * total;
@@ -96,11 +96,12 @@ function pixelToPoints(index,point){
     x = ((((rangeValue/(canvas.width/2))*point[0])))*0.01;
   }
 
+  
   if(point[1] < canvas.height/2){
     if(point[1] > 0){
       y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
     }else{
-      y = -1;
+     y = -1;
     }
   }else if(point[1] > canvas.height/2){
     y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
@@ -115,6 +116,37 @@ function pixelToPoints(index,point){
   webGLPoints[(index*7)+6] = 1;  
   
 
+  
+  if(mouseEvent){
+	checkMouseHit($('#webGLCanvas'),mouseEvent);
+  }  
+}
+
+
+function pixelToPointsNew(index,point){
+  var x = 0;
+  var y = 0;
+
+  var x_reach = 100;
+  var y_reach = 50;
+
+  x = point[0];
+  
+  if(point[1] < (50/2)){
+  	y = ((100/(50/2))*point[1])*(-0.01);
+  }else if(point[1] == 0){
+  	y = 0;
+  }else{
+  	y = (100/(50/2))*(point[1]-(50/2))*(0.01);
+  }
+
+  webGLPoints[(index*7)] = x;
+  webGLPoints[(index*7)+1] = y;
+  webGLPoints[(index*7)+2] = 0;
+  webGLPoints[(index*7)+3] = 0;
+  webGLPoints[(index*7)+4] = 0;
+  webGLPoints[(index*7)+5] = 0;
+  webGLPoints[(index*7)+6] = 1;    
   
   if(mouseEvent){
 	checkMouseHit($('#webGLCanvas'),mouseEvent);
