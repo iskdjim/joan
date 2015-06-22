@@ -132,8 +132,6 @@ function pixelToPointsNew(index,point){
   }
   
   console.log(x);
-  console.log(y);
-  console.log(point[1]);
   console.log("-------------");  
 
   webGLPoints[(index*7)] = x;

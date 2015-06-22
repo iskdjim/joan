@@ -3,5 +3,9 @@
 }
 
 .marginSpan{
-	margin-left:20px;
+  margin-left:20px;
+}
+
+#moveLeft,#moveRight{
+  cursor:pointer;
 }

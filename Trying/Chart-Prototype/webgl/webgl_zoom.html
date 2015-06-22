@@ -49,10 +49,10 @@
 	  isZoom = true;
       $('#linesCount').html(dataCount);
       $('#fader').attr({'max':dataCount});
-
+  	  showCout = 100;
       $('form').submit(function(e){
     	zoomCount = $('#zoom').val();  
-    	showCout = 100;
+
         xValueRange = 0.02*zoomCount;
           
     	startIndex = showCout-(50/zoomCount);
@@ -64,6 +64,22 @@
         lineWidth = parseInt($('#polyWidth').val()*16);
     	linetype = $('#drawType').val();
     	doDrawing("webgl");
+      });
+      
+      $("#webGLCanvas").click(function(e){
+      	//mouseEvent = e;
+        //$('form').trigger('submit');
+        console.log("test");
+      });
+      
+      $("#moveRight").click(function(){
+    	  showCout = showCout+10;
+    	  $('form').trigger('submit');
+      });
+      
+      $("#moveLeft").click(function(){
+    	  showCout = showCout-10;
+    	  $('form').trigger('submit');
       });
     });
   </script>
@@ -77,12 +93,17 @@
     <tr> 
       <td class="hider" >Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="200" type"name"/></td>
       <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
-      <td><input type="submit" id="drawBtn" value="draw" /></td>
+      <td></td>
     </tr>
     <tr> 
       <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
       <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.15" /></td>
-      <td><span class="marginSpan">Zoom Level: <span><select id="zoom"><option value="1">100%</option><option value="2">200%</option><option value="3">300%</option><option value="4">400%</option></select></td>
+      <td><span class="marginSpan">Zoom Level: <span><select id="zoom"><option value="1">100%</option><option value="2">200%</option><option value="3">300%</option><option value="4">400%</option></select><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+    <tr>
+      <td><span><button type="button" id="moveLeft">Move left</button></span><span class="marginSpan"><button type="button" id="moveRight">Move left</button></span></td>
+      <td></td>
+      <td></td>
     </tr>
   </table>
   </form>

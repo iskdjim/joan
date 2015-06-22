@@ -74,6 +74,13 @@ function prepareData(data, type, range, simplifyOptions) {
     if (type == "webgl" && linetype != "line") {
         webGLPoints = new Float32Array(range * 7 * 6);
     }
+    // no left data     
+    if (startIndex < 0) {
+        var newStart = ((startIndex / 10) * -5) * xRangeValue;
+        xRange = xRange + newStart;
+        console.log("hello:" + xRange);
+        endIndex = 100;
+    }
     for (var i in data) {
         if (range < rangeCounter) {
             break;
@@ -390,8 +397,6 @@ function pixelToPointsNew(index, point) {
         y = (100 / (y_reach / 2)) * (point[1] - (y_reach / 2)) * (0.01);
     }
     console.log(x);
-    console.log(y);
-    console.log(point[1]);
     console.log("-------------");
     webGLPoints[(index * 7)] = x;
     webGLPoints[(index * 7) + 1] = y;
