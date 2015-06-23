@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         compress: {
 			 main: {
 			    options: {
-			      archive: 'perf.zip'
+			      archive: 'chart.zip'
 			    },
 			    files: [
 			      {src: ['index.html'], dest: '/'},  
@@ -47,7 +47,9 @@ module.exports = function (grunt) {
 			      {src: ['canvas2d/**'], dest: '/'}, 
 			      {src: ['webgl/**'], dest: '/'}, 
 			      {src: ['api/data.json'], dest: '/'}, 
-			      {src: ['api/data.min.js'], dest: '/'}, 			      
+			      {src: ['api/data.min.js'], dest: '/'}, 
+			      {src: ['api/data_clean.json'], dest: '/'}, 
+			      {src: ['api/data_clean.min.js'], dest: '/'}, 		
 			      {src: ['css/**'], dest: '/'}, 
 			      {src: ['libs/**'], dest: '/'}, 
 			      {src: ['js/**'], dest: '/'}, 

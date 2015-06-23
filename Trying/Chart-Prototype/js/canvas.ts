@@ -18,7 +18,6 @@ function drawCanvasPath(preparedData, contextData){
   context.stroke();
 }
 
-
 function drawCanvasLines(preparedData, contextData){
   var context = contextData[0]
   context.clearRect ( 0 , 0 , contextData[1], contextData[2] );
@@ -29,9 +28,10 @@ function drawCanvasLines(preparedData, contextData){
   context.lineWidth = canvasLineWidth;
   var data = preparedData;
   for(var i in data) {
+
     var x1 = data[i].x;
     var y1 = data[i].y;
-
+  	
     context.beginPath();
     context.moveTo(lastx,lasty);
     context.lineTo(x1,y1);
@@ -49,6 +49,5 @@ function drawCanvasLines(preparedData, contextData){
     lastx = x1;
     lasty = y1;
   }
-
 }
 

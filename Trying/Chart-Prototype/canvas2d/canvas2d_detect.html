@@ -18,22 +18,25 @@
 
   <script>
     $(document).ready( function() {
+      $('#canvasWidthTd').hide();
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
       var iterationCounter = 0;
-      xValueRange = 20;
-
       $('#linesCount').html(dataCount);
       $('#fader').attr({'max':dataCount});
 
       $('form').submit(function(e){
-        canvasLineWidth = $("#canvas2dWidth").val();      
+    	//canvasLineWidth = $('#canvasWidth').val()*16;
       	e.preventDefault();   	
       	doDrawing("canvas");
       });
-      $("#myCanvas").click(function(e){
-      	mouseEvent = e;
-        $('form').trigger('submit');
+      
+      $('#drawType').change(function(){
+        if($(this).val() != "lines"){
+    	  $('#canvasWidthTd').hide();
+        }else{
+          $('#canvasWidthTd').show();	
+        }
       });
     });
 
@@ -41,22 +44,23 @@
 </head>
 <body>
   <h1>Canvas2D line detection</h1>
-  <p>Line detection for mouse click</p>
-  <p class="hider">Data exists for <span id="linesCount"></span> points</p>
+  <p>Data exists for <span id="linesCount"></span> points</p>
   <form id="drawing">
   <table>
     <tr> 
-      <td class="hider">Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="35" type"name"/></td>
-      <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
-      <td></td>
+      <td>Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="10000" type"name"/></td>
+      <td>Iterations for chart drawing: <input id="iterations" value="10" type"name"/></td>
+      <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
-    <tr class="simplifyHolder hider">
+    <tr class="simplifyHolder">
       <td>Value for simplify tolerance: <select id="tolerance"><option value="0">0% - no simplify</option><option value="0.25">25% - low simplify</option><option value="0.50">50%  - mid simplify</option><option value="0.75">75% - good simplify</option><option value="1">100% - best simplify</option></select></td>
       <td>Points left from simplify: <a id="counterSimply"></a></td>
     </tr>
-    <td class="hider">Object type: <select id="drawType"><option value="lines">Lines</option></select></td>
-    <td><span>Line Width: <input id="canvas2dWidth" value="10" type"name"/> <span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
-     <td></td>
+    <tr>
+      <td>Object type: <select id="drawType"><option value="lines">Lines</option><option value="path">Path</option></select></td>
+      <td id="canvasWidthTd">Line width in rem: <input type="text" id="canvasWidth" name="canvasWidth" value="0.0625" /></td>
+      <td></td>
+    </tr>    
   </table>
   </form>
   <br />
@@ -68,7 +72,7 @@ Your browser does not support the HTML5 canvas tag.</canvas>
     <p>Average ms: <span id="averageMs"></span></p>
   </div>
   <div class="download">
-  	<a href='../detect.zip'>Download source</a>
+  	<a href='../chart.zip'>Download source</a>
   </div>  
 </body>
 </html>

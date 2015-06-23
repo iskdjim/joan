@@ -88,12 +88,13 @@ function prepareData(data,type,range,simplifyOptions){
   if(type == "webgl" && linetype != "line"){
     webGLPoints = new Float32Array(range*7*6);
 
-    // no left data
-    if(startIndex < 0){
-  	  var newStart = ((startIndex/10)*-5)*xRangeValue;
-      xRange = xRange+newStart;
-      endIndex = 100;
-    }
+  }
+  
+  // no left data
+  if(startIndex < 0){
+    var newStart = ((startIndex/10)*-5)*xRangeValue;
+    xRange = xRange+newStart;
+    endIndex = 100;
   }
 
   for(var i in data) {
@@ -143,7 +144,7 @@ function prepareData(data,type,range,simplifyOptions){
       }
 
 	}else{
-      rangedPoints.push({x:xRange, y:(data[i].chanels[0].value/pointDivisor), time:data[i].time});
+      rangedPoints.push({x:xRange, y:(430-(data[i].chanels[0].value*10)), time:data[i].time});
     }
     rangeCounter++;
     xRange += xRangeValue;

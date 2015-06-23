@@ -17,6 +17,7 @@
 
   <script>
     $(document).ready( function() {
+      $('#canvasWidthTd').hide();
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
       var iterationCounter = 0;
@@ -24,7 +25,7 @@
       $('#fader').attr({'max':dataCount});
 
       $('form').submit(function(e){
-    	canvasLineWidth = $('#canvasWidth').val()*16;
+    	//canvasLineWidth = $('#canvasWidth').val()*16;
       	e.preventDefault();   	
       	doDrawing("canvas");
       });

@@ -61,7 +61,7 @@
     	
       	e.preventDefault();  
       	xAxeStart = (startIndex*startXRange)*300; 
-      	console.log(xAxeStart);
+
       	xAxeLabel();
       	
     	webglStuff('webGLCanvas');
@@ -90,8 +90,8 @@
   </script>
 </head>
 <body>
-  <h1>WebGL line detection</h1>
-  <p>Polygon detection for mouse click</p>
+  <h1>WebGL zoom</h1>
+  <p class="hider">Polygon detection for mouse click</p>
   <p class="hider">Data exists for <span id="linesCount"></span> points</p>
   <form id="drawing">
   <table>
@@ -106,7 +106,7 @@
       <td><span class="marginSpan">Zoom Level: <span><select id="zoom"><option value="1">100%</option><option value="2">200%</option><option value="3">300%</option><option value="4">400%</option><option value="5">500%</option><option value="6">600%</option></select><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
     </tr>
     <tr>
-      <td><span><button type="button" id="moveLeft">Move left</button></span><span class="marginSpan"><button type="button" id="moveRight">Move left</button></span></td>
+      <td class="naviButtons"><span><button type="button" id="moveLeft">Move left</button></span><span class="marginSpan"><button type="button" id="moveRight">Move left</button></span></td>
       <td></td>
       <td></td>
     </tr>
@@ -129,7 +129,7 @@
     <p>Average ms: <span id="averageMs"></span></p>  
   </div>
   <div class="download">
-  	<a href='../detect.zip'>Download source</a>
+  	<a href='../chart.zip'>Download source</a>
   </div> 
   <div class="clearer"></div> 
   <div class="xAxe">
