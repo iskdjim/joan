@@ -70,21 +70,19 @@
     	linetype = $('#drawType').val();
     	doDrawing("webgl");
       });
-      
-      $("#webGLCanvas").click(function(e){
-      	//mouseEvent = e;
-        //$('form').trigger('submit');
-        console.log("test");
-      });
-      
+
       $("#moveRight").click(function(){
-    	  showCout = showCout+10;
-    	  $('form').trigger('submit');
+        showCout = showCout+10;
+        $('form').trigger('submit');
       });
       
       $("#moveLeft").click(function(){
-    	  showCout = showCout-10;
-    	  $('form').trigger('submit');
+        showCout = showCout-10;
+        $('form').trigger('submit');
+      });
+      
+      $("#zoom").change(function(){
+        $('form').trigger('submit');
       });
     });
   </script>

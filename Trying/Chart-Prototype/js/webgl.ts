@@ -136,6 +136,10 @@ function pixelToPointsNew(index,point){
   webGLPoints[(index*7)+2] = 0;
   webGLPoints[(index*7)+3] = 0;
   webGLPoints[(index*7)+4] = 0;
+
+  if(index%2==0){
+  	//webGLPoints[(index*7)+4] = 1;
+  } 
   webGLPoints[(index*7)+5] = 0;
   webGLPoints[(index*7)+6] = 1;    
   

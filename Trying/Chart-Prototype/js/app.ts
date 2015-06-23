@@ -144,7 +144,11 @@ function prepareData(data,type,range,simplifyOptions){
       }
 
 	}else{
-      rangedPoints.push({x:xRange, y:(430-(data[i].chanels[0].value*10)), time:data[i].time});
+	  if(type == "canvas" && isZoom){
+        rangedPoints.push({x:xRange, y:(430-(data[i].chanels[0].value*10)), time:data[i].time});
+      }else{
+        rangedPoints.push({x:xRange, y:data[i].chanels[0].value/pointDivisor, time:data[i].time});
+      }
     }
     rangeCounter++;
     xRange += xRangeValue;
@@ -246,7 +250,6 @@ function checkMouseHit(target,e){
 }
 
 function xAxeLabel(){
-      	console.log(xAxeStart);
   for(var i=0;i<10;i++){ 	
   	var labelValue = (xAxeStart)+(i*(xAxeStep/zoomCount)); // start value * zoom faktor + steps with zoop faktor half
     $('#x'+i).html("<span>"+Math.round(labelValue)+"</span>");

@@ -24,7 +24,8 @@
       $('#linesCount').html(dataCount);
       $('#fader').attr({'max':dataCount});
 
-  	  showCout = 50;
+      isZoom = true;
+	  showCout = 50;
   	  var startXRange = 6;
   	  xAxeLabel();
       $('form').submit(function(e){
@@ -54,13 +55,17 @@
       });
       
       $("#moveRight").click(function(){
-    	  showCout = showCout+10;
-    	  $('form').trigger('submit');
+        showCout = showCout+10;
+        $('form').trigger('submit');
       });
-      
+        
       $("#moveLeft").click(function(){
-    	  showCout = showCout-10;
-    	  $('form').trigger('submit');
+        showCout = showCout-10;
+        $('form').trigger('submit');
+      });
+        
+      $("#zoom").change(function(){
+        $('form').trigger('submit');
       });
       
     });

@@ -124,7 +124,12 @@ function prepareData(data, type, range, simplifyOptions) {
             }
         }
         else {
-            rangedPoints.push({ x: xRange, y: (430 - (data[i].chanels[0].value * 10)), time: data[i].time });
+            if (type == "canvas" && isZoom) {
+                rangedPoints.push({ x: xRange, y: (430 - (data[i].chanels[0].value * 10)), time: data[i].time });
+            }
+            else {
+                rangedPoints.push({ x: xRange, y: data[i].chanels[0].value / pointDivisor, time: data[i].time });
+            }
         }
         rangeCounter++;
         xRange += xRangeValue;
@@ -213,7 +218,6 @@ function checkMouseHit(target, e) {
     });
 }
 function xAxeLabel() {
-    console.log(xAxeStart);
     for (var i = 0; i < 10; i++) {
         var labelValue = (xAxeStart) + (i * (xAxeStep / zoomCount)); // start value * zoom faktor + steps with zoop faktor half
         $('#x' + i).html("<span>" + Math.round(labelValue) + "</span>");
@@ -408,6 +412,8 @@ function pixelToPointsNew(index, point) {
     webGLPoints[(index * 7) + 2] = 0;
     webGLPoints[(index * 7) + 3] = 0;
     webGLPoints[(index * 7) + 4] = 0;
+    if (index % 2 == 0) {
+    }
     webGLPoints[(index * 7) + 5] = 0;
     webGLPoints[(index * 7) + 6] = 1;
     if (mouseEvent) {

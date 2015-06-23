@@ -89,12 +89,15 @@ function prepareData(data,type,range,simplifyOptions){
     if (type == "webgl") {
       if (rangeCounter > 0 && linetype != "line") {
         var pTriangles = new Array();
+        
         pTriangles[0] = new Array(lastPointX, lastPointY);
         pTriangles[1] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
         pTriangles[2] = new Array(xRange, (data[i].chanels[0].value / 50));
+        
         pTriangles[3] = new Array(lastPointX, lastPointY);
         pTriangles[4] = new Array(lastPointX + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
         pTriangles[5] = new Array(xRange + lineWidth, (data[i].chanels[0].value / 50) + lineWidth);
+        
         for (var j = 0; j < pTriangles.length; j++) {
           pointsString += "," + pixelToPoints(index, new Array(pTriangles[j][0], pTriangles[j][1]));
           index++;
