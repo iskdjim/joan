@@ -24,8 +24,17 @@
       $('#fader').attr({'max':dataCount});
 
       $('form').submit(function(e){
+    	canvasLineWidth = $('#canvasWidth').val()*16;
       	e.preventDefault();   	
       	doDrawing("canvas");
+      });
+      
+      $('#drawType').change(function(){
+        if($(this).val() != "lines"){
+    	  $('#canvasWidthTd').hide();
+        }else{
+          $('#canvasWidthTd').show();	
+        }
       });
     });
 
@@ -46,8 +55,8 @@
       <td>Points left from simplify: <a id="counterSimply"></a></td>
     </tr>
     <tr>
-      <td>Object type: <select id="drawType"><option value="path">Path</option><option value="lines">Lines</option></select></td>
-      <td></td>
+      <td>Object type: <select id="drawType"><option value="lines">Lines</option><option value="path">Path</option></select></td>
+      <td id="canvasWidthTd">Line width in rem: <input type="text" id="canvasWidth" name="canvasWidth" value="0.0625" /></td>
       <td></td>
     </tr>    
   </table>

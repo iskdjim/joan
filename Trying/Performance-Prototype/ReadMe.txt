@@ -10,3 +10,6 @@ Installation node,grunt and typescript with npm.
 8) install -g grunt-contrib-connect
 9) install -g grunt-open
 10) run grunt
+
+
+http://jessefreeman.com/dev-techniques/automating-typescript-with-node-and-grunt/

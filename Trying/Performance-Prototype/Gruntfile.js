@@ -40,6 +40,7 @@ module.exports = function (grunt) {
 			      archive: 'perf.zip'
 			    },
 			    files: [
+			      {src: ['ReadMe.txt'], dest: '/'},
 			      {src: ['index.html'], dest: '/'},  
 			      {src: ['package.json'], dest: '/'}, 
 			      {src: ['Gruntfile.js'], dest: '/'}, 

@@ -135,3 +135,11 @@ p + p {
 #resultTable .tableBorder.header{
   text-align:center;
 }
+
+#canvasWidth{
+  width:9rem;
+}
+
+#drawBtn{
+  margin-left:1rem;
+}

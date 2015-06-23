@@ -88,15 +88,13 @@ function prepareData(data,type,range,simplifyOptions){
   if(type == "webgl" && linetype != "line"){
     webGLPoints = new Float32Array(range*7*6);
 
-    // no left data     
+    // no left data
     if(startIndex < 0){
   	  var newStart = ((startIndex/10)*-5)*xRangeValue;
       xRange = xRange+newStart;
       endIndex = 100;
     }
   }
-
-  
 
   for(var i in data) {
     if(range < rangeCounter){
@@ -106,7 +104,6 @@ function prepareData(data,type,range,simplifyOptions){
     if(i < startIndex || i > endIndex){
     	continue;
     }
-
 
 	if(type == "webgl"){
 	  if(rangeCounter > 0 && linetype != "line"){
@@ -124,9 +121,9 @@ function prepareData(data,type,range,simplifyOptions){
         
         for(var j=0;j<pTriangles.length;j++){
         	if(isZoom){
-        	  pointsString += ","+pixelToPointsNew(index,new Array(pTriangles[j][0],pTriangles[j][1]));     
+        	  pointsString += ","+pixelToPointsNew(index,new Array(pTriangles[j][0],pTriangles[j][1]));
         	}else{
-              pointsString += ","+pixelToPoints(index,new Array(pTriangles[j][0],pTriangles[j][1]));       	  
+              pointsString += ","+pixelToPoints(index,new Array(pTriangles[j][0],pTriangles[j][1]));
         	}
 
           index++;
@@ -135,7 +132,6 @@ function prepareData(data,type,range,simplifyOptions){
 	    lastPointY = pTriangles[4][1];
               
       }else{
-      	//polygoneLinePoints.push(new Array(0,0,0,0,0,0, index));
       	if(isZoom){
           pointsString += ","+pixelToPointsNew(i,new Array(xRange,(data[i].chanels[0].value/pointDivisor)));
         }else{
