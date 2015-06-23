@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/detect.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../js/app-ts.js"></script>
+
+  <script src="../api/data.min.js"></script>   
+
+  <script id="shader-fs" type="x-shader/x-fragment">
+	varying lowp vec4 vColor;
+    void main(void) {
+      gl_FragColor = vColor;
+    }
+  </script>
+
+  <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+	attribute vec4 aVertexColor;
+
+	varying lowp vec4 vColor;
+    void main(void) {
+     gl_Position = vPosition;
+     vColor = aVertexColor;
+    }
+  </script>
+
+  <script>
+    var pointsData,GL;
+    var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
+    vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
+    vVertices,        // Array der Dreieckskoordinaten
+    vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
+    		 
+    $(document).ready( function() {
+	  dataCount = jsonData.count;
+	  rawData = jsonData.data;
+      xValueRange = 0.08;
+      endIndex = dataCount;
+	  var iterationCounter = 0;
+      $('#linesCount').html(dataCount);
+      $('#fader').attr({'max':dataCount});
+
+      $('form').submit(function(e){
+      	e.preventDefault();      	
+    	webglStuff('webGLCanvas');
+
+        lineWidth = parseInt($('#polyWidth').val()*16);
+    	linetype = $('#drawType').val();
+    	doDrawing("webgl");
+      });
+      
+      $("#webGLCanvas").mousemove(function(){
+        console.log("moved");
+      });
+    
+      $("#webGLCanvas").click(function(e){
+    	mouseEvent = e;
+        $('form').trigger('submit');
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>WebGL line detection</h1>
+  <p>Polygon detection for mouse click</p>
+  <p class="hider">Data exists for <span id="linesCount"></span> points</p>
+  <form id="drawing">
+  <table>
+    <tr> 
+      <td class="hider" >Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="25" type"name"/></td>
+      <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
+      <td></td>
+    </tr>
+    <tr> 
+      <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
+      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.8" /> <span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+      <td></td>
+    </tr>
+  </table>
+  </form>
+  <br />
+<canvas id="webGLCanvas" width="600" height="400">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average fps: <span id="averageFps"></span></p>
+    <p>Average ms: <span id="averageMs"></span></p>  
+  </div>
+  <div class="download">
+  	<a href='../detect.zip'>Download source</a>
+  </div>  
+</body>
+</html>
+
+

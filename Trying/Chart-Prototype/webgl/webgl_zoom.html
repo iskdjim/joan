@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/detect.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../js/app-ts.js"></script>
+
+  <script src="../api/data_clean.min.js"></script>   
+
+  <script id="shader-fs" type="x-shader/x-fragment">
+	varying lowp vec4 vColor;
+    void main(void) {
+      gl_FragColor = vColor;
+    }
+  </script>
+
+  <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+	attribute vec4 aVertexColor;
+
+	varying lowp vec4 vColor;
+    void main(void) {
+     gl_Position = vPosition;
+     vColor = aVertexColor;
+    }
+  </script>
+
+  <script>
+    var pointsData,GL;
+    var webGLProgramObject,
+    vertexAttribLoc,
+    vVertices,
+    vertexPosBufferObjekt;
+    		 
+    $(document).ready( function() {
+	  dataCount = jsonData.count;
+	  rawData = jsonData.data;
+
+	  var iterationCounter = 0;
+	  pointDivisor = 1;
+	  isZoom = true;
+      $('#linesCount').html(dataCount);
+      $('#fader').attr({'max':dataCount});
+  	  showCout = 50;
+  	  var startXRange = 0.02;
+  	  xAxeLabel();
+      $('form').submit(function(e){
+    	zoomCount = $('#zoom').val();  
+        xValueRange = startXRange*zoomCount;
+          
+    	startIndex = showCout-(50/zoomCount);
+    	endIndex = showCout+(50/zoomCount);
+    	
+      	e.preventDefault();  
+      	xAxeStart = (startIndex*startXRange)*300; 
+      	console.log(xAxeStart);
+      	xAxeLabel();
+      	
+    	webglStuff('webGLCanvas');
+
+        lineWidth = parseInt($('#polyWidth').val()*16);
+    	linetype = $('#drawType').val();
+    	doDrawing("webgl");
+      });
+      
+      $("#webGLCanvas").click(function(e){
+      	//mouseEvent = e;
+        //$('form').trigger('submit');
+        console.log("test");
+      });
+      
+      $("#moveRight").click(function(){
+    	  showCout = showCout+10;
+    	  $('form').trigger('submit');
+      });
+      
+      $("#moveLeft").click(function(){
+    	  showCout = showCout-10;
+    	  $('form').trigger('submit');
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>WebGL line detection</h1>
+  <p>Polygon detection for mouse click</p>
+  <p class="hider">Data exists for <span id="linesCount"></span> points</p>
+  <form id="drawing">
+  <table>
+    <tr> 
+      <td class="hider" >Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="200" type"name"/></td>
+      <td class="hider">Iterations for chart drawing: <input id="iterations" value="2" type"name"/></td>
+      <td></td>
+    </tr>
+    <tr> 
+      <td class="hider">Object Typ: <select id="drawType"><option value="polygon">Polygon</option><option value="line">Lines</option></select></td>
+      <td>Line width for polygones in rem: <input type="text" id="polyWidth" name="polyWidth" value="0.15" /></td>
+      <td><span class="marginSpan">Zoom Level: <span><select id="zoom"><option value="1">100%</option><option value="2">200%</option><option value="3">300%</option><option value="4">400%</option><option value="5">500%</option><option value="6">600%</option></select><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+    <tr>
+      <td><span><button type="button" id="moveLeft">Move left</button></span><span class="marginSpan"><button type="button" id="moveRight">Move left</button></span></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  </form>
+  <br />
+  <div class="yAxe">  
+    <div id="y4" class="yAxeValue">40</div>
+    <div id="y3" class="yAxeValue">30</div>
+    <div id="y2" class="yAxeValue">20</div>
+    <div id="y1" class="yAxeValue">10</div>
+    <div id="y0" class="yAxeValue">0</div>
+  </div>  
+  <canvas id="webGLCanvas" width="600" height="400">
+    Your browser does not support the HTML5 canvas tag.
+  </canvas>
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average fps: <span id="averageFps"></span></p>
+    <p>Average ms: <span id="averageMs"></span></p>  
+  </div>
+  <div class="download">
+  	<a href='../detect.zip'>Download source</a>
+  </div> 
+  <div class="clearer"></div> 
+  <div class="xAxe">
+    <div id="x0" class="xAxeValue"></div>
+    <div id="x1" class="xAxeValue"></div>
+    <div id="x2" class="xAxeValue"></div>
+    <div id="x3" class="xAxeValue"></div>
+    <div id="x4" class="xAxeValue"></div>
+    <div id="x5" class="xAxeValue"></div>
+    <div id="x6" class="xAxeValue"></div>
+    <div id="x7" class="xAxeValue"></div>
+    <div id="x8" class="xAxeValue"></div>
+    <div id="x9" class="xAxeValue"></div>
+  </div>    
+</body>
+</html>
+
+
