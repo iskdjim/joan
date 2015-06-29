@@ -15,14 +15,16 @@
 
   <script>
     $(document).ready( function() {
+      canvasWidth = 600;
+      canvasHeight = 400;	
       $('form').submit(function(e){
         linesCount = $("#linesCount").val();
         linesWidth = $("#linesWidth").val();     
       	e.preventDefault();   	
       	drawChart("canvas2d",linesCount,linesWidth);
       });
-      $("#myCanvas").mousemove(function(e){handleMousemove(e);});
-      
+      //$("#myCanvas").mousemove(function(e){handleMousemove(e,"hover");});
+      $("#myCanvas").click(function(e){handleMousemove(e,"click");});
    
     });
     function start(){

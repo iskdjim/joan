@@ -8,7 +8,9 @@ var mouseY = 0;
 var offsetX;
 var offsetY;
 var tolerance=5;
-    var lineIndex = -1;
+var lineIndex = -1;
+var activeLines = [];
+var possibleBoundingBoxes = [];
 
 function drawChart(type){
   if(type=="canvas2d"){

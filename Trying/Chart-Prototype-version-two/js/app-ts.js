@@ -8,6 +8,8 @@ var offsetX;
 var offsetY;
 var tolerance = 5;
 var lineIndex = -1;
+var activeLines = [];
+var possibleBoundingBoxes = [];
 function drawChart(type) {
     if (type == "canvas2d") {
         contextData = initCanvasContext('myCanvas');
@@ -48,21 +50,20 @@ function drawCanvasLines(linesData, lineX, lineY) {
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
         context.strokeStyle = '#000000';
-        if (mouseX && lineX && i == lineIndex) {
+        //console.log(activeLines);
+        if (mouseX && lineX && activeLines[i]) {
             context.strokeStyle = '#FF0000';
         }
         context.stroke();
     }
 }
 function generateLines() {
-    canvasWidth = 600;
-    canvasHeight = 400;
     linesData = [];
     for (var i = 0; i < linesCount; i++) {
-        var x1 = Math.floor((Math.random() * 600) + 1);
-        var y1 = Math.floor((Math.random() * 400) + 1);
-        var x2 = Math.floor((Math.random() * 600) + 1);
-        var y2 = Math.floor((Math.random() * 400) + 1);
+        var x1 = Math.floor((Math.random() * canvasWidth) + 1);
+        var y1 = Math.floor((Math.random() * canvasHeight) + 1);
+        var x2 = Math.floor((Math.random() * canvasWidth) + 1);
+        var y2 = Math.floor((Math.random() * canvasHeight) + 1);
         linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
     }
     drawCanvasLines(linesData, 0, 0);
@@ -83,12 +84,14 @@ function linepointNearestMouse(line, x, y) {
 // calculate how close the mouse is to the line
 // if that distance is less than tolerance then
 // display a dot on the line
-function handleMousemove(e) {
+function handleMousemove(e, action) {
     e.preventDefault();
     e.stopPropagation();
     mouseX = e.clientX - offsetX;
     mouseY = e.clientY - offsetY;
     var boundingHit = 0;
+    // check if mouse hits a bounding box
+    possibleBoundingBoxes = [];
     for (var i in linesData) {
         var xRange0 = linesData[i][0][0];
         var xRange1 = linesData[i][1][0];
@@ -110,23 +113,35 @@ function handleMousemove(e) {
             continue;
         }
         boundingHit = 1;
-        lineIndex = i;
+        possibleBoundingBoxes[i] = i;
     }
     if (!boundingHit) {
-        drawCanvasLines(linesData, 0, 0);
     }
-    else {
-    }
-    if (lineIndex >= 0) {
-        var linepoint = linepointNearestMouse(linesData[lineIndex], mouseX, mouseY);
-        var dx = mouseX - linepoint.x;
-        var dy = mouseY - linepoint.y;
-        var distance = Math.abs(Math.sqrt(dx * dx + dy * dy));
-        if (distance < tolerance) {
+    if (possibleBoundingBoxes.length > 0) {
+        var nearestLineIndex = -1;
+        var bestDistance = 999999;
+        // check which line is the nearest from the possible ones
+        for (var j in possibleBoundingBoxes) {
+            var linepoint = linepointNearestMouse(linesData[possibleBoundingBoxes[j]], mouseX, mouseY);
+            var dx = mouseX - linepoint.x;
+            var dy = mouseY - linepoint.y;
+            var distance = Math.abs(Math.sqrt(dx * dx + dy * dy));
+            // best distance => nearest line and set index
+            if (bestDistance > distance) {
+                bestDistance = distance;
+                nearestLineIndex = possibleBoundingBoxes[j];
+            }
+        }
+        if (bestDistance < tolerance) {
+            if (action == "click") {
+                activeLines[nearestLineIndex] = 1;
+                if (e.shiftKey) {
+                    activeLines[nearestLineIndex] = 0;
+                }
+            }
             drawCanvasLines(linesData, linepoint.x, linepoint.y);
         }
         else {
-            drawCanvasLines(linesData, 0, 0);
         }
     }
 }
