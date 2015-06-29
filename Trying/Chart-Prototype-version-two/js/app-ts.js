@@ -52,7 +52,6 @@ function drawCanvasLines(linesData, lineX, lineY) {
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
         context.strokeStyle = '#000000';
-        //console.log(activeLines);
         //if(mouseX && lineX && activeLines[i]){
         if (lineX && activeLines[i]) {
             context.strokeStyle = '#FF0000';
@@ -140,13 +139,11 @@ function handleMousemove(e, action) {
 // if that distance is less than tolerance then
 // display a dot on the line
 function handleBoxSelect() {
-    //mouseX= e.clientX-offsetX;
-    //mouseY= e.clientY-offsetY;
     var boundingHit = 0;
     // check if mouse hits a bounding box
     var selectBoxHits = [];
-    console.log("left top x:" + selectBoxX + "left top y:" + selectBoxY);
-    console.log("right bottom x:" + (selectBoxX + selectBoxWidth) + "right bottom y:" + (selectBoxY + selectBoxHeight));
+    //console.log("left top x:"+selectBoxX+"left top y:"+selectBoxY);
+    //console.log("right bottom x:"+(selectBoxX+selectBoxWidth)+"right bottom y:"+(selectBoxY+selectBoxHeight));
     for (var i in linesData) {
         if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
             activeLines[i] = i;
@@ -160,35 +157,16 @@ function handleBoxSelect() {
                 activeLines[i] = 0;
             }
         }
-        // check for the angle for each of the 4 redrangle points, if all are bigger or all a smaller then the angle from point 1 to point 2...there is no colision... between 90 und 180
-        // var angleDeg = Math.atan2(linesData[i][1][1] - linesData[i][0][1], linesData[i][0][0] - linesData[i][1][0]) * 180 / Math.PI;
-        //	  var xRange0 = linesData[i][0][0];
-        // var xRange1 = linesData[i][1][0];
-        //  var yRange0 = linesData[i][0][1];
-        //  var yRange1 = linesData[i][1][1];
-        // check if first x value is bigger
-        //  if(linesData[i][0][0] > linesData[i][1][0]){
-        //    xRange0 = linesData[i][1][0];
-        //    xRange1 = linesData[i][0][0];	
-        //  }
-        // check if first y value is bigger
-        // if(linesData[i][0][1] > linesData[i][1][1]){
-        //   yRange0 = linesData[i][1][1];
-        //    yRange1 = linesData[i][0][1];	
-        // } 
         var xyValues = checkPointsForAngle(linesData[i]);
         var x1 = (selectBoxX + selectBoxWidth);
         var y1 = (selectBoxY + selectBoxHeight);
+        // calculate the angle for the diffrent box points
         var angleDeg = Math.atan2(xyValues.y1 - xyValues.y0, xyValues.x1 - xyValues.x0) * 180 / Math.PI;
         var rightTop = Math.atan2((selectBoxY) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
         var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
         var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
         var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
-        // console.log(angleDeg);    
-        // console.log(rightTop);
-        // console.log(rightBottom);
-        //  console.log(leftBottom);
-        // console.log(leftTop);  
+        // calculate the distance for the box points
         var dist_angleDeg = Math.sqrt(Math.pow(xyValues.x1 - xyValues.x0, 2) + Math.pow(xyValues.y1 - xyValues.y0, 2));
         var dist_rightTop = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
         var dist_rightBottom = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
