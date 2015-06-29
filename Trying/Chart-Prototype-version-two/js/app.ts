@@ -12,6 +12,10 @@ var lineIndex = -1;
 var activeLines = [];
 var possibleBoundingBoxes = [];
 
+var selectBoxWidth,selectBoxHeight,selectBoxX,selectBoxY,selectBoxActive;
+
+var deselect;
+
 function drawChart(type){
   if(type=="canvas2d"){
   	contextData = initCanvasContext('myCanvas');

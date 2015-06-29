@@ -105,8 +105,14 @@ p + p {
   border:1px solid #000;
   width:37.6rem;
   height:25.1rem;
+  position:relative;
 }
 
 #myCanvas{
+  position:absolute;
+}
+
+.selectBox{
   border:1px solid red;
+  position:absolute;
 }

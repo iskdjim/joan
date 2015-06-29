@@ -25,7 +25,9 @@
       });
       //$("#myCanvas").mousemove(function(e){handleMousemove(e,"hover");});
       $("#myCanvas").click(function(e){handleMousemove(e,"click");});
-   
+      $("#canvasWrapper").mousedown(function(e){createBox(e,"mousedown");});
+      $("#canvasWrapper").mouseup(function(e){removeBox(e,"mousedown");});
+      
     });
     function start(){
     	$('form').trigger('submit');
