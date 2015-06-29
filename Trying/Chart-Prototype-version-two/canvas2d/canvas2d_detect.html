@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/detect.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../js/app-ts.js"></script>
+
+  <script>
+    $(document).ready( function() {
+      $('form').submit(function(e){
+        linesCount = $("#linesCount").val();
+        linesWidth = $("#linesWidth").val();     
+      	e.preventDefault();   	
+      	drawChart("canvas2d",linesCount,linesWidth);
+      });
+      $("#myCanvas").mousemove(function(e){handleMousemove(e);});
+      
+   
+    });
+    function start(){
+    	$('form').trigger('submit');
+   	 }
+
+  </script>
+</head>
+<body onLoad="start()">
+  <h1>Canvas2D line detection</h1>
+  <form id="drawing">
+  <table>
+    <tr>
+      <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
+      <td><span class="marginSpan">Line Width:  <input id="linesWidth" value="5" type="name"/</span></td>
+      <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+  </table>
+  </form>
+  <br />
+  <div id="canvasWrapper">
+    <canvas id="myCanvas" width="600" height="400">
+      Your browser does not support the HTML5 canvas tag.
+    </canvas>
+  </div>  
+  <div class="download">
+  	<a href='../chart.zip'>Download source</a>
+  </div>  
+</body>
+</html>

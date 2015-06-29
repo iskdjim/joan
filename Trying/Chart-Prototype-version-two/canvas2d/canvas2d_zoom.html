@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/detect.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../libs/simplify.js"></script>
+  <script src="../js/app-ts.js"></script>
+
+  <script src="../api/data_clean.min.js"></script> 
+
+  <script>
+    $(document).ready( function() {
+	  dataCount = jsonData.count;
+	  rawData = jsonData.data;
+      var iterationCounter = 0;
+      $('#linesCount').html(dataCount);
+      $('#fader').attr({'max':dataCount});
+
+      isZoom = true;
+	  showCout = 50;
+  	  var startXRange = 6;
+  	  xAxeLabel();
+      $('form').submit(function(e){
+      	zoomCount = $('#zoom').val();  
+        xValueRange = startXRange*zoomCount;
+          
+    	startIndex = showCout-(50/zoomCount);
+    	endIndex = showCout+(50/zoomCount);
+    	
+      	e.preventDefault(); 
+      	console.log("x:"+startIndex);
+      	xAxeStart = (startIndex*startXRange); 
+
+      	xAxeLabel();  
+    	  
+    	canvasLineWidth = $('#canvasWidth').val()*16;
+
+      	doDrawing("canvas");
+      });
+      
+      $('#drawType').change(function(){
+        if($(this).val() != "lines"){
+    	  $('#canvasWidthTd').hide();
+        }else{
+          $('#canvasWidthTd').show();	
+        }
+      });
+      
+      $("#moveRight").click(function(){
+        showCout = showCout+10;
+        $('form').trigger('submit');
+      });
+        
+      $("#moveLeft").click(function(){
+        showCout = showCout-10;
+        $('form').trigger('submit');
+      });
+        
+      $("#zoom").change(function(){
+        $('form').trigger('submit');
+      });
+      
+    });
+
+  </script>
+</head>
+<body>
+  <h1>Canvas2D zoom</h1>
+  <p class="hider">Data exists for <span id="linesCount"></span> points</p>
+  <form id="drawing">
+  <table>
+    <tr> 
+      <td class="hider">Number of points to draw: <input type="range" min="0" max="100" value="0" id="fader" step="10" oninput="outputUpdate(value)"> <input id="limitLines" value="10000" type"name"/></td>
+      <td class="hider">Iterations for chart drawing: <input id="iterations" value="10" type"name"/></td>
+      <td></td>
+    </tr>
+    <tr class="simplifyHolder hider">
+      <td>Value for simplify tolerance: <select id="tolerance"><option value="0">0% - no simplify</option><option value="0.25">25% - low simplify</option><option value="0.50">50%  - mid simplify</option><option value="0.75">75% - good simplify</option><option value="1">100% - best simplify</option></select></td>
+      <td>Points left from simplify: <a id="counterSimply"></a></td>
+    </tr>
+    <tr>
+      <td class="hider">Object type: <select id="drawType"><option value="lines">Lines</option><option value="path">Path</option></select></td>
+      <td id="canvasWidthTd">Line width in rem: <input type="text" id="canvasWidth" name="canvasWidth" value="0.0625" /></td>
+      <td><span class="marginSpan">Zoom Level: <span><select id="zoom"><option value="1">100%</option><option value="2">200%</option><option value="3">300%</option><option value="4">400%</option><option value="5">500%</option><option value="6">600%</option></select><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+    <tr>
+      <td class="naviButtons"><span><button type="button" id="moveLeft">Move left</button></span><span class="marginSpan"><button type="button" id="moveRight">Move left</button></span></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  </form>
+  <br />
+  <div class="yAxe">  
+    <div id="y4" class="yAxeValue">40</div>
+    <div id="y3" class="yAxeValue">30</div>
+    <div id="y2" class="yAxeValue">20</div>
+    <div id="y1" class="yAxeValue">10</div>
+    <div id="y0" class="yAxeValue">0</div>
+  </div>    
+  <canvas id="myCanvas" width="600" height="400">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+  <div class="stats">
+    <p>Statistics:</p>
+    <p>Average fps: <span id="averageFps"></span></p>
+    <p>Average ms: <span id="averageMs"></span></p>
+  </div>
+  <div class="download">
+  	<a href='../chart.zip'>Download source</a>
+  </div>
+  <div class="clearer"></div> 
+  <div class="xAxe">
+    <div id="x0" class="xAxeValue"></div>
+    <div id="x1" class="xAxeValue"></div>
+    <div id="x2" class="xAxeValue"></div>
+    <div id="x3" class="xAxeValue"></div>
+    <div id="x4" class="xAxeValue"></div>
+    <div id="x5" class="xAxeValue"></div>
+    <div id="x6" class="xAxeValue"></div>
+    <div id="x7" class="xAxeValue"></div>
+    <div id="x8" class="xAxeValue"></div>
+    <div id="x9" class="xAxeValue"></div>
+  </div>      
+</body>
+</html>
