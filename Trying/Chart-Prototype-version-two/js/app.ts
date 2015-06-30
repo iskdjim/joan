@@ -11,27 +11,124 @@ var tolerance=5;
 var lineIndex = -1;
 var activeLines = [];
 var possibleBoundingBoxes = [];
-
+var svgLineIds = [];
 var selectBoxWidth,selectBoxHeight,selectBoxX,selectBoxY,selectBoxActive;
-
+var techType;
 var deselect;
 
 function drawChart(type){
-  if(type=="canvas2d"){
+  techType = type;
+  var $chart=$("#chartWrapper");
+  var chartOffset=$chart.offset();
+  offsetX=chartOffset.left;
+  offsetY=chartOffset.top;
+  
+  if(techType=="canvas2d"){
   	activeLines=[];
   	contextData = initCanvasContext('myCanvas');
-	var $canvas=$("#myCanvas");
-	var canvasOffset=$canvas.offset();
-	offsetX=canvasOffset.left;
-	offsetY=canvasOffset.top;
     generateLines();
     drawCanvasLines(linesData,0,0);
-  }else if(type=="svg"){
+  }else if(techType=="svg"){
     generateLines();
     drawSvgLines(linesData, $(".svgHolder"));
   }
 }
 
+
+// handle mousemove events
+// calculate how close the mouse is to the line
+// if that distance is less than tolerance then
+// display a dot on the line
+function handleBoxSelect(){
+
+  var boundingHit = 0;
+
+  // check if mouse hits a bounding box
+  var selectBoxHits = [];
+  //console.log("left top x:"+selectBoxX+"left top y:"+selectBoxY);
+  //console.log("right bottom x:"+(selectBoxX+selectBoxWidth)+"right bottom y:"+(selectBoxY+selectBoxHeight));
+
+  for(var i in linesData){
+    if(linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX+selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY+selectBoxHeight)){
+      activeLines[i] = i;
+      if(deselect){
+        activeLines[i] = -1;
+      }
+    }
+
+    if(linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX+selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY+selectBoxHeight)){
+      activeLines[i] = i;
+      if(deselect){
+        activeLines[i] = -1;
+      }
+    }
+
+    var xyValues = checkPointsForAngle(linesData[i]);
+
+    var x1 = (selectBoxX+selectBoxWidth);
+    var y1 = (selectBoxY+selectBoxHeight);
+
+    // calculate the angle for the diffrent box points
+    var angleDeg = Math.atan2(xyValues.y1 - xyValues.y0, xyValues.x1 - xyValues.x0) * 180 / Math.PI;
+    var rightTop = Math.atan2((selectBoxY) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
+    var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
+    var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX)-xyValues.x0) * 180 / Math.PI;
+    var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX)-xyValues.x0) * 180 / Math.PI;  
+
+    // calculate the distance for the box points
+    var dist_angleDeg = Math.sqrt(Math.pow(xyValues.x1 - xyValues.x0,2) + Math.pow(xyValues.y1 - xyValues.y0,2));
+    var dist_rightTop = Math.sqrt(Math.pow(x1 - xyValues.x0,2) + Math.pow(selectBoxY - xyValues.y0,2));
+    var dist_rightBottom = Math.sqrt(Math.pow(x1 - xyValues.x0,2) + Math.pow(y1 - xyValues.y0,2));
+    var dist_leftBottom = Math.sqrt(Math.pow(selectBoxX - xyValues.x0,2) + Math.pow(y1 - xyValues.y0,2));
+    var dist_leftTop = Math.sqrt(Math.pow(selectBoxX - xyValues.x0,2) + Math.pow(selectBoxY - xyValues.y0,2));
+
+
+    // if all angles are bigger => no colision
+    if(rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg){
+
+    // if all angles are smaller => no colision	
+    }else if(rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg){
+
+    // check if box is on the line width the distance results
+    }else if(dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg){
+
+    }else{
+      activeLines[i] = i;
+      if(deselect){
+        activeLines[i] = -1;
+      }
+    }
+  }
+
+  if(techType=="canvas2d"){
+    drawCanvasLines(linesData,1,1);
+  }else if(techType=="svg"){
+    selectSvgLines(activeLines);
+  }
+}
+
+function checkPointsForAngle(lineData){
+  var xRange0 = lineData[0][0];
+  var xRange1 = lineData[1][0];
+
+  var yRange0 = lineData[0][1];
+  var yRange1 = lineData[1][1];
+
+  // check if first x value is bigger
+  if(lineData[0][0] > lineData[1][0]){
+    //xRange0 = lineData[1][0];
+    //xRange1 = lineData[0][0];
+  }
+
+  // check if first y value is bigger
+  if(lineData[0][1] > lineData[1][1]){
+    //yRange0 = lineData[1][1];
+    //yRange1 = lineData[0][1];
+  }
+  return ({x0:xRange0,y0:yRange0,x1:xRange1,y1:yRange1});
+}
+
+// create select Box
 function createBox(e){
   $('#chartWrapper').append("<div id='selectBox' class='selectBox'></div>");
 
@@ -43,7 +140,6 @@ function createBox(e){
   var selectBoxYCalc = e.clientY-offsetY;
   $('#selectBox').css({'left': selectBoxXCalc, 'top': selectBoxYCalc ,'height': '0px', 'width': '0px'});	
   $("#chartWrapper").mousemove(function(event){
-
     // mousemove position
     var xPositionMouseMove = event.pageX-offsetX;
     var yPositionMouseMove = event.pageY-offsetY;

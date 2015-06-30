@@ -10,23 +10,100 @@ var tolerance = 5;
 var lineIndex = -1;
 var activeLines = [];
 var possibleBoundingBoxes = [];
+var svgLineIds = [];
 var selectBoxWidth, selectBoxHeight, selectBoxX, selectBoxY, selectBoxActive;
+var techType;
 var deselect;
 function drawChart(type) {
-    if (type == "canvas2d") {
+    techType = type;
+    var $chart = $("#chartWrapper");
+    var chartOffset = $chart.offset();
+    offsetX = chartOffset.left;
+    offsetY = chartOffset.top;
+    if (techType == "canvas2d") {
         activeLines = [];
         contextData = initCanvasContext('myCanvas');
-        var $canvas = $("#myCanvas");
-        var canvasOffset = $canvas.offset();
-        offsetX = canvasOffset.left;
-        offsetY = canvasOffset.top;
         generateLines();
         drawCanvasLines(linesData, 0, 0);
     }
-    else if (type == "svg") {
+    else if (techType == "svg") {
         generateLines();
+        drawSvgLines(linesData, $(".svgHolder"));
     }
 }
+// handle mousemove events
+// calculate how close the mouse is to the line
+// if that distance is less than tolerance then
+// display a dot on the line
+function handleBoxSelect() {
+    var boundingHit = 0;
+    // check if mouse hits a bounding box
+    var selectBoxHits = [];
+    //console.log("left top x:"+selectBoxX+"left top y:"+selectBoxY);
+    //console.log("right bottom x:"+(selectBoxX+selectBoxWidth)+"right bottom y:"+(selectBoxY+selectBoxHeight));
+    for (var i in linesData) {
+        if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
+            activeLines[i] = i;
+            if (deselect) {
+                activeLines[i] = -1;
+            }
+        }
+        if (linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX + selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY + selectBoxHeight)) {
+            activeLines[i] = i;
+            if (deselect) {
+                activeLines[i] = -1;
+            }
+        }
+        var xyValues = checkPointsForAngle(linesData[i]);
+        var x1 = (selectBoxX + selectBoxWidth);
+        var y1 = (selectBoxY + selectBoxHeight);
+        // calculate the angle for the diffrent box points
+        var angleDeg = Math.atan2(xyValues.y1 - xyValues.y0, xyValues.x1 - xyValues.x0) * 180 / Math.PI;
+        var rightTop = Math.atan2((selectBoxY) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
+        var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
+        var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
+        var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
+        // calculate the distance for the box points
+        var dist_angleDeg = Math.sqrt(Math.pow(xyValues.x1 - xyValues.x0, 2) + Math.pow(xyValues.y1 - xyValues.y0, 2));
+        var dist_rightTop = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
+        var dist_rightBottom = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
+        var dist_leftBottom = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
+        var dist_leftTop = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
+        // if all angles are bigger => no colision
+        if (rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg) {
+        }
+        else if (rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg) {
+        }
+        else if (dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg) {
+        }
+        else {
+            activeLines[i] = i;
+            if (deselect) {
+                activeLines[i] = -1;
+            }
+        }
+    }
+    if (techType == "canvas2d") {
+        drawCanvasLines(linesData, 1, 1);
+    }
+    else if (techType == "svg") {
+        selectSvgLines(activeLines);
+    }
+}
+function checkPointsForAngle(lineData) {
+    var xRange0 = lineData[0][0];
+    var xRange1 = lineData[1][0];
+    var yRange0 = lineData[0][1];
+    var yRange1 = lineData[1][1];
+    // check if first x value is bigger
+    if (lineData[0][0] > lineData[1][0]) {
+    }
+    // check if first y value is bigger
+    if (lineData[0][1] > lineData[1][1]) {
+    }
+    return ({ x0: xRange0, y0: yRange0, x1: xRange1, y1: yRange1 });
+}
+// create select Box
 function createBox(e) {
     $('#chartWrapper').append("<div id='selectBox' class='selectBox'></div>");
     // get start positions of mouse in canvas
@@ -125,6 +202,9 @@ function drawCanvasLines(linesData, lineX, lineY) {
         //if(mouseX && lineX && activeLines[i]){
         if (lineX && activeLines[i]) {
             context.strokeStyle = '#FF0000';
+            if (activeLines[i] == "-1") {
+                context.strokeStyle = '#000000';
+            }
         }
         context.stroke();
     }
@@ -181,94 +261,32 @@ function handleMousemove(e, action) {
         }
     }
 }
-// handle mousemove events
-// calculate how close the mouse is to the line
-// if that distance is less than tolerance then
-// display a dot on the line
-function handleBoxSelect() {
-    var boundingHit = 0;
-    // check if mouse hits a bounding box
-    var selectBoxHits = [];
-    //console.log("left top x:"+selectBoxX+"left top y:"+selectBoxY);
-    //console.log("right bottom x:"+(selectBoxX+selectBoxWidth)+"right bottom y:"+(selectBoxY+selectBoxHeight));
+function drawSvgLines(linesData, target) {
     for (var i in linesData) {
-        if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
-            activeLines[i] = i;
-            if (deselect) {
-                activeLines[i] = 0;
-            }
-        }
-        if (linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX + selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY + selectBoxHeight)) {
-            activeLines[i] = i;
-            if (deselect) {
-                activeLines[i] = 0;
-            }
-        }
-        var xyValues = checkPointsForAngle(linesData[i]);
-        var x1 = (selectBoxX + selectBoxWidth);
-        var y1 = (selectBoxY + selectBoxHeight);
-        // calculate the angle for the diffrent box points
-        var angleDeg = Math.atan2(xyValues.y1 - xyValues.y0, xyValues.x1 - xyValues.x0) * 180 / Math.PI;
-        var rightTop = Math.atan2((selectBoxY) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
-        var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
-        var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
-        var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
-        // calculate the distance for the box points
-        var dist_angleDeg = Math.sqrt(Math.pow(xyValues.x1 - xyValues.x0, 2) + Math.pow(xyValues.y1 - xyValues.y0, 2));
-        var dist_rightTop = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
-        var dist_rightBottom = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
-        var dist_leftBottom = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
-        var dist_leftTop = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
-        // if all angles are bigger => no colision
-        if (rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg) {
-        }
-        else if (rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg) {
-        }
-        else if (dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg) {
-        }
-        else {
-            activeLines[i] = i;
-            if (deselect) {
-                activeLines[i] = 0;
-            }
-        }
-    }
-    drawCanvasLines(linesData, 1, 1);
-}
-function checkPointsForAngle(lineData) {
-    var xRange0 = lineData[0][0];
-    var xRange1 = lineData[1][0];
-    var yRange0 = lineData[0][1];
-    var yRange1 = lineData[1][1];
-    // check if first x value is bigger
-    if (lineData[0][0] > lineData[1][0]) {
-    }
-    // check if first y value is bigger
-    if (lineData[0][1] > lineData[1][1]) {
-    }
-    return ({ x0: xRange0, y0: yRange0, x1: xRange1, y1: yRange1 });
-}
-function drawSvgLines(prepareData, target) {
-    var shiftCounter = 0;
-    var linePoints = new Array(new Array(0, 0));
-    var data = prepareData;
-    for (var i in data) {
-        shiftCounter++;
-        linePoints.push(new Array(data[i].x, data[i].y));
-        if (shiftCounter > 1) {
-            linePoints.shift();
-        }
-        var x1 = linePoints[0][0];
-        var y1 = linePoints[0][1];
-        var x2 = linePoints[1][0];
-        var y2 = linePoints[1][1];
+        var x1 = linesData[i][0][0];
+        var y1 = linesData[i][0][1];
+        var x2 = linesData[i][1][0];
+        var y2 = linesData[i][1][1];
+        console.log(linesData[i]);
         var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        newLine.setAttribute('id', 'time_' + data[i].time);
+        newLine.setAttribute('id', 'line_' + i);
         newLine.setAttribute('x1', x1.toString());
         newLine.setAttribute('y1', y1.toString());
         newLine.setAttribute('x2', x2.toString());
         newLine.setAttribute('y2', y2.toString());
-        newLine.setAttribute('style', 'stroke:rgb(0,0,0)');
+        newLine.setAttribute('stroke-width', linesWidth.toString());
+        newLine.setAttribute('class', 'normal');
         target.append(newLine);
     }
+}
+function selectSvgLines(lineIds) {
+    $.each(lineIds, function (i, lineId) {
+        if (lineId != "-1") {
+            $("#line_" + lineId).addClass('active');
+        }
+        else {
+            console.log(i);
+            $("#line_" + i).removeClass('active');
+        }
+    });
 }

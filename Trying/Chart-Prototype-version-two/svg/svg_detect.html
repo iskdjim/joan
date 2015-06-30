@@ -18,16 +18,27 @@
       canvasWidth = 600;
       canvasHeight = 400;	
       $('form').submit(function(e){
+    	svgLineIds=[];
+    	$(".svgHolder").empty();
         linesCount = $("#linesCount").val();
         linesWidth = $("#linesWidth").val();     
       	e.preventDefault();   	
       	drawChart("svg",linesCount,linesWidth);
+      	
+      	$('.svgHolder line').unbind('click');
+        $('.svgHolder line').click(function(e){
+        	var lineId = $(this).attr('id').replace("line_", "");
+        	svgLineIds[lineId] = lineId;
+        	
+        	if(e.shiftKey) {
+        		svgLineIds[lineId] = "-1"; 
+        	}
+        	selectSvgLines(svgLineIds);
+	    });
+        //$("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
+        //$("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
       });
-      $("#canvasWrapper").mousemove(function(e){handleMousemove(e,"hover");});
-      //$("#canvasWrapper").click(function(e){handleMousemove(e,"click");});
-     // $("#canvasWrapper").mousedown(function(e){createBox(e,"mousedown");});
-     // $("#canvasWrapper").mouseup(function(e){removeBox(e,"mousedown");});
-      
+
     });
     function start(){
     	$('form').trigger('submit');
@@ -36,7 +47,7 @@
   </script>
 </head>
 <body onLoad="start()">
-  <h1>Canvas2D line detection</h1>
+  <h1>SVG line detection</h1>
   <form id="drawing">
   <table>
     <tr>
