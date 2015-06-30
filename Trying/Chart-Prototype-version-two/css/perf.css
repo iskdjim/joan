@@ -100,7 +100,7 @@ p + p {
   text-align:center;
 }
 
-#canvasWrapper{
+#chartWrapper,.svgHolder{
   float:left;
   border:1px solid #000;
   width:37.6rem;

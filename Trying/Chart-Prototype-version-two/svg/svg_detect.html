@@ -21,12 +21,12 @@
         linesCount = $("#linesCount").val();
         linesWidth = $("#linesWidth").val();     
       	e.preventDefault();   	
-      	drawChart("canvas2d",linesCount,linesWidth);
+      	drawChart("svg",linesCount,linesWidth);
       });
-      //$("#myCanvas").mousemove(function(e){handleMousemove(e,"hover");});
-     // $("#myCanvas").click(function(e){handleMousemove(e,"click");});
-      $("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
-      $("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
+      $("#canvasWrapper").mousemove(function(e){handleMousemove(e,"hover");});
+      //$("#canvasWrapper").click(function(e){handleMousemove(e,"click");});
+     // $("#canvasWrapper").mousedown(function(e){createBox(e,"mousedown");});
+     // $("#canvasWrapper").mouseup(function(e){removeBox(e,"mousedown");});
       
     });
     function start(){
@@ -48,9 +48,7 @@
   </form>
   <br />
   <div id="chartWrapper">
-    <canvas id="myCanvas" width="600" height="400">
-      Your browser does not support the HTML5 canvas tag.
-    </canvas>
+    <svg class="svgHolder" id="container"></svg>
   </div>  
   <div class="download">
   	<a href='../chart.zip'>Download source</a>

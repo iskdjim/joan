@@ -3,21 +3,6 @@ function initCanvasContext(desternation){
   return new Array(c.getContext("2d"),c.width, c.height);
 }
 
-function drawCanvasPath(preparedData, contextData){
-  var context = contextData[0]
-  context.clearRect ( 0 , 0 , contextData[1], contextData[2] );
-  context.beginPath();
-
-  var data = preparedData;
-  for(var i in data) {
-    var x1 = data[i].x;
-    var y1 = data[i].y;
-
-    context.lineTo(x1,y1);
-  }
-  context.stroke();
-}
-
 function drawCanvasLines(linesData,lineX,lineY){
   var context = contextData[0];
   context.clearRect ( 0 , 0 , contextData[1], contextData[2] );
@@ -50,32 +35,6 @@ function drawCanvasLines(linesData,lineX,lineY){
   }
 }
 
-function generateLines(){
-  linesData = [];
-
-  for(var i=0; i<linesCount;i++){
-  	var x1 = Math.floor((Math.random() * canvasWidth) + 1);
-  	var y1 = Math.floor((Math.random() * canvasHeight) + 1);
-  	var x2 = Math.floor((Math.random() * canvasWidth) + 1);
-  	var y2 = Math.floor((Math.random() * canvasHeight) + 1);
-  	
-    linesData.push(new Array(new Array(x1,y1),new Array(x2,y2)));
-  }	 
-
-  drawCanvasLines(linesData,0,0);
-}
-
-// calculate the point on the line that's 
-// nearest to the mouse position
-function linepointNearestMouse(line,x,y) {
-  var lerp=function(a,b,x){ return(a+x*(b-a)); };
-  var dx=line[1][0]-line[0][0];
-  var dy=line[1][1]-line[0][1];
-  var t=((x-line[0][0])*dx+(y-line[0][1])*dy)/(dx*dx+dy*dy);
-  var lineX=lerp(line[0][0], line[1][0], t);
-  var lineY=lerp(line[0][1], line[1][1], t);
-  return ({x:lineX,y:lineY});
-};
 
 // handle mousemove events
 // calculate how close the mouse is to the line
@@ -212,46 +171,14 @@ function checkPointsForAngle(lineData){
 
   // check if first x value is bigger
   if(lineData[0][0] > lineData[1][0]){
-    xRange0 = lineData[1][0];
-    xRange1 = lineData[0][0];
+    //xRange0 = lineData[1][0];
+    //xRange1 = lineData[0][0];
   }
 
   // check if first y value is bigger
   if(lineData[0][1] > lineData[1][1]){
-    yRange0 = lineData[1][1];
-    yRange1 = lineData[0][1];
+    //yRange0 = lineData[1][1];
+    //yRange1 = lineData[0][1];
   }
   return ({x0:xRange0,y0:yRange0,x1:xRange1,y1:yRange1});
-}
-
-
-function createBox(e){
-  $('#canvasWrapper').append("<div id='selectBox' class='selectBox'></div>");
-  selectBoxX = e.clientX-offsetX;
-  selectBoxY = e.clientY-offsetY;
-  $('#selectBox').css({'left': selectBoxX, 'top': selectBoxY});
-    	
-  $("#canvasWrapper").mousemove(function(event){
-    var xPositionMouseMove = event.pageX-offsetX;
-    var yPositionMouseMove = event.pageY-offsetY;
-
-    selectBoxHeight = yPositionMouseMove-selectBoxY;
-    selectBoxWidth = xPositionMouseMove-selectBoxX;
-        
-    $('#selectBox').css({'height': selectBoxHeight, 'width': selectBoxWidth});
-    selectBoxActive = 1;
-    deselect = 0;
-    if(e.shiftKey) {
-      deselect = 1;
-    }
-  });
- 	
-}
-
-function removeBox(e){
-  $('#canvasWrapper #selectBox').remove();
-  if(selectBoxActive){
-    selectBoxActive = 0;
-    handleBoxSelect();
-  }
 }
