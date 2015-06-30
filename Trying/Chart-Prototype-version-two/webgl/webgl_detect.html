@@ -12,43 +12,69 @@
 
   <script src="../libs/zepto.js"></script>
   <script src="../js/app-ts.js"></script>
+  
+  <script id="shader-fs" type="x-shader/x-fragment">
+	varying lowp vec4 vColor;
+    void main(void) {
+      gl_FragColor = vColor;
+    }
+  </script>
+
+  <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+	attribute vec4 aVertexColor;
+
+	varying lowp vec4 vColor;
+    void main(void) {
+     gl_Position = vPosition;
+     vColor = aVertexColor;
+    }
+  </script>
 
   <script>
+    var pointsData,GL;
+    var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
+    vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
+    vVertices,        // Array der Dreieckskoordinaten
+    vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
+    		 
     $(document).ready( function() {
+
       canvasWidth = 600;
       canvasHeight = 400;	
       $('form').submit(function(e){
         linesCount = $("#linesCount").val();
-        linesWidth = $("#linesWidth").val();     
-      	e.preventDefault();   	
-      	drawChart("canvas2d",linesCount,linesWidth);
+    	webglStuff('webGLCanvas');
+        linesWidth = parseInt($("#linesWidth").val()*16);  
+    	e.preventDefault();   	
+    	drawChart("webgl");
       });
       //$("#chartWrapper").mousemove(function(e){handleMousemove(e,"hover");});
-      $("#chartWrapper").click(function(e){handleMousemove(e,"click");});
+      //$("#chartWrapper").click(function(e){handleMousemove(e,"click");});
       //$("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
       //$("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
-      
-    });
-    function start(){
-    	$('form').trigger('submit');
-   	 }
 
+    });
+    
+    function start(){
+      $('form').trigger('submit');
+   	}
   </script>
 </head>
 <body onLoad="start()">
-  <h1>Canvas2D line detection</h1>
+  <h1>WebGL line detection</h1>
   <form id="drawing">
   <table>
     <tr>
-      <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
-      <td><span class="marginSpan">Line Width:  <input id="linesWidth" value="5" type="name"/</span></td>
+      <td>Number of Lines: <input id="linesCount" value="1" type="name"/></td>
+      <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.225" type="name"/</span></td>
       <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
     </tr>
   </table>
   </form>
   <br />
   <div id="chartWrapper">
-    <canvas id="myCanvas" width="600" height="400">
+    <canvas id="webGLCanvas" width="600" height="400">
       Your browser does not support the HTML5 canvas tag.
     </canvas>
   </div>  

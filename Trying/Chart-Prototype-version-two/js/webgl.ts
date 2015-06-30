@@ -44,7 +44,7 @@ function webglStuff(destination){
 
 function drawWebGlLines(data){
   vVertices = data;
-
+  console.log(vVertices);  
   // create buffer...GPU
   vertexPosBufferObjekt = GL.createBuffer();
   // ...and set as active object
@@ -56,13 +56,7 @@ function drawWebGlLines(data){
     
   var itemSize = 7; // x,y,z + r,g,b,a
 
-  var drawCount;
-  if($('#limitLines').val() < vVertices.length/itemSize){
-    drawCount = $('#limitLines').val();
-  }else{
-    drawCount = vVertices.length/itemSize;
-  }
-
+  var drawCount = vVertices.length/itemSize;
 
   var step = Float32Array.BYTES_PER_ELEMENT;
   var total = 3+4;
@@ -74,74 +68,12 @@ function drawWebGlLines(data){
   GL.enableVertexAttribArray(vertexAttribLoc);
   GL.enableVertexAttribArray(vertexColorAttribute);
 
-  if(linetype != "line"){
-    GL.drawArrays(GL.TRIANGLES, 0, drawCount*6);
+  if(triangles){
+    GL.drawArrays(GL.TRIANGLES, 0, drawCount);
   }else{
-    GL.drawArrays(GL.LINE_STRIP, 0, drawCount);
-  }
-}
-
-function pixelToPoints(index,point){
-  var x = 0;
-  var y = 0;
-
-  var rangeValue = 100;
-  x = point[0];
-  
-  if(point[1] < canvas.height/2){
-    if(point[1] > 0){
-      y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
-    }else{
-     y = -1;
-    }
-  }else if(point[1] > canvas.height/2){
-    y = (rangeValue-(((rangeValue/(canvas.height/2))*point[1])))*0.01;
+    GL.drawArrays(GL.LINES, 0, drawCount);
   }
 
-  webGLPoints[(index*7)] = x;
-  webGLPoints[(index*7)+1] = y;
-  webGLPoints[(index*7)+2] = 0;
-  webGLPoints[(index*7)+3] = 0;
-  webGLPoints[(index*7)+4] = 0;
-  webGLPoints[(index*7)+5] = 0;
-  webGLPoints[(index*7)+6] = 1;  
-  
-
-  
-  if(mouseEvent){
-	checkMouseHit($('#webGLCanvas'),mouseEvent);
-  }  
-}
-
-
-function pixelToPointsNew(index,point){
-  var x = 0;
-  var y = 0;
-
-  var x_reach = 100;
-  var y_reach = 50;
-
-  x = point[0];
-  
-  if(point[1] < (y_reach/2)){
-  	y = ((100/(y_reach/2))*point[1])*(-0.01);
-  }else if(point[1] == 0){
-  	y = 0;
-  }else{
-  	y = (100/(y_reach/2))*(point[1]-(y_reach/2))*(0.01);
-  }
-
-  webGLPoints[(index*7)] = x;
-  webGLPoints[(index*7)+1] = y;
-  webGLPoints[(index*7)+2] = 0;
-  webGLPoints[(index*7)+3] = 0;
-  webGLPoints[(index*7)+4] = 0;
-  webGLPoints[(index*7)+5] = 0;
-  webGLPoints[(index*7)+6] = 1;    
-  
-  if(mouseEvent){
-	checkMouseHit($('#webGLCanvas'),mouseEvent);
-  }  
 }
 
 function getShader(GL, id) {
@@ -175,4 +107,72 @@ function getShader(GL, id) {
   }
   
   return shader;
+}
+
+function generateWebGLLines(){
+  var pixelPointRelation = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+
+  for(var i in linesData){
+ 	var x0 = linesData[i][0][0];
+ 	var y0 = linesData[i][0][1];
+ 	var x1 = linesData[i][1][0];
+ 	var y1 = linesData[i][1][1];
+ 	
+ 	// get webgl coordinates
+ 	var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x0);
+ 	var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y0);
+ 	var x1PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x1);
+ 	var y1PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y1);
+ 	 	
+ 	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate),new Array(x1PointCoordinate,y1PointCoordinate));
+ 	
+ 	// needed for index of points array	
+ 	if(i==0){
+      var firstIndex = 0;
+ 	  var secondIndex = 1;
+ 	}else{
+ 	  var firstIndex = (parseInt(i)*2);
+ 	  var secondIndex = (parseInt(i)*2+1);
+ 	}
+ 	prepareWebGLData(webGLLinesData[i][0],firstIndex);
+ 	prepareWebGLData(webGLLinesData[i][1],secondIndex);
+  }
+}
+
+function generateWebGLTriangles(){
+  var pixelPointRelation = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+
+  for(var i in linesData){
+ 	var x0 = linesData[i][0][0];
+ 	var y0 = linesData[i][0][1];
+ 	
+ 	// get webgl coordinates
+ 	var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x0);
+ 	var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y0);
+ 	 	
+ 	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate));
+ 	prepareWebGLData(webGLLinesData[i][0],i);
+  }
+}
+
+function prepareWebGLData(xyPoints, index){
+  webGLPoints[(index*7)] = xyPoints[0];
+  webGLPoints[(index*7)+1] = xyPoints[1];
+  webGLPoints[(index*7)+2] = 0; // z
+  webGLPoints[(index*7)+3] = 0; // r
+  webGLPoints[(index*7)+4] = 1; // g
+  webGLPoints[(index*7)+5] = 0; // b
+  webGLPoints[(index*7)+6] = 1;  // alpha
+}
+
+function pixelToPointCoordinate(pixelPointRelation,pixelPoint){
+	var point = pixelPointRelation*pixelPoint;
+	
+	// check if in the -1 or 1 area
+	if(point < 1){
+		point=point*-1;
+	}else{
+		point=point-1;
+	}
+	return point;
 }

@@ -57,7 +57,7 @@ function handleMousemove(e, action){
     var xyValues = checkPointsForAngle(linesData[i]);
 
     if(mouseX<xyValues.x0 || mouseX>xyValues.x1 || mouseY<xyValues.y0  || mouseY>xyValues.y1){
-      //console.log("no hit for line"+i);
+      console.log("no hit for line"+i);
 	  boundingHit = 0;
 	  continue;
 	}
@@ -69,6 +69,8 @@ function handleMousemove(e, action){
     if(!boundingHit){
       //drawCanvasLines(linesData,0,0);
     }
+    
+    console.log(possibleBoundingBoxes);
 
     if(possibleBoundingBoxes.length > 0){
       var nearestLineIndex = -1;

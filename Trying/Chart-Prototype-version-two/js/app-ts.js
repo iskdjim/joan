@@ -1,6 +1,7 @@
 /// <reference path="../libs/jquery.d.ts" />
 var linesWidth, linesCount, mouseEvent, canvasWidth, canvasHeight;
 var linesData = [];
+var webGLLinesData = [];
 var contextData;
 var mouseX = 0;
 var mouseY = 0;
@@ -14,12 +15,15 @@ var svgLineIds = [];
 var selectBoxWidth, selectBoxHeight, selectBoxX, selectBoxY, selectBoxActive;
 var techType;
 var deselect;
+var webGLPoints;
+var triangles = true;
 function drawChart(type) {
     techType = type;
     var $chart = $("#chartWrapper");
     var chartOffset = $chart.offset();
     offsetX = chartOffset.left;
     offsetY = chartOffset.top;
+    console.log(techType);
     if (techType == "canvas2d") {
         activeLines = [];
         contextData = initCanvasContext('myCanvas');
@@ -30,17 +34,18 @@ function drawChart(type) {
         generateLines();
         drawSvgLines(linesData, $(".svgHolder"));
     }
+    else if (techType == "webgl") {
+        generateLines();
+        //generateWebGLLines();
+        generateWebGLTriangles();
+        drawWebGlLines(webGLPoints);
+    }
 }
 // handle mousemove events
 // calculate how close the mouse is to the line
 // if that distance is less than tolerance then
 // display a dot on the line
 function handleBoxSelect() {
-    var boundingHit = 0;
-    // check if mouse hits a bounding box
-    var selectBoxHits = [];
-    //console.log("left top x:"+selectBoxX+"left top y:"+selectBoxY);
-    //console.log("right bottom x:"+(selectBoxX+selectBoxWidth)+"right bottom y:"+(selectBoxY+selectBoxHeight));
     for (var i in linesData) {
         if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
             activeLines[i] = i;
@@ -97,9 +102,13 @@ function checkPointsForAngle(lineData) {
     var yRange1 = lineData[1][1];
     // check if first x value is bigger
     if (lineData[0][0] > lineData[1][0]) {
+        xRange0 = lineData[1][0];
+        xRange1 = lineData[0][0];
     }
     // check if first y value is bigger
     if (lineData[0][1] > lineData[1][1]) {
+        yRange0 = lineData[1][1];
+        yRange1 = lineData[0][1];
     }
     return ({ x0: xRange0, y0: yRange0, x1: xRange1, y1: yRange1 });
 }
@@ -173,12 +182,46 @@ function linepointNearestMouse(line, x, y) {
 ;
 function generateLines() {
     linesData = [];
+    if (triangles) {
+        webGLPoints = new Float32Array(linesCount * 7 * 6);
+    }
+    else {
+        webGLPoints = new Float32Array(linesCount * 7 * 2);
+    }
+    var lastPointX = 0;
+    var lastPointY = 0;
+    var webglwidth = 20;
     for (var i = 0; i < linesCount; i++) {
         var x1 = Math.floor((Math.random() * canvasWidth) + 1);
         var y1 = Math.floor((Math.random() * canvasHeight) + 1);
         var x2 = Math.floor(Math.random() * (canvasHeight - x1 + 1) + x1);
         var y2 = Math.floor((Math.random() * canvasHeight) + 1);
-        linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
+        // web gl triangle points
+        if (techType == "webgl") {
+            var pTriangles = new Array();
+            if (lastPointX == 0 && lastPointY == 0) {
+                lastPointX = x1;
+                lastPointY = y1;
+            }
+            pTriangles[0] = new Array(lastPointX, lastPointY);
+            pTriangles[1] = new Array(lastPointX + 10, lastPointY);
+            pTriangles[2] = new Array(lastPointX, lastPointY + 10);
+            pTriangles[3] = new Array(lastPointX + 10, lastPointY);
+            pTriangles[4] = new Array(lastPointX + 10, lastPointY + 10);
+            pTriangles[5] = new Array(lastPointX, lastPointY + 10);
+            //pTriangles[0] = new Array(5,5);
+            //pTriangles[1] = new Array(10,5);
+            //pTriangles[2] = new Array(5,10);
+            //pTriangles[3] = new Array(10,5);
+            //pTriangles[4] = new Array(10,10);
+            //pTriangles[5] = new Array(5,10);
+            for (var j = 0; j < pTriangles.length; j++) {
+                linesData.push(new Array(new Array(pTriangles[j][0], pTriangles[j][1])));
+            }
+        }
+        else {
+            linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
+        }
     }
 }
 function initCanvasContext(desternation) {
@@ -224,7 +267,7 @@ function handleMousemove(e, action) {
     for (var i in linesData) {
         var xyValues = checkPointsForAngle(linesData[i]);
         if (mouseX < xyValues.x0 || mouseX > xyValues.x1 || mouseY < xyValues.y0 || mouseY > xyValues.y1) {
-            //console.log("no hit for line"+i);
+            console.log("no hit for line" + i);
             boundingHit = 0;
             continue;
         }
@@ -233,6 +276,7 @@ function handleMousemove(e, action) {
     }
     if (!boundingHit) {
     }
+    console.log(possibleBoundingBoxes);
     if (possibleBoundingBoxes.length > 0) {
         var nearestLineIndex = -1;
         var bestDistance = 999999;
@@ -289,4 +333,147 @@ function selectSvgLines(lineIds) {
             $("#line_" + i).removeClass('active');
         }
     });
+}
+var canvas, points, linerange;
+var pointsData, GL;
+var webGLProgramObject, vertexAttribLoc, vVertices, vertexColorAttribute, vertexPosBufferObjekt; // The WebGL-buffer for the triangles
+function webglStuff(destination) {
+    canvas = document.getElementById(destination);
+    try {
+        GL = canvas.getContext("experimental-webgl");
+    }
+    catch (e) { }
+    if (!GL) {
+        window.alert("Fehler: WebGL-context not found");
+    }
+    var fragmentShader = getShader(GL, "shader-fs");
+    var vertexShader = getShader(GL, "shader-vs");
+    webGLProgramObject = GL.createProgram();
+    GL.attachShader(webGLProgramObject, fragmentShader);
+    GL.attachShader(webGLProgramObject, vertexShader);
+    // Shader-program-object is complete and has to be linked
+    GL.linkProgram(webGLProgramObject);
+    // it is posible to use more than one shader program, so tell the program which one should be used
+    GL.useProgram(webGLProgramObject);
+    // background color
+    GL.clearColor(255.0, 255.0, 255.0, 1.0);
+    // delete background
+    GL.clear(GL.COLOR_BUFFER_BIT);
+    // Conntection between javascript and the shader-attribut
+    vertexColorAttribute = GL.getAttribLocation(webGLProgramObject, "aVertexColor");
+    vertexAttribLoc = GL.getAttribLocation(webGLProgramObject, "vPosition");
+}
+function drawWebGlLines(data) {
+    vVertices = data;
+    console.log(vVertices);
+    // create buffer...GPU
+    vertexPosBufferObjekt = GL.createBuffer();
+    // ...and set as active object
+    GL.bindBuffer(GL.ARRAY_BUFFER, vertexPosBufferObjekt);
+    // give array data to active buffer
+    GL.bufferData(GL.ARRAY_BUFFER, vVertices, GL.STATIC_DRAW);
+    var itemSize = 7; // x,y,z + r,g,b,a
+    var drawCount = vVertices.length / itemSize;
+    var step = Float32Array.BYTES_PER_ELEMENT;
+    var total = 3 + 4;
+    var stride = step * total;
+    GL.vertexAttribPointer(vertexAttribLoc, 3, GL.FLOAT, false, stride, 0);
+    GL.vertexAttribPointer(vertexColorAttribute, 4, GL.FLOAT, false, stride, step * 3);
+    GL.enableVertexAttribArray(vertexAttribLoc);
+    GL.enableVertexAttribArray(vertexColorAttribute);
+    if (triangles) {
+        GL.drawArrays(GL.TRIANGLES, 0, drawCount);
+    }
+    else {
+        GL.drawArrays(GL.LINES, 0, drawCount);
+    }
+}
+function getShader(GL, id) {
+    var shaderScript = document.getElementById(id);
+    if (!shaderScript) {
+        return null;
+    }
+    var str = "";
+    var k = shaderScript.firstChild;
+    while (k) {
+        if (k.nodeType == 3) {
+            str += k.textContent;
+        }
+        k = k.nextSibling;
+    }
+    var shader;
+    if (shaderScript.type == "x-shader/x-fragment") {
+        shader = GL.createShader(GL.FRAGMENT_SHADER);
+    }
+    else if (shaderScript.type == "x-shader/x-vertex") {
+        shader = GL.createShader(GL.VERTEX_SHADER);
+    }
+    else {
+        return null;
+    }
+    GL.shaderSource(shader, str);
+    GL.compileShader(shader);
+    if (!GL.getShaderParameter(shader, GL.COMPILE_STATUS)) {
+        alert(GL.getShaderInfoLog(shader));
+        return null;
+    }
+    return shader;
+}
+function generateWebGLLines() {
+    var pixelPointRelation = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
+    for (var i in linesData) {
+        var x0 = linesData[i][0][0];
+        var y0 = linesData[i][0][1];
+        var x1 = linesData[i][1][0];
+        var y1 = linesData[i][1][1];
+        // get webgl coordinates
+        var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x0);
+        var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y0);
+        var x1PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x1);
+        var y1PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y1);
+        webGLLinesData[i] = new Array(new Array(x0PointCoordinate, y0PointCoordinate), new Array(x1PointCoordinate, y1PointCoordinate));
+        // needed for index of points array	
+        if (i == 0) {
+            var firstIndex = 0;
+            var secondIndex = 1;
+        }
+        else {
+            var firstIndex = (parseInt(i) * 2);
+            var secondIndex = (parseInt(i) * 2 + 1);
+        }
+        prepareWebGLData(webGLLinesData[i][0], firstIndex);
+        prepareWebGLData(webGLLinesData[i][1], secondIndex);
+    }
+}
+function generateWebGLTriangles() {
+    var pixelPointRelation = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
+    for (var i in linesData) {
+        var x0 = linesData[i][0][0];
+        var y0 = linesData[i][0][1];
+        // get webgl coordinates
+        var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x0);
+        var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y0);
+        webGLLinesData[i] = new Array(new Array(x0PointCoordinate, y0PointCoordinate));
+        prepareWebGLData(webGLLinesData[i][0], i);
+    }
+}
+function prepareWebGLData(xyPoints, index) {
+    webGLPoints[(index * 7)] = xyPoints[0];
+    webGLPoints[(index * 7) + 1] = xyPoints[1];
+    webGLPoints[(index * 7) + 2] = 0; // z
+    webGLPoints[(index * 7) + 3] = 0; // r
+    webGLPoints[(index * 7) + 4] = 1; // g
+    webGLPoints[(index * 7) + 5] = 0; // b
+    webGLPoints[(index * 7) + 6] = 1; // alpha
+}
+function pixelToPointCoordinate(pixelPointRelation, pixelPoint) {
+    var point = pixelPointRelation * pixelPoint;
+    // check if in the -1 or 1 area
+    if (point < 1) {
+        point = point * -1;
+    }
+    else {
+        point = point - 1;
+    }
+    return point;
 }
