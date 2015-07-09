@@ -24,9 +24,9 @@
       	drawChart("canvas2d",linesCount,linesWidth);
       });
       //$("#chartWrapper").mousemove(function(e){handleMousemove(e,"hover");});
-      $("#chartWrapper").click(function(e){handleMousemove(e,"click");});
-      //$("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
-      //$("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
+      $("#chartWrapper").click(function(e){ if(!mousedDownFired){handleMousemove(e,"click");}});
+      $("#chartWrapper").mousedown(function(e){ mousedDownFired = true; createBox(e,"mousedown"); });
+      $("#chartWrapper").mouseup(function(e){ mousedDownFired = false; removeBox(e,"mousedown");});
       
     });
     function start(){

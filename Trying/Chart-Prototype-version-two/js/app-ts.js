@@ -17,6 +17,7 @@ var techType;
 var deselect;
 var webGLPoints;
 var triangles = true;
+var mousedDownFired = false;
 function drawChart(type) {
     techType = type;
     var $chart = $("#chartWrapper");
@@ -45,16 +46,22 @@ function drawChart(type) {
 // calculate how close the mouse is to the line
 // if that distance is less than tolerance then
 // display a dot on the line
-function handleBoxSelect() {
+function handleBoxSelect(e) {
+    if (!e.shiftKey && !e.ctrlKey) {
+        activeLines = [];
+    }
+    var selectedLines = [];
     for (var i in linesData) {
         if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
             activeLines[i] = i;
+            selectedLines[i] = 1;
             if (deselect) {
                 activeLines[i] = -1;
             }
         }
         if (linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX + selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY + selectBoxHeight)) {
             activeLines[i] = i;
+            selectedLines[i] = 1;
             if (deselect) {
                 activeLines[i] = -1;
             }
@@ -62,9 +69,12 @@ function handleBoxSelect() {
         var xyValues = checkPointsForAngle(linesData[i]);
         var x1 = (selectBoxX + selectBoxWidth);
         var y1 = (selectBoxY + selectBoxHeight);
+        console.log("selectBoxY" + selectBoxY);
+        console.log("x1" + x1);
+        console.log(xyValues.y0);
         // calculate the angle for the diffrent box points
-        var angleDeg = Math.atan2(xyValues.y1 - xyValues.y0, xyValues.x1 - xyValues.x0) * 180 / Math.PI;
-        var rightTop = Math.atan2((selectBoxY) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
+        var angleDeg = Math.atan2((xyValues.y1 - xyValues.y0), (xyValues.x1 - xyValues.x0)) * (180 / Math.PI);
+        var rightTop = Math.atan2((selectBoxY - xyValues.y0), (x1 - xyValues.x0)) * (180 / Math.PI);
         var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
         var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
         var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX) - xyValues.x0) * 180 / Math.PI;
@@ -74,17 +84,39 @@ function handleBoxSelect() {
         var dist_rightBottom = Math.sqrt(Math.pow(x1 - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
         var dist_leftBottom = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(y1 - xyValues.y0, 2));
         var dist_leftTop = Math.sqrt(Math.pow(selectBoxX - xyValues.x0, 2) + Math.pow(selectBoxY - xyValues.y0, 2));
-        // if all angles are bigger => no colision
-        if (rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg) {
+        // if x values of boxer are smaller as line x values
+        if (x1 < xyValues.x0 && selectBoxX < xyValues.x0) {
+        }
+        else if (rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg) {
+            console.log("angle check 1");
         }
         else if (rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg) {
+            console.log("angle check 2");
         }
         else if (dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg) {
+            console.log("distance check 1");
         }
         else {
             activeLines[i] = i;
+            selectedLines[i] = 1;
             if (deselect) {
+                console.log("deselect");
                 activeLines[i] = -1;
+            }
+        }
+    }
+    console.log(activeLines);
+    console.log("--------------------");
+    console.log(selectedLines);
+    if (e.ctrlKey) {
+        for (var i in linesData) {
+            if (selectedLines[i] != 1) {
+                if (typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1") {
+                    activeLines[i] = 1;
+                }
+                else {
+                    activeLines[i] = 0;
+                }
             }
         }
     }
@@ -104,12 +136,14 @@ function checkPointsForAngle(lineData) {
     if (lineData[0][0] > lineData[1][0]) {
         xRange0 = lineData[1][0];
         xRange1 = lineData[0][0];
-    }
-    // check if first y value is bigger
-    if (lineData[0][1] > lineData[1][1]) {
         yRange0 = lineData[1][1];
         yRange1 = lineData[0][1];
     }
+    // check if first y value is bigger
+    //if(lineData[0][1] > lineData[1][1]){
+    //  yRange0 = lineData[1][1];
+    //  yRange1 = lineData[0][1];
+    //}
     return ({ x0: xRange0, y0: yRange0, x1: xRange1, y1: yRange1 });
 }
 // create select Box
@@ -157,7 +191,6 @@ function createBox(e) {
         selectBoxActive = 1;
         deselect = 0;
         if (e.shiftKey) {
-            deselect = 1;
         }
     });
 }
@@ -165,7 +198,7 @@ function removeBox(e) {
     $('#chartWrapper #selectBox').remove();
     if (selectBoxActive) {
         selectBoxActive = 0;
-        handleBoxSelect();
+        handleBoxSelect(e);
     }
 }
 // calculate the point on the line that's 
@@ -194,7 +227,7 @@ function generateLines() {
     for (var i = 0; i < linesCount; i++) {
         var x1 = Math.floor((Math.random() * canvasWidth) + 1);
         var y1 = Math.floor((Math.random() * canvasHeight) + 1);
-        var x2 = Math.floor(Math.random() * (canvasHeight - x1 + 1) + x1);
+        var x2 = Math.floor(Math.random() * (canvasWidth - x1 + 1) + x1);
         var y2 = Math.floor((Math.random() * canvasHeight) + 1);
         // web gl triangle points
         if (techType == "webgl") {
@@ -223,6 +256,7 @@ function generateLines() {
             linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
         }
     }
+    console.log(linesData);
 }
 function initCanvasContext(desternation) {
     var c = document.getElementById(desternation);
@@ -262,6 +296,9 @@ function handleMousemove(e, action) {
     mouseX = e.clientX - offsetX;
     mouseY = e.clientY - offsetY;
     var boundingHit = 0;
+    if (action == "click" && !e.shiftKey && !e.ctrlKey) {
+        activeLines = [];
+    }
     // check if mouse hits a bounding box
     possibleBoundingBoxes = [];
     for (var i in linesData) {
@@ -276,7 +313,7 @@ function handleMousemove(e, action) {
     }
     if (!boundingHit) {
     }
-    console.log(possibleBoundingBoxes);
+    //console.log(possibleBoundingBoxes);
     if (possibleBoundingBoxes.length > 0) {
         var nearestLineIndex = -1;
         var bestDistance = 999999;
@@ -294,14 +331,30 @@ function handleMousemove(e, action) {
         }
         if (bestDistance < tolerance) {
             if (action == "click") {
-                activeLines[nearestLineIndex] = 1;
-                if (e.shiftKey) {
+                if (e.ctrlKey && activeLines[nearestLineIndex] == 1) {
                     activeLines[nearestLineIndex] = 0;
+                }
+                else {
+                    activeLines[nearestLineIndex] = 1;
+                }
+            }
+            // check for controll key to toggle the states
+            console.log(activeLines);
+            if (e.ctrlKey) {
+                for (var i in linesData) {
+                    if (i != nearestLineIndex) {
+                        if (typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1") {
+                            activeLines[i] = 1;
+                        }
+                        else {
+                            activeLines[i] = 0;
+                        }
+                    }
+                    else {
+                    }
                 }
             }
             drawCanvasLines(linesData, linepoint.x, linepoint.y);
-        }
-        else {
         }
     }
 }

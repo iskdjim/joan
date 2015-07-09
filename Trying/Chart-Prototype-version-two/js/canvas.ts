@@ -50,7 +50,10 @@ function handleMousemove(e, action){
   mouseY= e.clientY-offsetY;
 
   var boundingHit = 0;
-
+  if(action == "click" && !e.shiftKey && !e.ctrlKey){
+  	activeLines = [];
+  }
+ 
   // check if mouse hits a bounding box
   possibleBoundingBoxes = [];
   for(var i in linesData){
@@ -70,8 +73,7 @@ function handleMousemove(e, action){
       //drawCanvasLines(linesData,0,0);
     }
     
-    console.log(possibleBoundingBoxes);
-
+    //console.log(possibleBoundingBoxes);
     if(possibleBoundingBoxes.length > 0){
       var nearestLineIndex = -1;
       var bestDistance = 999999;
@@ -87,16 +89,35 @@ function handleMousemove(e, action){
        	  nearestLineIndex = possibleBoundingBoxes[j];
        	}
       }
+      
 	  if(bestDistance<tolerance){
+	  	
 	    if(action == "click"){
-	  	  activeLines[nearestLineIndex] = 1;
-	  	  if(e.shiftKey) {
-	  	  activeLines[nearestLineIndex] = 0;	
+	      if(e.ctrlKey && activeLines[nearestLineIndex] == 1){
+	        activeLines[nearestLineIndex] = 0;	
+	      }else{
+	  	    activeLines[nearestLineIndex] = 1;
 	  	  }
+	  	 
 	    }
+	    
+	    // check for controll key to toggle the states
+	    console.log(activeLines);
+   		if(e.ctrlKey){
+          for(var i in linesData){
+          	if(i != nearestLineIndex){
+              if(typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1"){
+                activeLines[i] = 1;
+              }else{
+                activeLines[i] = 0;
+              }
+            }else{
+             
+            }
+          }
+        }
+	   
         drawCanvasLines(linesData,linepoint.x,linepoint.y);
-	  }else{
-	    //drawCanvasLines(linesData,0,0);
 	  }
     }
 }
