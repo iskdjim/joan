@@ -23,9 +23,6 @@ function drawCanvasLines(linesData,lineX,lineY){
 	//if(mouseX && lineX && activeLines[i]){
 	if(lineX && activeLines[i]){	
       context.strokeStyle = '#FF0000';
-      if(activeLines[i] == "-1"){
-        context.strokeStyle = '#000000';
-      }
 	}
 
 	context.stroke();    
@@ -125,19 +122,19 @@ function handleMousemove(e, action){
 	    
 	    // check for controll key to toggle the states
 	    console.log(activeLines);
-   		if(e.ctrlKey){
-          for(var i in linesData){
-          	if(i != nearestLineIndex){
-              if(typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1"){
-                activeLines[i] = 1;
-              }else{
-                activeLines[i] = 0;
-              }
-            }else{
-             
-            }
-          }
-        }
+   		//if(e.ctrlKey){
+        //  for(var i in linesData){
+        //  	if(i != nearestLineIndex){
+        //      if(typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1"){
+        //        activeLines[i] = 1;
+        //      }else{
+        //        activeLines[i] = 0;
+        //      }
+        //    }else{
+        //     
+        //    }
+        //  }
+        //}
 	   
         drawCanvasLines(linesData,linepoint.x,linepoint.y);
 	  }

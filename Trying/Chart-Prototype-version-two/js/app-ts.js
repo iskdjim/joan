@@ -51,27 +51,22 @@ function handleBoxSelect(e) {
         activeLines = [];
     }
     var selectedLines = [];
+    var foundBounding = 0; // check if point in box
     for (var i in linesData) {
+        if (!e.shiftKey && !e.ctrlKey) {
+            activeLines[i] = 0;
+        }
         if (linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX + selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY + selectBoxHeight)) {
-            activeLines[i] = i;
-            selectedLines[i] = 1;
-            if (deselect) {
-                activeLines[i] = -1;
-            }
+            activeLines[i] = checkToggleState(e, activeLines[i]);
+            continue;
         }
         if (linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX + selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY + selectBoxHeight)) {
-            activeLines[i] = i;
-            selectedLines[i] = 1;
-            if (deselect) {
-                activeLines[i] = -1;
-            }
+            activeLines[i] = checkToggleState(e, activeLines[i]);
+            continue;
         }
         var xyValues = checkPointsForAngle(linesData[i]);
         var x1 = (selectBoxX + selectBoxWidth);
         var y1 = (selectBoxY + selectBoxHeight);
-        console.log("selectBoxY" + selectBoxY);
-        console.log("x1" + x1);
-        console.log(xyValues.y0);
         // calculate the angle for the diffrent box points
         var angleDeg = Math.atan2((xyValues.y1 - xyValues.y0), (xyValues.x1 - xyValues.x0)) * (180 / Math.PI);
         var rightTop = Math.atan2((selectBoxY - xyValues.y0), (x1 - xyValues.x0)) * (180 / Math.PI);
@@ -97,46 +92,30 @@ function handleBoxSelect(e) {
             console.log("distance check 1");
         }
         else {
-            activeLines[i] = i;
+            activeLines[i] = checkToggleState(e, activeLines[i]);
             selectedLines[i] = 1;
             if (deselect) {
-                console.log("deselect");
-                activeLines[i] = -1;
+                activeLines[i] = 0;
             }
         }
     }
+    console.log("Akitve Linien toggle:");
     console.log(activeLines);
-    console.log("--------------------");
-    console.log(selectedLines);
-    if (e.ctrlKey) {
-        for (var i in linesData) {
-            if (selectedLines[i] != 1) {
-                if (typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1") {
-                    activeLines[i] = 1;
-                }
-                else {
-                    activeLines[i] = 0;
-                }
-            }
-            else {
-                console.log("touched line " + activeLines[i]);
-                console.log(activeLines);
-                if (activeLines[i] == 1) {
-                    console.log("touched line go black");
-                    activeLines[i] = 0;
-                }
-                else {
-                    activeLines[i] = 1;
-                }
-            }
-        }
-    }
     if (techType == "canvas2d") {
         drawCanvasLines(linesData, 1, 1);
     }
     else if (techType == "svg") {
         selectSvgLines(activeLines);
     }
+}
+function checkToggleState(e, activeLine) {
+    if (e.ctrlKey && activeLine == 1) {
+        activeLine = 0;
+    }
+    else {
+        activeLine = 1;
+    }
+    return activeLine;
 }
 function checkPointsForAngle(lineData) {
     var xRange0 = lineData[0][0];
@@ -290,9 +269,6 @@ function drawCanvasLines(linesData, lineX, lineY) {
         //if(mouseX && lineX && activeLines[i]){
         if (lineX && activeLines[i]) {
             context.strokeStyle = '#FF0000';
-            if (activeLines[i] == "-1") {
-                context.strokeStyle = '#000000';
-            }
         }
         context.stroke();
     }
@@ -371,20 +347,19 @@ function handleMousemove(e, action) {
             }
             // check for controll key to toggle the states
             console.log(activeLines);
-            if (e.ctrlKey) {
-                for (var i in linesData) {
-                    if (i != nearestLineIndex) {
-                        if (typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1") {
-                            activeLines[i] = 1;
-                        }
-                        else {
-                            activeLines[i] = 0;
-                        }
-                    }
-                    else {
-                    }
-                }
-            }
+            //if(e.ctrlKey){
+            //  for(var i in linesData){
+            //  	if(i != nearestLineIndex){
+            //      if(typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1"){
+            //        activeLines[i] = 1;
+            //      }else{
+            //        activeLines[i] = 0;
+            //      }
+            //    }else{
+            //     
+            //    }
+            //  }
+            //}
             drawCanvasLines(linesData, linepoint.x, linepoint.y);
         }
     }
