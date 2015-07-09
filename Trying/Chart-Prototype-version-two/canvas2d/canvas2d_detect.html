@@ -23,10 +23,29 @@
       	e.preventDefault();   	
       	drawChart("canvas2d",linesCount,linesWidth);
       });
+      var clickstart;
+      var clickstop;
+
+      
       //$("#chartWrapper").mousemove(function(e){handleMousemove(e,"hover");});
-      $("#chartWrapper").click(function(e){ if(!mousedDownFired){handleMousemove(e,"click");}});
-      $("#chartWrapper").mousedown(function(e){ mousedDownFired = true; createBox(e,"mousedown"); });
-      $("#chartWrapper").mouseup(function(e){ mousedDownFired = false; removeBox(e,"mousedown");});
+ 
+      $("#chartWrapper").mousedown(function(e){
+          clickstart = e.timeStamp;
+
+          createBox(e,"mousedown");
+
+      }).mouseup(function(e){
+	    clickstop = e.timeStamp- clickstart
+	    if(clickstop >= 200){
+	      removeBox(e,"mousedown");
+	    }else{
+
+	      handleMousemove(e,"click");
+	    }
+	    $('#chartWrapper #selectBox').remove();
+          
+
+      });
       
     });
     function start(){

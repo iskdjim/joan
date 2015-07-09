@@ -118,6 +118,17 @@ function handleBoxSelect(e) {
                     activeLines[i] = 0;
                 }
             }
+            else {
+                console.log("touched line " + activeLines[i]);
+                console.log(activeLines);
+                if (activeLines[i] == 1) {
+                    console.log("touched line go black");
+                    activeLines[i] = 0;
+                }
+                else {
+                    activeLines[i] = 1;
+                }
+            }
         }
     }
     if (techType == "canvas2d") {
@@ -303,10 +314,30 @@ function handleMousemove(e, action) {
     possibleBoundingBoxes = [];
     for (var i in linesData) {
         var xyValues = checkPointsForAngle(linesData[i]);
-        if (mouseX < xyValues.x0 || mouseX > xyValues.x1 || mouseY < xyValues.y0 || mouseY > xyValues.y1) {
+        console.log("mouseX " + mouseX);
+        console.log("mouseY " + mouseY);
+        console.log("xyValues.x0 " + xyValues.x0);
+        console.log("xyValues.x1 " + xyValues.x1);
+        console.log("xyValues.y0 " + xyValues.y0);
+        console.log("xyValues.y1 " + xyValues.y1);
+        if (mouseX < xyValues.x0 || mouseX > xyValues.x1) {
             console.log("no hit for line" + i);
             boundingHit = 0;
             continue;
+        }
+        if (xyValues.y0 < xyValues.y1) {
+            if (mouseY > xyValues.y1 || mouseY < xyValues.y0) {
+                console.log("no hit for line" + i);
+                boundingHit = 0;
+                continue;
+            }
+        }
+        else {
+            if (mouseY > xyValues.y0 || mouseY < xyValues.y1) {
+                console.log("no hit for line" + i);
+                boundingHit = 0;
+                continue;
+            }
         }
         boundingHit = 1;
         possibleBoundingBoxes[i] = i;

@@ -136,9 +136,18 @@ function handleBoxSelect(e){
 		  }else{
 		    activeLines[i] = 0;
 		  }
+	  }else{
+	  	console.log("touched line "+activeLines[i]);
+	  	console.log(activeLines);
+	  	if(activeLines[i] == 1){
+	  		console.log("touched line go black");
+	  	  activeLines[i] = 0;
+	  	}else{
+	  	  activeLines[i] = 1;	
+	  	}
 	  }
     }
-  }
+  }	  	 
 
   if(techType=="canvas2d"){
     drawCanvasLines(linesData,1,1);
