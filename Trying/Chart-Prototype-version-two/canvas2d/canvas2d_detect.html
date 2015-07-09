@@ -26,31 +26,22 @@
       var clickstart;
       var clickstop;
 
-      
-      //$("#chartWrapper").mousemove(function(e){handleMousemove(e,"hover");});
- 
       $("#chartWrapper").mousedown(function(e){
-          clickstart = e.timeStamp;
-
-          createBox(e,"mousedown");
-
+        clickstart = e.timeStamp;
+        createBox(e,"mousedown");
       }).mouseup(function(e){
-	    clickstop = e.timeStamp- clickstart
+	    clickstop = e.timeStamp - clickstart
 	    if(clickstop >= 100){
 	      removeBox(e,"mousedown");
 	    }else{
-
 	      handleMousemove(e,"click");
 	    }
 	    $('#chartWrapper #selectBox').remove();
-          
-
       });
-      
     });
     function start(){
-    	$('form').trigger('submit');
-   	 }
+      $('form').trigger('submit');
+   	}
 
   </script>
 </head>

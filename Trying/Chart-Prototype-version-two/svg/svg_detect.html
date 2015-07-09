@@ -24,19 +24,21 @@
         linesWidth = $("#linesWidth").val();     
       	e.preventDefault();   	
       	drawChart("svg",linesCount,linesWidth);
-      	
-      	$('.svgHolder line').unbind('click');
-        $('.svgHolder line').click(function(e){
-        	var lineId = $(this).attr('id').replace("line_", "");
-        	svgLineIds[lineId] = lineId;
-        	
-        	if(e.shiftKey) {
-        		svgLineIds[lineId] = "-1"; 
-        	}
-        	selectSvgLines(svgLineIds);
-	    });
-        //$("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
-        //$("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
+      });
+      var clickstart;
+      var clickstop;
+
+      $("#chartWrapper").mousedown(function(e){
+        clickstart = e.timeStamp;
+        createBox(e,"mousedown");
+      }).mouseup(function(e){
+	    clickstop = e.timeStamp - clickstart
+	    if(clickstop >= 100){
+	      removeBox(e,"mousedown");
+	    }else{
+	      handleMousemove(e,"click");
+	    }
+	    $('#chartWrapper #selectBox').remove();
       });
 
     });

@@ -1,6 +1,7 @@
 /// <reference path="../libs/jquery.d.ts" />
 var linesWidth, linesCount, mouseEvent, canvasWidth, canvasHeight;
 var linesData = [];
+var linesDataDraw = [];
 var webGLLinesData = [];
 var contextData;
 var mouseX = 0;
@@ -25,8 +26,10 @@ function drawChart(type) {
     offsetX = chartOffset.left;
     offsetY = chartOffset.top;
     console.log(techType);
+    activeLines = [];
+    linesDataDraw = [];
+    linesData = [];
     if (techType == "canvas2d") {
-        activeLines = [];
         contextData = initCanvasContext('myCanvas');
         generateLines();
         drawCanvasLines(linesData, 0, 0);
@@ -37,9 +40,101 @@ function drawChart(type) {
     }
     else if (techType == "webgl") {
         generateLines();
-        //generateWebGLLines();
-        generateWebGLTriangles();
+        if (triangles) {
+            generateWebGLTriangles();
+        }
+        else {
+            generateWebGLLines();
+        }
         drawWebGlLines(webGLPoints);
+    }
+}
+// handle mousemove events
+// calculate how close the mouse is to the line
+// if that distance is less than tolerance then
+// display a dot on the line
+function handleMousemove(e, action) {
+    e.preventDefault();
+    e.stopPropagation();
+    mouseX = e.clientX - offsetX;
+    mouseY = e.clientY - offsetY;
+    var boundingHit = 0;
+    if (action == "click" && !e.shiftKey && !e.ctrlKey) {
+        activeLines = [];
+    }
+    // check if mouse hits a bounding box
+    possibleBoundingBoxes = [];
+    for (var i in linesData) {
+        console.log(i);
+        var xyValues = checkPointsForAngle(linesData[i]);
+        console.log("mouseX " + mouseX);
+        console.log("mouseY " + mouseY);
+        console.log("xyValues.x0 " + xyValues.x0);
+        console.log("xyValues.x1 " + xyValues.x1);
+        console.log("xyValues.y0 " + xyValues.y0);
+        console.log("xyValues.y1 " + xyValues.y1);
+        if (mouseX < xyValues.x0 || mouseX > xyValues.x1) {
+            console.log("1 no hit for line" + i);
+            boundingHit = 0;
+            continue;
+        }
+        if (xyValues.y0 < xyValues.y1) {
+            if (mouseY > xyValues.y1 || mouseY < xyValues.y0) {
+                console.log("2 no hit for line" + i);
+                boundingHit = 0;
+                continue;
+            }
+        }
+        else {
+            if (mouseY > xyValues.y0 || mouseY < xyValues.y1) {
+                console.log("3 no hit for line" + i);
+                boundingHit = 0;
+                continue;
+            }
+        }
+        boundingHit = 1;
+        possibleBoundingBoxes[i] = i;
+    }
+    if (!boundingHit) {
+    }
+    //console.log(possibleBoundingBoxes);
+    if (possibleBoundingBoxes.length > 0) {
+        var nearestLineIndex = -1;
+        var bestDistance = 999999;
+        // check which line is the nearest from the possible ones
+        for (var j in possibleBoundingBoxes) {
+            var linepoint = linepointNearestMouse(linesData[possibleBoundingBoxes[j]], mouseX, mouseY);
+            var dx = mouseX - linepoint.x;
+            var dy = mouseY - linepoint.y;
+            var distance = Math.abs(Math.sqrt(dx * dx + dy * dy));
+            // best distance => nearest line and set index
+            if (bestDistance > distance) {
+                bestDistance = distance;
+                nearestLineIndex = possibleBoundingBoxes[j];
+            }
+        }
+        if (bestDistance < tolerance) {
+            if (action == "click") {
+                if (e.ctrlKey && activeLines[nearestLineIndex] == 1) {
+                    activeLines[nearestLineIndex] = 0;
+                }
+                else {
+                    activeLines[nearestLineIndex] = 1;
+                }
+            }
+            if (techType == "canvas2d") {
+                drawCanvasLines(linesData, linepoint.x, linepoint.y);
+            }
+            else if (techType == "svg") {
+                selectSvgLines(activeLines);
+            }
+            else if (techType == "webgl") {
+                $.each(activeLines, function (i, value) {
+                    console.log("line found" + i);
+                });
+                drawWebGlLines(webGLPoints);
+            }
+        }
     }
 }
 // handle mousemove events
@@ -64,6 +159,7 @@ function handleBoxSelect(e) {
             activeLines[i] = checkToggleState(e, activeLines[i]);
             continue;
         }
+        console.log(linesData);
         var xyValues = checkPointsForAngle(linesData[i]);
         var x1 = (selectBoxX + selectBoxWidth);
         var y1 = (selectBoxY + selectBoxHeight);
@@ -99,13 +195,28 @@ function handleBoxSelect(e) {
             }
         }
     }
-    console.log("Akitve Linien toggle:");
     console.log(activeLines);
     if (techType == "canvas2d") {
         drawCanvasLines(linesData, 1, 1);
     }
     else if (techType == "svg") {
         selectSvgLines(activeLines);
+    }
+    else if (techType == "webgl") {
+        $.each(activeLines, function (i, value) {
+            if (value) {
+                console.log("line found" + i);
+                for (var j = (6 * i); j < (6 * i + 6); j++) {
+                    webGLPoints[(j * 7) + 3] = 1; // r
+                }
+            }
+            else {
+                for (var j = (6 * i); j < (6 * i + 6); j++) {
+                    webGLPoints[(j * 7) + 3] = 0; // r
+                }
+            }
+        });
+        drawWebGlLines(webGLPoints);
     }
 }
 function checkToggleState(e, activeLine) {
@@ -204,7 +315,7 @@ function linepointNearestMouse(line, x, y) {
 }
 ;
 function generateLines() {
-    linesData = [];
+    linesData, linesDataDraw = [];
     if (triangles) {
         webGLPoints = new Float32Array(linesCount * 7 * 6);
     }
@@ -219,19 +330,24 @@ function generateLines() {
         var y1 = Math.floor((Math.random() * canvasHeight) + 1);
         var x2 = Math.floor(Math.random() * (canvasWidth - x1 + 1) + x1);
         var y2 = Math.floor((Math.random() * canvasHeight) + 1);
+        console.log("line: " + x1 + " " + y1 + " " + x2 + " " + y2);
         // web gl triangle points
-        if (techType == "webgl") {
+        if (triangles && techType == "webgl") {
             var pTriangles = new Array();
             if (lastPointX == 0 && lastPointY == 0) {
                 lastPointX = x1;
                 lastPointY = y1;
             }
-            pTriangles[0] = new Array(lastPointX, lastPointY);
-            pTriangles[1] = new Array(lastPointX + 10, lastPointY);
-            pTriangles[2] = new Array(lastPointX, lastPointY + 10);
-            pTriangles[3] = new Array(lastPointX + 10, lastPointY);
-            pTriangles[4] = new Array(lastPointX + 10, lastPointY + 10);
-            pTriangles[5] = new Array(lastPointX, lastPointY + 10);
+            // calculate the angle for the diffrent box points
+            angleforLineWidth;
+            var angleforLineWidth = Math.atan2((y2 - y1), (x2 - x1)) * (180 / Math.PI);
+            console.log("winkel:" + angleforLineWidth);
+            pTriangles[0] = new Array(x1, y1);
+            pTriangles[1] = new Array(x2, y2);
+            pTriangles[2] = new Array(x2 - 5, y2 - 5);
+            pTriangles[3] = new Array(x1, y1);
+            pTriangles[4] = new Array(x2 - 5, y2 - 5);
+            pTriangles[5] = new Array(x1 - 5, y1 - 5);
             //pTriangles[0] = new Array(5,5);
             //pTriangles[1] = new Array(10,5);
             //pTriangles[2] = new Array(5,10);
@@ -239,8 +355,9 @@ function generateLines() {
             //pTriangles[4] = new Array(10,10);
             //pTriangles[5] = new Array(5,10);
             for (var j = 0; j < pTriangles.length; j++) {
-                linesData.push(new Array(new Array(pTriangles[j][0], pTriangles[j][1])));
+                linesDataDraw.push(new Array(new Array(pTriangles[j][0], pTriangles[j][1])));
             }
+            linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
         }
         else {
             linesData.push(new Array(new Array(x1, y1), new Array(x2, y2)));
@@ -273,97 +390,6 @@ function drawCanvasLines(linesData, lineX, lineY) {
         context.stroke();
     }
 }
-// handle mousemove events
-// calculate how close the mouse is to the line
-// if that distance is less than tolerance then
-// display a dot on the line
-function handleMousemove(e, action) {
-    e.preventDefault();
-    e.stopPropagation();
-    mouseX = e.clientX - offsetX;
-    mouseY = e.clientY - offsetY;
-    var boundingHit = 0;
-    if (action == "click" && !e.shiftKey && !e.ctrlKey) {
-        activeLines = [];
-    }
-    // check if mouse hits a bounding box
-    possibleBoundingBoxes = [];
-    for (var i in linesData) {
-        var xyValues = checkPointsForAngle(linesData[i]);
-        console.log("mouseX " + mouseX);
-        console.log("mouseY " + mouseY);
-        console.log("xyValues.x0 " + xyValues.x0);
-        console.log("xyValues.x1 " + xyValues.x1);
-        console.log("xyValues.y0 " + xyValues.y0);
-        console.log("xyValues.y1 " + xyValues.y1);
-        if (mouseX < xyValues.x0 || mouseX > xyValues.x1) {
-            console.log("no hit for line" + i);
-            boundingHit = 0;
-            continue;
-        }
-        if (xyValues.y0 < xyValues.y1) {
-            if (mouseY > xyValues.y1 || mouseY < xyValues.y0) {
-                console.log("no hit for line" + i);
-                boundingHit = 0;
-                continue;
-            }
-        }
-        else {
-            if (mouseY > xyValues.y0 || mouseY < xyValues.y1) {
-                console.log("no hit for line" + i);
-                boundingHit = 0;
-                continue;
-            }
-        }
-        boundingHit = 1;
-        possibleBoundingBoxes[i] = i;
-    }
-    if (!boundingHit) {
-    }
-    //console.log(possibleBoundingBoxes);
-    if (possibleBoundingBoxes.length > 0) {
-        var nearestLineIndex = -1;
-        var bestDistance = 999999;
-        // check which line is the nearest from the possible ones
-        for (var j in possibleBoundingBoxes) {
-            var linepoint = linepointNearestMouse(linesData[possibleBoundingBoxes[j]], mouseX, mouseY);
-            var dx = mouseX - linepoint.x;
-            var dy = mouseY - linepoint.y;
-            var distance = Math.abs(Math.sqrt(dx * dx + dy * dy));
-            // best distance => nearest line and set index
-            if (bestDistance > distance) {
-                bestDistance = distance;
-                nearestLineIndex = possibleBoundingBoxes[j];
-            }
-        }
-        if (bestDistance < tolerance) {
-            if (action == "click") {
-                if (e.ctrlKey && activeLines[nearestLineIndex] == 1) {
-                    activeLines[nearestLineIndex] = 0;
-                }
-                else {
-                    activeLines[nearestLineIndex] = 1;
-                }
-            }
-            // check for controll key to toggle the states
-            console.log(activeLines);
-            //if(e.ctrlKey){
-            //  for(var i in linesData){
-            //  	if(i != nearestLineIndex){
-            //      if(typeof activeLines[i] === 'undefined' || activeLines[i] == "0" || activeLines[i] == "-1"){
-            //        activeLines[i] = 1;
-            //      }else{
-            //        activeLines[i] = 0;
-            //      }
-            //    }else{
-            //     
-            //    }
-            //  }
-            //}
-            drawCanvasLines(linesData, linepoint.x, linepoint.y);
-        }
-    }
-}
 function drawSvgLines(linesData, target) {
     for (var i in linesData) {
         var x1 = linesData[i][0][0];
@@ -383,13 +409,12 @@ function drawSvgLines(linesData, target) {
     }
 }
 function selectSvgLines(lineIds) {
-    $.each(lineIds, function (i, lineId) {
-        if (lineId != "-1") {
+    $.each($('.svgHolder line'), function (i, element) {
+        $(element).removeClass('active');
+    });
+    $.each(lineIds, function (lineId, lineIdValue) {
+        if (lineIdValue) {
             $("#line_" + lineId).addClass('active');
-        }
-        else {
-            console.log(i);
-            $("#line_" + i).removeClass('active');
         }
     });
 }
@@ -479,17 +504,18 @@ function getShader(GL, id) {
     return shader;
 }
 function generateWebGLLines() {
-    var pixelPointRelation = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
+    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
+    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1	
     for (var i in linesData) {
         var x0 = linesData[i][0][0];
         var y0 = linesData[i][0][1];
         var x1 = linesData[i][1][0];
         var y1 = linesData[i][1][1];
         // get webgl coordinates
-        var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x0);
-        var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y0);
-        var x1PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x1);
-        var y1PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y1);
+        var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX, x0);
+        var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY, y0);
+        var x1PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX, x1);
+        var y1PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY, y1);
         webGLLinesData[i] = new Array(new Array(x0PointCoordinate, y0PointCoordinate), new Array(x1PointCoordinate, y1PointCoordinate));
         // needed for index of points array	
         if (i == 0) {
@@ -505,13 +531,14 @@ function generateWebGLLines() {
     }
 }
 function generateWebGLTriangles() {
-    var pixelPointRelation = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
-    for (var i in linesData) {
-        var x0 = linesData[i][0][0];
-        var y0 = linesData[i][0][1];
+    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
+    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1	
+    for (var i in linesDataDraw) {
+        var x0 = linesDataDraw[i][0][0];
+        var y0 = linesDataDraw[i][0][1];
         // get webgl coordinates
-        var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, x0);
-        var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation, y0);
+        var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX, x0);
+        var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY, y0);
         webGLLinesData[i] = new Array(new Array(x0PointCoordinate, y0PointCoordinate));
         prepareWebGLData(webGLLinesData[i][0], i);
     }
@@ -521,18 +548,30 @@ function prepareWebGLData(xyPoints, index) {
     webGLPoints[(index * 7) + 1] = xyPoints[1];
     webGLPoints[(index * 7) + 2] = 0; // z
     webGLPoints[(index * 7) + 3] = 0; // r
-    webGLPoints[(index * 7) + 4] = 1; // g
+    webGLPoints[(index * 7) + 4] = 0; // g
     webGLPoints[(index * 7) + 5] = 0; // b
     webGLPoints[(index * 7) + 6] = 1; // alpha
 }
-function pixelToPointCoordinate(pixelPointRelation, pixelPoint) {
+function pixelToPointCoordinateX(pixelPointRelation, pixelPoint) {
     var point = pixelPointRelation * pixelPoint;
     // check if in the -1 or 1 area
     if (point < 1) {
-        point = point * -1;
+        point = (1 - point) * -1;
     }
     else {
         point = point - 1;
     }
+    return point;
+}
+function pixelToPointCoordinateY(pixelPointRelation, pixelPoint) {
+    var point = pixelPointRelation * pixelPoint;
+    // check if in the -1 or 1 area
+    if (point < 1) {
+        point = (1 - point);
+    }
+    else {
+        point = (2 - point) * -1; // pixel width is from top...web gl coordinates for y starts bottom with -1
+    }
+    console.log(point);
     return point;
 }

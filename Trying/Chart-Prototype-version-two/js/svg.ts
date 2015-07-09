@@ -25,12 +25,13 @@ function drawSvgLines(linesData, target){
 }
 
 function selectSvgLines(lineIds){
-  $.each(lineIds, function(i, lineId){
-    if(lineId != "-1"){
-  	  $("#line_"+lineId).addClass('active');
-  	}else{
-  	  console.log(i);
-      $("#line_"+i).removeClass('active');
-  	}
+  $.each($('.svgHolder line'), function(i, element){
+    $(element).removeClass('active');
+  });
+
+  $.each(lineIds, function(lineId, lineIdValue){
+  	if(lineIdValue){
+      $("#line_"+lineId).addClass('active');
+    }
   });			
 }

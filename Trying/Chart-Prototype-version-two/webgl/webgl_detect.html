@@ -33,10 +33,10 @@
 
   <script>
     var pointsData,GL;
-    var webGLProgramObject, // "GPU-Programm", das zur Berechnung der Grafik verwendet wird
-    vertexAttribLoc,  // Verknüpfung zwischen JavaScript und Vertex-Shader
-    vVertices,        // Array der Dreieckskoordinaten
-    vertexPosBufferObjekt; // Der WebGL-Buffer, der die Dreieckskoordinaten aufnimmt
+    var webGLProgramObject,
+    vertexAttribLoc,
+    vVertices,
+    vertexPosBufferObjekt;
     		 
     $(document).ready( function() {
 
@@ -49,10 +49,21 @@
     	e.preventDefault();   	
     	drawChart("webgl");
       });
-      //$("#chartWrapper").mousemove(function(e){handleMousemove(e,"hover");});
-      //$("#chartWrapper").click(function(e){handleMousemove(e,"click");});
-      //$("#chartWrapper").mousedown(function(e){createBox(e,"mousedown");});
-      //$("#chartWrapper").mouseup(function(e){removeBox(e,"mousedown");});
+      var clickstart;
+      var clickstop;
+
+      $("#chartWrapper").mousedown(function(e){
+        clickstart = e.timeStamp;
+        createBox(e,"mousedown");
+      }).mouseup(function(e){
+	    clickstop = e.timeStamp - clickstart
+	    if(clickstop >= 100){
+	      removeBox(e,"mousedown");
+	    }else{
+	      handleMousemove(e,"click");
+	    }
+	    $('#chartWrapper #selectBox').remove();
+      });
 
     });
     
@@ -66,7 +77,7 @@
   <form id="drawing">
   <table>
     <tr>
-      <td>Number of Lines: <input id="linesCount" value="1" type="name"/></td>
+      <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
       <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.225" type="name"/</span></td>
       <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
     </tr>

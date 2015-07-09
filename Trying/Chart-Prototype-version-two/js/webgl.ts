@@ -110,7 +110,8 @@ function getShader(GL, id) {
 }
 
 function generateWebGLLines(){
-  var pixelPointRelation = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1	
 
   for(var i in linesData){
  	var x0 = linesData[i][0][0];
@@ -119,10 +120,10 @@ function generateWebGLLines(){
  	var y1 = linesData[i][1][1];
  	
  	// get webgl coordinates
- 	var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x0);
- 	var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y0);
- 	var x1PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x1);
- 	var y1PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y1);
+ 	var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x0);
+ 	var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y0);
+ 	var x1PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x1);
+ 	var y1PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y1);
  	 	
  	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate),new Array(x1PointCoordinate,y1PointCoordinate));
  	
@@ -140,15 +141,17 @@ function generateWebGLLines(){
 }
 
 function generateWebGLTriangles(){
-  var pixelPointRelation = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1	
 
-  for(var i in linesData){
- 	var x0 = linesData[i][0][0];
- 	var y0 = linesData[i][0][1];
+  for(var i in linesDataDraw){
+ 	var x0 = linesDataDraw[i][0][0];
+ 	var y0 = linesDataDraw[i][0][1];
  	
  	// get webgl coordinates
- 	var x0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,x0);
- 	var y0PointCoordinate = pixelToPointCoordinate(pixelPointRelation,y0);
+ 	var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x0);
+ 	var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y0);
+
  	 	
  	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate));
  	prepareWebGLData(webGLLinesData[i][0],i);
@@ -160,19 +163,32 @@ function prepareWebGLData(xyPoints, index){
   webGLPoints[(index*7)+1] = xyPoints[1];
   webGLPoints[(index*7)+2] = 0; // z
   webGLPoints[(index*7)+3] = 0; // r
-  webGLPoints[(index*7)+4] = 1; // g
+  webGLPoints[(index*7)+4] = 0; // g
   webGLPoints[(index*7)+5] = 0; // b
   webGLPoints[(index*7)+6] = 1;  // alpha
 }
 
-function pixelToPointCoordinate(pixelPointRelation,pixelPoint){
+function pixelToPointCoordinateX(pixelPointRelation,pixelPoint){
 	var point = pixelPointRelation*pixelPoint;
-	
+
 	// check if in the -1 or 1 area
 	if(point < 1){
-		point=point*-1;
+	  point=(1-point)*-1;
 	}else{
-		point=point-1;
+	  point=point-1;
 	}
+	return point;
+}
+
+function pixelToPointCoordinateY(pixelPointRelation,pixelPoint){
+	var point = pixelPointRelation*pixelPoint;
+
+	// check if in the -1 or 1 area
+	if(point < 1){
+	  point=(1-point);	
+	}else{
+	  point = (2-point)*-1; // pixel width is from top...web gl coordinates for y starts bottom with -1
+	}
+	console.log(point);
 	return point;
 }
