@@ -60,17 +60,15 @@ function handleMousemove(e, action) {
     var boundingHit = 0;
     if (action == "click" && !e.shiftKey && !e.ctrlKey) {
         activeLines = [];
+        linesDataDraw = [];
     }
     // check if mouse hits a bounding box
     possibleBoundingBoxes = [];
     for (var i in linesData) {
         var xyValues = checkPointsForAngle(linesData[i]);
-        //console.log("mouseX "+mouseX);
-        //console.log("mouseY "+mouseY);
-        //console.log("xyValues.x0 "+xyValues.x0);    
-        //console.log("xyValues.x1 "+xyValues.x1);
-        //console.log("xyValues.y0 "+xyValues.y0);
-        //console.log("xyValues.y1 "+xyValues.y1);
+        if (action == "click" && !e.shiftKey && !e.ctrlKey) {
+            activeLines[i] = 0;
+        }
         if (mouseX < xyValues.x0 || mouseX > xyValues.x1) {
             //console.log("X: no hit for line"+i);
             boundingHit = 0;
@@ -118,29 +116,29 @@ function handleMousemove(e, action) {
                     activeLines[nearestLineIndex] = 1;
                 }
             }
-            if (techType == "canvas2d") {
-                drawCanvasLines(linesData, linepoint.x, linepoint.y);
-            }
-            else if (techType == "svg") {
-                selectSvgLines(activeLines);
-            }
-            else if (techType == "webgl") {
-                $.each(activeLines, function (i, value) {
-                    if (value) {
-                        console.log("line found" + i);
-                        console.log("set Color red");
-                        for (var j = (6 * i); j < (6 * i + 6); j++) {
-                            webGLPoints[(j * 7) + 3] = 1; // r
-                        }
+        }
+        if (techType == "canvas2d") {
+            drawCanvasLines(linesData, linepoint.x, linepoint.y);
+        }
+        else if (techType == "svg") {
+            selectSvgLines(activeLines);
+        }
+        else if (techType == "webgl") {
+            $.each(activeLines, function (i, value) {
+                if (value) {
+                    console.log("line found" + i);
+                    console.log("set Color red");
+                    for (var j = (6 * i); j < (6 * i + 6); j++) {
+                        webGLPoints[(j * 7) + 3] = 1; // r
                     }
-                    else {
-                        for (var j = (6 * i); j < (6 * i + 6); j++) {
-                            webGLPoints[(j * 7) + 3] = 0; // r
-                        }
+                }
+                else {
+                    for (var j = (6 * i); j < (6 * i + 6); j++) {
+                        webGLPoints[(j * 7) + 3] = 0; // r
                     }
-                });
-                drawWebGlLines(webGLPoints);
-            }
+                }
+            });
+            drawWebGlLines(webGLPoints);
         }
     }
 }
@@ -208,6 +206,7 @@ function handleBoxSelect(e) {
         selectSvgLines(activeLines);
     }
     else if (techType == "webgl") {
+        console.log(activeLines);
         $.each(activeLines, function (i, value) {
             if (value) {
                 console.log("web gl active line: " + i);
@@ -343,15 +342,28 @@ function generateLines() {
                 lastPointX = x1;
                 lastPointY = y1;
             }
-            // calculate the angle for the diffrent box points
-            angleforLineWidth;
+            var lineWidth = 5;
             var angleforLineWidth = Math.atan2((y2 - y1), (x2 - x1)) * (180 / Math.PI);
-            pTriangles[0] = new Array(x1, y1);
-            pTriangles[1] = new Array(x2, y2);
-            pTriangles[2] = new Array(x2 - 5, y2 - 5);
-            pTriangles[3] = new Array(x1, y1);
-            pTriangles[4] = new Array(x2 - 5, y2 - 5);
-            pTriangles[5] = new Array(x1 - 5, y1 - 5);
+            console.log(angleforLineWidth);
+            var xWidthValue = lineWidth;
+            var yWidthValue = lineWidth;
+            // minus angle => y2 > y1
+            // generate x,y position for vertikal lines
+            if (angleforLineWidth < 0) {
+                xWidthValue = (5 / 90) * (Math.abs(angleforLineWidth));
+                yWidthValue = lineWidth;
+            }
+            else {
+                xWidthValue = (5 / 90) * (Math.abs(angleforLineWidth));
+                yWidthValue = lineWidth * -1;
+            }
+            var angleValue = 1;
+            pTriangles[0] = new Array(x1 + xWidthValue, y1 + yWidthValue);
+            pTriangles[1] = new Array(x2 + xWidthValue, y2 + yWidthValue);
+            pTriangles[2] = new Array(x2, y2);
+            pTriangles[3] = new Array(x1 + xWidthValue, y1 + yWidthValue);
+            pTriangles[4] = new Array(x2, y2);
+            pTriangles[5] = new Array(x1, y1);
             //pTriangles[0] = new Array(5,5);
             //pTriangles[1] = new Array(10,5);
             //pTriangles[2] = new Array(5,10);
@@ -452,7 +464,7 @@ function webglStuff(destination) {
 }
 function drawWebGlLines(data) {
     vVertices = data;
-    console.log(data);
+    //console.log(data);
     // create buffer...GPU
     vertexPosBufferObjekt = GL.createBuffer();
     // ...and set as active object
@@ -557,7 +569,7 @@ function prepareWebGLData(xyPoints, index) {
 }
 function pixelToPointCoordinateX(pixelPointRelation, pixelPoint) {
     var point = pixelPointRelation * pixelPoint;
-    console.log("X: Pixel:" + pixelPoint + " - pixelPointRelation:" + pixelPointRelation + " point:" + point);
+    //console.log("X: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
     // check if in the -1 or 1 area
     if (point >= 1) {
         point = point - 1;
@@ -570,7 +582,7 @@ function pixelToPointCoordinateX(pixelPointRelation, pixelPoint) {
 }
 function pixelToPointCoordinateY(pixelPointRelation, pixelPoint) {
     var point = pixelPointRelation * pixelPoint;
-    console.log("Y: Pixel:" + pixelPoint + " - pixelPointRelation:" + pixelPointRelation + " point:" + point);
+    //console.log("Y: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
     // check if in the -1 or 1 area
     if (point >= 1) {
         point = (1 - point);
@@ -578,6 +590,6 @@ function pixelToPointCoordinateY(pixelPointRelation, pixelPoint) {
     else {
         point = (1 - point); // pixel width is from top...web gl coordinates for y starts bottom with -1
     }
-    console.log(point);
+    //console.log(point);
     return point;
 }

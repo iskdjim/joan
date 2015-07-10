@@ -44,7 +44,7 @@ function webglStuff(destination){
 
 function drawWebGlLines(data){
   vVertices = data;
-  console.log(data);
+  //console.log(data);
   // create buffer...GPU
   vertexPosBufferObjekt = GL.createBuffer();
   // ...and set as active object
@@ -170,7 +170,7 @@ function prepareWebGLData(xyPoints, index){
 
 function pixelToPointCoordinateX(pixelPointRelation,pixelPoint){
 	var point = pixelPointRelation*pixelPoint;
-	console.log("X: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
+	//console.log("X: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
 
 	// check if in the -1 or 1 area
 	if(point >= 1){
@@ -184,13 +184,13 @@ function pixelToPointCoordinateX(pixelPointRelation,pixelPoint){
 
 function pixelToPointCoordinateY(pixelPointRelation,pixelPoint){
 	var point = pixelPointRelation*pixelPoint;
-	console.log("Y: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
+	//console.log("Y: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
 	// check if in the -1 or 1 area
 	if(point >= 1){
 	  point=(1-point);
 	}else{
 	  point = (1-point); // pixel width is from top...web gl coordinates for y starts bottom with -1
 	}
-	console.log(point);
+	//console.log(point);
 	return point;
 }
