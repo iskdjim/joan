@@ -70,10 +70,10 @@ function handleMousemove(e, action){
   // check if mouse hits a bounding box
   possibleBoundingBoxes = [];
   for(var i in linesData){
-    var xyValues = checkPointsForAngle(linesData[i]);
     if(action == "click" && !e.shiftKey && !e.ctrlKey){
       activeLines[i] = 0;	
     }
+    var xyValues = checkPointsForAngle(linesData[i]);
 
     if(mouseX<xyValues.x0 || mouseX>xyValues.x1){
       //console.log("X: no hit for line"+i);
@@ -148,7 +148,6 @@ function handleMousemove(e, action){
 	    });
         drawWebGlLines(webGLPoints);
 	  }
-	
   }
 }
 
@@ -385,7 +384,8 @@ function generateLines(){
   			lastPointX = x1;
   			lastPointY = y1;
   		}
-  		var lineWidth = 5;
+
+  		var lineWidth = linesWidth;
   	
         var angleforLineWidth = Math.atan2((y2 - y1),(x2 - x1)) * (180 / Math.PI);
         console.log(angleforLineWidth);

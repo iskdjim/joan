@@ -57,7 +57,7 @@
         createBox(e,"mousedown");
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
-	    if(clickstop >= 100){
+	    if(clickstop >= 150){
 	      removeBox(e,"mousedown");
 	    }else{
 	      handleMousemove(e,"click");
@@ -78,7 +78,7 @@
   <table>
     <tr>
       <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
-      <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.225" type="name"/</span></td>
+      <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.3125" type="name"/</span></td>
       <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
     </tr>
   </table>
