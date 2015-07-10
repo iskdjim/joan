@@ -55,11 +55,13 @@
       $("#chartWrapper").mousedown(function(e){
         clickstart = e.timeStamp;
         createBox(e,"mousedown");
+                
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
 	    if(clickstop >= 150){
 	      removeBox(e,"mousedown");
 	    }else{
+	      $('.selectBox').hide();
 	      handleMousemove(e,"click");
 	    }
 	    $('#chartWrapper #selectBox').remove();

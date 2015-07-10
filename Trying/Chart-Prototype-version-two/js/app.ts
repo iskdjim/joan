@@ -60,6 +60,11 @@ function handleMousemove(e, action){
   e.stopPropagation();
   mouseX= e.clientX-offsetX;
   mouseY= e.clientY-offsetY;
+  
+  // reset boundig box
+  if(action == 'click'){
+    $('#selectBox').css({'left':'0px', 'top':'0px','height': '0px', 'width': '0px'});	
+  }
 
   var boundingHit = 0;
   if(action == "click" && !e.shiftKey && !e.ctrlKey){
