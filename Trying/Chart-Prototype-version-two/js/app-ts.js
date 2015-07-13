@@ -57,6 +57,10 @@ function handleMousemove(e, action) {
     e.stopPropagation();
     mouseX = e.clientX - offsetX;
     mouseY = e.clientY - offsetY;
+    // reset boundig box
+    if (action == 'click') {
+        $('#selectBox').css({ 'left': '0px', 'top': '0px', 'height': '0px', 'width': '0px' });
+    }
     var boundingHit = 0;
     if (action == "click" && !e.shiftKey && !e.ctrlKey) {
         activeLines = [];
@@ -126,8 +130,8 @@ function handleMousemove(e, action) {
         else if (techType == "webgl") {
             $.each(activeLines, function (i, value) {
                 if (value) {
-                    console.log("line found" + i);
-                    console.log("set Color red");
+                    //console.log("line found"+i);
+                    //console.log("set Color red");
                     for (var j = (6 * i); j < (6 * i + 6); j++) {
                         webGLPoints[(j * 7) + 3] = 1; // r
                     }
@@ -307,7 +311,7 @@ function removeBox(e) {
         handleBoxSelect(e);
     }
 }
-// calculate the point on the line that's 
+// calculate the point on the line that's
 // nearest to the mouse position
 function linepointNearestMouse(line, x, y) {
     var lerp = function (a, b, x) { return (a + x * (b - a)); };
@@ -364,12 +368,6 @@ function generateLines() {
             pTriangles[3] = new Array(x1 + xWidthValue, y1 + yWidthValue);
             pTriangles[4] = new Array(x2, y2);
             pTriangles[5] = new Array(x1, y1);
-            //pTriangles[0] = new Array(5,5);
-            //pTriangles[1] = new Array(10,5);
-            //pTriangles[2] = new Array(5,10);
-            //pTriangles[3] = new Array(10,5);
-            //pTriangles[4] = new Array(10,10);
-            //pTriangles[5] = new Array(5,10);
             for (var j = 0; j < pTriangles.length; j++) {
                 linesDataDraw.push(new Array(new Array(pTriangles[j][0], pTriangles[j][1])));
             }
@@ -398,7 +396,6 @@ function drawCanvasLines(linesData, lineX, lineY) {
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
         context.strokeStyle = '#000000';
-        //if(mouseX && lineX && activeLines[i]){
         if (lineX && activeLines[i]) {
             context.strokeStyle = '#FF0000';
         }
@@ -411,7 +408,6 @@ function drawSvgLines(linesData, target) {
         var y1 = linesData[i][0][1];
         var x2 = linesData[i][1][0];
         var y2 = linesData[i][1][1];
-        console.log(linesData[i]);
         var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         newLine.setAttribute('id', 'line_' + i);
         newLine.setAttribute('x1', x1.toString());
@@ -519,8 +515,8 @@ function getShader(GL, id) {
     return shader;
 }
 function generateWebGLLines() {
-    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
-    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1	
+    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1
+    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1
     for (var i in linesData) {
         var x0 = linesData[i][0][0];
         var y0 = linesData[i][0][1];
@@ -532,7 +528,7 @@ function generateWebGLLines() {
         var x1PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX, x1);
         var y1PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY, y1);
         webGLLinesData[i] = new Array(new Array(x0PointCoordinate, y0PointCoordinate), new Array(x1PointCoordinate, y1PointCoordinate));
-        // needed for index of points array	
+        // needed for index of points array
         if (i == 0) {
             var firstIndex = 0;
             var secondIndex = 1;
@@ -546,8 +542,8 @@ function generateWebGLLines() {
     }
 }
 function generateWebGLTriangles() {
-    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1	
-    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1	
+    var pixelPointRelationX = 2 / canvasWidth; // 2 => wegbl coords from -1 to 1
+    var pixelPointRelationY = 2 / canvasHeight; // 2 => wegbl coords from -1 to 1
     for (var i in linesDataDraw) {
         var x0 = linesDataDraw[i][0][0];
         var y0 = linesDataDraw[i][0][1];
@@ -577,7 +573,6 @@ function pixelToPointCoordinateX(pixelPointRelation, pixelPoint) {
     else {
         point = point - 1;
     }
-    //console.log(point);
     return point;
 }
 function pixelToPointCoordinateY(pixelPointRelation, pixelPoint) {

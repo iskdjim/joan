@@ -26,8 +26,7 @@ function webglStuff(destination){
 
   // Shader-program-object is complete and has to be linked
   GL.linkProgram(webGLProgramObject);
-  
-  
+ 
   // it is posible to use more than one shader program, so tell the program which one should be used
   GL.useProgram(webGLProgramObject);
 
@@ -35,7 +34,7 @@ function webglStuff(destination){
   GL.clearColor(255.0, 255.0,255.0, 1.0);
   // delete background
   GL.clear(GL.COLOR_BUFFER_BIT);
-	
+
   // Conntection between javascript and the shader-attribut
   vertexColorAttribute = GL.getAttribLocation(webGLProgramObject, "aVertexColor");
 
@@ -49,13 +48,11 @@ function drawWebGlLines(data){
   vertexPosBufferObjekt = GL.createBuffer();
   // ...and set as active object
   GL.bindBuffer(GL.ARRAY_BUFFER, vertexPosBufferObjekt);
-		        
+
   // give array data to active buffer
   GL.bufferData(GL.ARRAY_BUFFER, vVertices, GL.STATIC_DRAW);
-  
-    
-  var itemSize = 7; // x,y,z + r,g,b,a
 
+  var itemSize = 7; // x,y,z + r,g,b,a
   var drawCount = vVertices.length/itemSize;
 
   var step = Float32Array.BYTES_PER_ELEMENT;
@@ -73,10 +70,9 @@ function drawWebGlLines(data){
   }else{
     GL.drawArrays(GL.LINES, 0, drawCount);
   }
-
 }
 
-function getShader(GL, id) {
+function getShader(GL, id){
   var shaderScript : any = document.getElementById(id);
   if (!shaderScript) {
     return null;
@@ -98,7 +94,7 @@ function getShader(GL, id) {
   } else {
     return null;
   }
-  
+
   GL.shaderSource(shader, str);
   GL.compileShader(shader);
   if (!GL.getShaderParameter(shader, GL.COMPILE_STATUS)) {
@@ -110,24 +106,24 @@ function getShader(GL, id) {
 }
 
 function generateWebGLLines(){
-  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
-  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1
+  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1
 
   for(var i in linesData){
  	var x0 = linesData[i][0][0];
  	var y0 = linesData[i][0][1];
  	var x1 = linesData[i][1][0];
  	var y1 = linesData[i][1][1];
- 	
+
  	// get webgl coordinates
  	var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x0);
  	var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y0);
  	var x1PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x1);
  	var y1PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y1);
- 	 	
+
  	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate),new Array(x1PointCoordinate,y1PointCoordinate));
- 	
- 	// needed for index of points array	
+
+ 	// needed for index of points array
  	if(i==0){
       var firstIndex = 0;
  	  var secondIndex = 1;
@@ -141,18 +137,17 @@ function generateWebGLLines(){
 }
 
 function generateWebGLTriangles(){
-  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1	
-  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1	
+  var pixelPointRelationX = 2/canvasWidth;  // 2 => wegbl coords from -1 to 1
+  var pixelPointRelationY = 2/canvasHeight;  // 2 => wegbl coords from -1 to 1
 
   for(var i in linesDataDraw){
  	var x0 = linesDataDraw[i][0][0];
  	var y0 = linesDataDraw[i][0][1];
- 	
+
  	// get webgl coordinates
  	var x0PointCoordinate = pixelToPointCoordinateX(pixelPointRelationX,x0);
  	var y0PointCoordinate = pixelToPointCoordinateY(pixelPointRelationY,y0);
 
- 	 	
  	webGLLinesData[i] = new Array(new Array(x0PointCoordinate,y0PointCoordinate));
  	prepareWebGLData(webGLLinesData[i][0],i);
   }
@@ -171,14 +166,12 @@ function prepareWebGLData(xyPoints, index){
 function pixelToPointCoordinateX(pixelPointRelation,pixelPoint){
 	var point = pixelPointRelation*pixelPoint;
 	//console.log("X: Pixel:"+pixelPoint+" - pixelPointRelation:"+pixelPointRelation+" point:"+point);
-
 	// check if in the -1 or 1 area
 	if(point >= 1){
 	  point=point-1;
 	}else{
 	  point=point-1;
 	}
-	//console.log(point);
 	return point;
 }
 

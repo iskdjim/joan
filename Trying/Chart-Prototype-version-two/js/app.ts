@@ -63,7 +63,7 @@ function handleMousemove(e, action){
   
   // reset boundig box
   if(action == 'click'){
-    $('#selectBox').css({'left':'0px', 'top':'0px','height': '0px', 'width': '0px'});	
+    $('#selectBox').css({'left':'0px', 'top':'0px','height': '0px', 'width': '0px'});
   }
 
   var boundingHit = 0;
@@ -71,12 +71,12 @@ function handleMousemove(e, action){
   	activeLines = [];
   	linesDataDraw = [];
   }
- 
+
   // check if mouse hits a bounding box
   possibleBoundingBoxes = [];
   for(var i in linesData){
     if(action == "click" && !e.shiftKey && !e.ctrlKey){
-      activeLines[i] = 0;	
+      activeLines[i] = 0;
     }
     var xyValues = checkPointsForAngle(linesData[i]);
 
@@ -85,7 +85,7 @@ function handleMousemove(e, action){
 	  boundingHit = 0;
 	  continue;
 	}
-	
+
 	if(xyValues.y0 < xyValues.y1){
 	  if(mouseY>xyValues.y1 || mouseY<xyValues.y0){
         //console.log("Y: no hit for line"+i);
@@ -99,9 +99,9 @@ function handleMousemove(e, action){
 	    continue;
 	  }	
 	}
-	
-	  boundingHit = 1;
-	  possibleBoundingBoxes[i] = i;
+
+	boundingHit = 1;
+	possibleBoundingBoxes[i] = i;
 
 	}
 
@@ -121,15 +121,14 @@ function handleMousemove(e, action){
        	  nearestLineIndex = possibleBoundingBoxes[j];
        	}
       }
-      
+
 	  if(bestDistance<tolerance){
 	    if(action == "click"){
 	      if(e.ctrlKey && activeLines[nearestLineIndex] == 1){
-	        activeLines[nearestLineIndex] = 0;	
+	        activeLines[nearestLineIndex] = 0;
 	      }else{
 	  	    activeLines[nearestLineIndex] = 1;
 	  	  }
-	  	 
 	    }
 	  }
 
@@ -137,11 +136,11 @@ function handleMousemove(e, action){
 	    drawCanvasLines(linesData,linepoint.x,linepoint.y);
 	  }else if(techType=="svg"){
 	    selectSvgLines(activeLines);
-	  }else if(techType=="webgl"){  	
+	  }else if(techType=="webgl"){
         $.each(activeLines, function(i, value){
 	      if(value){
-	        console.log("line found"+i);
-	        console.log("set Color red");
+	        //console.log("line found"+i);
+	        //console.log("set Color red");
 	        for(var j=(6*i);j<(6*i+6);j++){
 	          webGLPoints[(j*7)+3] = 1; // r
 	        }
@@ -156,32 +155,30 @@ function handleMousemove(e, action){
   }
 }
 
-
-
 // handle mousemove events
 // calculate how close the mouse is to the line
 // if that distance is less than tolerance then
 // display a dot on the line
 function handleBoxSelect(e){
-	
+
   if(!e.shiftKey && !e.ctrlKey){
   	activeLines = [];
   }
-  
+
   var selectedLines = [];
-  
+
   var foundBounding = 0; // check if point in box
   for(var i in linesData){
   	if(!e.shiftKey && !e.ctrlKey){
   	  activeLines[i] = 0;
   	}
     if(linesData[i][0][0] > selectBoxX && linesData[i][0][0] < (selectBoxX+selectBoxWidth) && linesData[i][0][1] > selectBoxY && linesData[i][0][1] < (selectBoxY+selectBoxHeight)){
-      activeLines[i] = checkToggleState(e,activeLines[i])
+      activeLines[i] = checkToggleState(e,activeLines[i]);
       continue;
     }
 
     if(linesData[i][1][0] > selectBoxX && linesData[i][1][0] < (selectBoxX+selectBoxWidth) && linesData[i][1][1] > selectBoxY && linesData[i][1][1] < (selectBoxY+selectBoxHeight)){
-      activeLines[i] = checkToggleState(e,activeLines[i])
+      activeLines[i] = checkToggleState(e,activeLines[i]);
       continue;
     }
 
@@ -192,11 +189,11 @@ function handleBoxSelect(e){
 
     // calculate the angle for the diffrent box points
     var angleDeg = Math.atan2((xyValues.y1 - xyValues.y0),(xyValues.x1 - xyValues.x0)) * (180 / Math.PI);
-    
+
     var rightTop = Math.atan2((selectBoxY - xyValues.y0),(x1 - xyValues.x0)) * (180 / Math.PI);
     var rightBottom = Math.atan2((y1) - xyValues.y0, (x1) - xyValues.x0) * 180 / Math.PI;
     var leftBottom = Math.atan2((y1) - xyValues.y0, (selectBoxX)-xyValues.x0) * 180 / Math.PI;
-    var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX)-xyValues.x0) * 180 / Math.PI;  
+    var leftTop = Math.atan2((selectBoxY) - xyValues.y0, (selectBoxX)-xyValues.x0) * 180 / Math.PI;
 
     // calculate the distance for the box points
     var dist_angleDeg = Math.sqrt(Math.pow(xyValues.x1 - xyValues.x0,2) + Math.pow(xyValues.y1 - xyValues.y0,2));
@@ -205,23 +202,19 @@ function handleBoxSelect(e){
     var dist_leftBottom = Math.sqrt(Math.pow(selectBoxX - xyValues.x0,2) + Math.pow(y1 - xyValues.y0,2));
     var dist_leftTop = Math.sqrt(Math.pow(selectBoxX - xyValues.x0,2) + Math.pow(selectBoxY - xyValues.y0,2));
 
-
 	// if x values of boxer are smaller as line x values
 	if(x1 < xyValues.x0 && selectBoxX < xyValues.x0){
 
-    // if all angles are bigger => no colision  
+    // if all angles are bigger => no colision
     }else if(rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg){
 		console.log("angle check 1");
-    // if all angles are smaller => no colision	
+    // if all angles are smaller => no colision
     }else if(rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg){
 		console.log("angle check 2");
     // check if box is on the line width the distance results
     }else if(dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg){
       console.log("distance check 1");
-     
-    //}else if(dist_rightTop < dist_angleDeg && dist_rightBottom < dist_angleDeg && dist_leftBottom < dist_angleDeg && dist_leftTop < dist_angleDeg){  
-    //   console.log("distance check 2");   	
-    }else{   
+    }else{
       activeLines[i] = checkToggleState(e,activeLines[i])
 
       selectedLines[i] = 1;
@@ -274,7 +267,7 @@ function checkPointsForAngle(lineData){
     xRange0 = lineData[1][0];
     xRange1 = lineData[0][0];
     yRange0 = lineData[1][1];
-    yRange1 = lineData[0][1];    
+    yRange1 = lineData[0][1];
   }
 
   // check if first y value is bigger
@@ -295,7 +288,7 @@ function createBox(e){
 
   var selectBoxXCalc = e.clientX-offsetX;
   var selectBoxYCalc = e.clientY-offsetY;
-  $('#selectBox').css({'left': selectBoxXCalc, 'top': selectBoxYCalc ,'height': '0px', 'width': '0px'});	
+  $('#selectBox').css({'left': selectBoxXCalc, 'top': selectBoxYCalc ,'height': '0px', 'width': '0px'});
   $("#chartWrapper").mousemove(function(event){
     // mousemove position
     var xPositionMouseMove = event.pageX-offsetX;
@@ -331,7 +324,7 @@ function createBox(e){
 	  selectBoxHeight = selectBoxYCalc-yPositionMouseMove;
 	  $('#selectBox').css({'left': selectBoxXCalc, 'top': yPositionMouseMove ,'height': selectBoxHeight, 'width': selectBoxWidth});
 	  selectBoxX = selectBoxXCalc;
-      selectBoxY = yPositionMouseMove;	
+      selectBoxY = yPositionMouseMove;
 	}
 
     selectBoxActive = 1;
@@ -340,7 +333,6 @@ function createBox(e){
       //deselect = 1;
     }
   });
-
 }
 
 function removeBox(e){
@@ -351,8 +343,7 @@ function removeBox(e){
   }
 }
 
-
-// calculate the point on the line that's 
+// calculate the point on the line that's
 // nearest to the mouse position
 function linepointNearestMouse(line,x,y) {
   var lerp=function(a,b,x){ return(a+x*(b-a)); };
@@ -367,12 +358,12 @@ function linepointNearestMouse(line,x,y) {
 function generateLines(){
   linesData,linesDataDraw = [];
 
-
   if(triangles){
     webGLPoints = new Float32Array(linesCount*7*6);
   }else{
     webGLPoints = new Float32Array(linesCount*7*2);  	
   }
+
   var lastPointX = 0;
   var lastPointY = 0;
   var webglwidth = 20;
@@ -381,56 +372,45 @@ function generateLines(){
   	var y1 = Math.floor((Math.random() * canvasHeight) + 1);
   	var x2 = Math.floor(Math.random()*(canvasWidth-x1+1)+x1);
   	var y2 = Math.floor((Math.random() * canvasHeight) + 1);
-  	
+
   	// web gl triangle points
   	if(triangles && techType=="webgl"){
-  		var pTriangles = new Array();
-  		if(lastPointX == 0 && lastPointY == 0){
-  			lastPointX = x1;
-  			lastPointY = y1;
-  		}
+  	  var pTriangles = new Array();
+  	  if(lastPointX == 0 && lastPointY == 0){
+  	    lastPointX = x1;
+  	    lastPointY = y1;
+  	  }
 
-  		var lineWidth = linesWidth;
-  	
-        var angleforLineWidth = Math.atan2((y2 - y1),(x2 - x1)) * (180 / Math.PI);
-        console.log(angleforLineWidth);
-        var xWidthValue = lineWidth;
-        var yWidthValue = lineWidth;
-        // minus angle => y2 > y1
-        // generate x,y position for vertikal lines
-        if(angleforLineWidth < 0){
-        	xWidthValue = (5/90)*(Math.abs(angleforLineWidth));
-        	yWidthValue = lineWidth;
-        }else{
-        	xWidthValue = (5/90)*(Math.abs(angleforLineWidth));
-        	yWidthValue = lineWidth*-1;
-        }
-		var angleValue = 1;
+  	  var lineWidth = linesWidth;
+  	  var angleforLineWidth = Math.atan2((y2 - y1),(x2 - x1)) * (180 / Math.PI);
+      console.log(angleforLineWidth);
+      var xWidthValue = lineWidth;
+      var yWidthValue = lineWidth;
+      // minus angle => y2 > y1
+      // generate x,y position for vertikal lines
+      if(angleforLineWidth < 0){
+        xWidthValue = (5/90)*(Math.abs(angleforLineWidth));
+        yWidthValue = lineWidth;
+      }else{
+        xWidthValue = (5/90)*(Math.abs(angleforLineWidth));
+        yWidthValue = lineWidth*-1;
+      }
+      var angleValue = 1;
 
-        pTriangles[0] = new Array(x1+xWidthValue,y1+yWidthValue);
-        pTriangles[1] = new Array(x2+xWidthValue,y2+yWidthValue);
-        pTriangles[2] = new Array(x2,y2);
+      pTriangles[0] = new Array(x1+xWidthValue,y1+yWidthValue);
+      pTriangles[1] = new Array(x2+xWidthValue,y2+yWidthValue);
+      pTriangles[2] = new Array(x2,y2);
 
-        pTriangles[3] = new Array(x1+xWidthValue,y1+yWidthValue);
-        pTriangles[4] = new Array(x2,y2);
-        pTriangles[5] = new Array(x1,y1);
-       
-        //pTriangles[0] = new Array(5,5);
-        //pTriangles[1] = new Array(10,5);
-        //pTriangles[2] = new Array(5,10);
-
-        //pTriangles[3] = new Array(10,5);
-        //pTriangles[4] = new Array(10,10);
-        //pTriangles[5] = new Array(5,10);
+      pTriangles[3] = new Array(x1+xWidthValue,y1+yWidthValue);
+      pTriangles[4] = new Array(x2,y2);
+      pTriangles[5] = new Array(x1,y1);
         
-        for(var j=0;j<pTriangles.length;j++){
-           linesDataDraw.push(new Array(new Array(pTriangles[j][0],pTriangles[j][1])));
-        }
-           linesData.push(new Array(new Array(x1,y1),new Array(x2,y2)));
+      for(var j=0;j<pTriangles.length;j++){
+        linesDataDraw.push(new Array(new Array(pTriangles[j][0],pTriangles[j][1])));
+      }
+      linesData.push(new Array(new Array(x1,y1),new Array(x2,y2)));
   	}else{
   	  linesData.push(new Array(new Array(x1,y1),new Array(x2,y2)));
   	}
   }	 
 }
-
-

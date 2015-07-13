@@ -20,19 +20,10 @@ function drawCanvasLines(linesData,lineX,lineY){
 	context.lineTo(x1,y1);
 	context.strokeStyle = '#000000';
 
-	//if(mouseX && lineX && activeLines[i]){
 	if(lineX && activeLines[i]){	
       context.strokeStyle = '#FF0000';
 	}
 
-	context.stroke();    
-	//if(mouseX && lineX){
-	//  context.beginPath();
-	//  context.arc(lineX,lineY,tolerance,0,Math.PI*2);
-	//  context.closePath();
-	//  context.fill();
-    //}  
+	context.stroke();
   }
 }
-
-
