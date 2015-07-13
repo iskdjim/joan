@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         compress: {
 			 main: {
 			    options: {
-			      archive: 'chart.zip'
+			      archive: 'lineDetection.zip'
 			    },
 			    files: [
 			      {src: ['index.html'], dest: '/'},  
