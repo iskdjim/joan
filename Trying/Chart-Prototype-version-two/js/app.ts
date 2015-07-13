@@ -204,13 +204,13 @@ function handleBoxSelect(e){
 
 	// if x values of boxer are smaller as line x values
 	if(x1 < xyValues.x0 && selectBoxX < xyValues.x0){
-
+		
     // if all angles are bigger => no colision
     }else if(rightTop > angleDeg && rightBottom > angleDeg && leftBottom > angleDeg && leftTop > angleDeg){
-		console.log("angle check 1");
+	  console.log("angle check 1");
     // if all angles are smaller => no colision
     }else if(rightTop < angleDeg && rightBottom < angleDeg && leftBottom < angleDeg && leftTop < angleDeg){
-		console.log("angle check 2");
+	  console.log("angle check 2");
     // check if box is on the line width the distance results
     }else if(dist_rightTop > dist_angleDeg && dist_rightBottom > dist_angleDeg && dist_leftBottom > dist_angleDeg && dist_leftTop > dist_angleDeg){
       console.log("distance check 1");
