@@ -42,8 +42,7 @@ module.exports = function (grunt) {
 			    files: [
 			      {src: ['index.html'], dest: '/'},  
 			      {src: ['package.json'], dest: '/'}, 
-			      {src: ['Gruntfile.js'], dest: '/'},
-			      {src: ['ReadMe.txt'], dest: '/'}, 			      
+			      {src: ['Gruntfile.js'], dest: '/'}, 
 			      {src: ['svg/**'], dest: '/'}, 
 			      {src: ['canvas2d/**'], dest: '/'}, 
 			      {src: ['webgl/**'], dest: '/'}, 

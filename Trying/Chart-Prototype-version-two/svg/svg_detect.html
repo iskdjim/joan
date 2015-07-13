@@ -29,11 +29,16 @@
       var clickstop;
 
       $("#chartWrapper").mousedown(function(e){
+      	
         clickstart = e.timeStamp;
+        console.log(clickstart);
+        console.log(clickstop);
         createBox(e,"mousedown");
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
-	    if(clickstop >= 100){
+	    console.log(clickstop);
+	    if(clickstop >= 200){
+	    	console.log("bounding");
 	      removeBox(e,"mousedown");
 	    }else{
 	      handleMousemove(e,"click");

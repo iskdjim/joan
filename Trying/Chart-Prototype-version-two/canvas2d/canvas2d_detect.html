@@ -31,7 +31,7 @@
         createBox(e,"mousedown");
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
-	    if(clickstop >= 100){
+	    if(clickstop >= 200){
 	      removeBox(e,"mousedown");
 	    }else{
 	      $('.selectBox').hide();
