@@ -21,7 +21,7 @@
     	svgLineIds=[];
     	$(".svgHolder").empty();
         linesCount = $("#linesCount").val();
-        linesWidth = $("#linesWidth").val();     
+        linesWidth = parseInt($("#linesWidth").val()*16);
       	e.preventDefault();   	
       	drawChart("svg",linesCount,linesWidth);
       });
@@ -29,10 +29,7 @@
       var clickstop;
 
       $("#chartWrapper").mousedown(function(e){
-      	
         clickstart = e.timeStamp;
-        console.log(clickstart);
-        console.log(clickstop);
         createBox(e,"mousedown");
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
@@ -41,9 +38,16 @@
 	    	console.log("bounding");
 	      removeBox(e,"mousedown");
 	    }else{
+		  $('.selectBox').hide();	    	
 	      handleMousemove(e,"click");
 	    }
 	    $('#chartWrapper #selectBox').remove();
+      });
+      
+      $("#chartWrapper").mousemove(function(e){
+      	if(($('#hoverCheck').is(':checked'))){
+            handleMousemove(e,"click");
+      	}
       });
 
     });
@@ -59,8 +63,11 @@
   <table>
     <tr>
       <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
-      <td><span class="marginSpan">Line Width:  <input id="linesWidth" value="5" type="name"/</span></td>
+      <td><span class="marginSpan">Line Width in rem: <input id="linesWidth" value="0.325" type="name"/</span></td>
       <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+    <tr>
+      <td>Activate mouseover: <input type="checkbox" name="hoverCheck" id="hoverCheck"></td>
     </tr>
   </table>
   </form>

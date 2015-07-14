@@ -45,7 +45,7 @@
       $('form').submit(function(e){
         linesCount = $("#linesCount").val();
     	webglStuff('webGLCanvas');
-        linesWidth = parseInt($("#linesWidth").val()*16);  
+        linesWidth = parseInt($("#linesWidth").val()*16);
     	e.preventDefault();   	
     	drawChart("webgl");
       });
@@ -66,6 +66,12 @@
 	    }
 	    $('#chartWrapper #selectBox').remove();
       });
+      
+      $("#chartWrapper").mousemove(function(e){
+    	if(($('#hoverCheck').is(':checked'))){
+          handleMousemove(e,"click");
+    	}
+      });  
 
     });
     
@@ -80,8 +86,11 @@
   <table>
     <tr>
       <td>Number of Lines: <input id="linesCount" value="5" type="name"/></td>
-      <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.3125" type="name"/</span></td>
+      <td><span class="marginSpan">Line Width in rem:  <input id="linesWidth" value="0.325" type="name"/</span></td>
       <td><span class="marginSpan"><input type="submit" id="drawBtn" value="draw" /></span></td>
+    </tr>
+    <tr>
+      <td>Activate mouseover: <input type="checkbox" name="hoverCheck" id="hoverCheck"></td>
     </tr>
   </table>
   </form>
