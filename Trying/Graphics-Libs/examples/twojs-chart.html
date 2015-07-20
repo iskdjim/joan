@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../libs/underscore.js"></script>
+  <script src="../libs/backbone.js"></script>
+  <script src="../libs/two.js"></script>
+  <script src="../js/twojs-functions.js"></script>
+
+  <script src="../api/data.min.200.js"></script> 
+
+  <script>
+    $(document).ready( function() {
+     
+	  var dataCount = jsonData.count;
+	  var rawData = jsonData.data;
+	  var interval;
+      $('#drawing').submit(function(){
+      	techType = $('#techType').val();
+    	init();
+    	clearInterval(interval);
+    	var indexValue = 0;
+    	var dataValues = [];
+    	var lastYValue = 0;
+    	var lastXValue = 0;
+
+	    interval = setInterval(function(){
+	      var newPoint = [];
+	      newPoint[0] = 0;
+	      newPoint[1] = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
+	      newPoint[2] = indexValue
+	      newPoint[1] = rawData[indexValue].chanels[0]['value']/100;
+
+	      indexValue++;
+	      if(indexValue>=1){
+	        dataValues.push(newPoint);
+	        drawChart(dataValues);
+		  }
+	    }, 500);
+	    
+	    return false;
+      });
+
+    });
+
+  </script>
+</head>
+<body>
+  <h1>Draw lines with two.js</h1>
+  <form id="drawing">
+  <table>
+    <tr> 
+      <td></td>
+      <td>Technologie: <select id="techType"><option value="canvas">Canvas2D</option><option value="webgl">WebGL</option><option value="svg">SVG</option></select></td>
+      <td><input type="submit" id="drawBtn" value="draw" /></td>
+    </tr>
+ 
+  </table>
+  </form>
+  <br />
+<div id="myChartHolder">
+</div>
+  <div class="download">
+  	<a href='../Perf.zip'>Download source</a>
+  </div>  
+</body>
+</html>
