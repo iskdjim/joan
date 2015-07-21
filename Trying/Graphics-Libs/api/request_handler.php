@@ -12,7 +12,9 @@ while($data = fgetcsv($handle, 9999, ";")){
 	$dataset = array("time" => $data[0], 
 					 "chanels" => 
 						array(
-							array("chanel" => "1", "value" => $data[5])
+							array("chanel" => "1", "value" => $data[5]),
+							array("chanel" => "2", "value" => $data[9]),
+							array("chanel" => "3", "value" => $data[7])
 						)
 					
 					);
