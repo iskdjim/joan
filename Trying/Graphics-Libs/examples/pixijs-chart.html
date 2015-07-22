@@ -10,53 +10,51 @@
   <link rel="stylesheet" href="../css/perf.css"/>
 
   <script src="../libs/zepto.js"></script>
-  <script src="../libs/underscore.js"></script>
-  <script src="../libs/backbone.js"></script>
-  <script src="../libs/two.js"></script>
-  <script src="../js/twojs-functions.js"></script>
-
+  <script src="../libs/pixi/pixi.js"></script>
+  <script src="../js/pixijs-functions.js"></script>
   <script src="../api/data.min.morechannels.js"></script> 
 
   <script>
-    $(document).ready( function() {    
+    $(document).ready( function() {   
 	  var dataCount = jsonData.count;
 	  var rawData = jsonData.data;
 	  var interval;
       $('#drawing').submit(function(){
-      	techType = $('#techType').val();
     	init();
     	clearInterval(interval);
     	var indexValue = 0;
     	var dataValues = [];
+    	var lastYValue = 0;
+    	var lastXValue = 0;
 
 	    interval = setInterval(function(){
 	      var newPoints = [[],[],[]];
-
+	      
 	      newPoints[0][0] = 0;
 	      //newPoint[0][1] = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
 	      newPoints[0][1] = rawData[indexValue].chanels[0]['value']/100;
-	      newPoints[0][2] = indexValue;
+	      newPoints[0][2] = indexValue
 
 	      newPoints[1][0] = 0;
 	      //newPoint[0][1] = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
 	      newPoints[1][1] = rawData[indexValue].chanels[1]['value']/100;
-	      newPoints[1][2] = indexValue;
-
+	      newPoints[1][2] = indexValue
+	      
 	      newPoints[2][0] = 0;
 	      //newPoint[0][1] = Math.floor(Math.random() * (400 - 0 + 1)) + 0;
 	      newPoints[2][1] = rawData[indexValue].chanels[2]['value']/100;
-	      newPoints[2][2] = indexValue;
+	      newPoints[2][2] = indexValue
 
 	      indexValue++;
 	      if(indexValue>=1){
 	        dataValues.push(newPoints);
-	        drawChart(dataValues);
+	        drawChart(dataValues, indexValue);
 		  }
 	    }, 500);
-
 	    return false;
       });
     });
+
   </script>
 </head>
 <body>
@@ -65,7 +63,7 @@
   <table>
     <tr> 
       <td></td>
-      <td>Technologie: <select id="techType"><option value="canvas">Canvas2D</option><option value="webgl">WebGL</option><option value="svg">SVG</option></select></td>
+      <td></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
  
@@ -75,7 +73,7 @@
 <div id="myChartHolder">
 </div>
   <div class="download">
-  	<a href='../graphicLibs.zip'>Download source</a>
+  	<a href='../Perf.zip'>Download source</a>
   </div>  
 </body>
 </html>

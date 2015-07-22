@@ -31,24 +31,20 @@ module.exports = function (grunt) {
         },
         open: {
             dev: {
-                path: 'http://localhost/www/Diplarbeit/joan/Trying/Chart-Libs/'
+                path: 'http://localhost/www/Diplarbeit/joan/Trying/Graphics-Libs/'
             }
         },
         compress: {
 			 main: {
 			    options: {
-			      archive: 'perf.zip'
+			      archive: 'graphicLibs.zip'
 			    },
 			    files: [
-			      {src: ['ReadMe.txt'], dest: '/'},
 			      {src: ['index.html'], dest: '/'},  
 			      {src: ['package.json'], dest: '/'}, 
 			      {src: ['Gruntfile.js'], dest: '/'}, 
-			      {src: ['svg/**'], dest: '/'}, 
-			      {src: ['canvas2d/**'], dest: '/'}, 
-			      {src: ['webgl/**'], dest: '/'}, 
 			      {src: ['api/data.json'], dest: '/'}, 
-			      {src: ['api/data.min.js'], dest: '/'}, 			      
+			      {src: ['api/data.min.morechannels'], dest: '/'}, 			      
 			      {src: ['css/**'], dest: '/'}, 
 			      {src: ['libs/**'], dest: '/'}, 
 			      {src: ['js/**'], dest: '/'}, 
