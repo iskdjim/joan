@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script type="text/javascript" src="../framework/gen/plexx.js"></script>
+
+  <script>
+    $(document).ready( function() {   
+
+
+
+    	var myCanvas = new Plexx.CanvasNode(1000, 1000, "#FFFFFF");
+    	var renderContext = new Plexx.RenderContext("myChartHolder");
+
+    	var polygon3 = new Plexx.Polygon([0, 0, 50, 100, 100, 0], "red");
+    	var polygon4 = new Plexx.Polygon([0, 0, 0, 100, 100, 100, 100, 0], "red");
+    	var polygon5 = new Plexx.Polygon([0, 0, 0, 100, 100, 100, 100, 0, 50, 0, 0, 200, 100, 200], "red");
+
+    	myCanvas.add(polygon3.translateXY(10, 10));
+    	myCanvas.add(polygon4.translateXY(120, 10));
+    	myCanvas.add(polygon5.translateXY(230, 10));
+
+    	var debugPanel = new Plexx.DebugHelper("polygons-debugpanel", renderContext, myCanvas);
+
+    	myCanvas.render(renderContext);
+ 
+    });
+
+  </script>
+</head>
+<body>
+  <h1>Draw lines with two.js</h1>
+  <form id="drawing">
+  <table>
+    <tr> 
+      <td></td>
+      <td></td>
+      <td><input type="submit" id="drawBtn" value="draw" /></td>
+    </tr>
+ 
+  </table>
+  </form>
+  <br />
+<div id="myChartHolder">
+</div>
+  <div class="download">
+  	<a href='../Perf.zip'>Download source</a>
+  </div>  
+</body>
+</html>

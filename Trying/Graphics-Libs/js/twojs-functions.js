@@ -15,7 +15,15 @@ function drawChart(data){
     var x1 = x0+30;
 
     for(var j=0;j<3;j++){
-      var line = two.makeLine(x0, data[i][j][1], x1 , data[i+1][j][1]);
+    	
+      //var line = two.makeLine(x0, data[i][j][1], x1 , data[i+1][j][1]);
+      //line.stroke = colors[j]; // Accepts all valid css color
+      //line.linewidth = 5;
+      
+      var line = two.makePolygon(x0, data[i][j][1], x1 , data[i+1][j][1]);
+      two.bind('click', function(){
+    	  console.log("hello");
+      })
       line.stroke = colors[j]; // Accepts all valid css color
       line.linewidth = 5;
 	}

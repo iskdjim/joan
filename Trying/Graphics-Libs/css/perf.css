@@ -34,6 +34,14 @@ table tr td{
   margin-top:1rem;
 }
 
+.lineData{
+  border:0.1rem solid #000;
+  width:20rem;
+  float:left;
+  margin-left:1rem;
+  margin-top:1rem;
+}
+
 h1{
   text-align:center;
 }
@@ -140,4 +148,8 @@ p + p {
 
 #drawBtn{
   margin-left:1rem;
+}
+
+.marginRight{
+  padding-right:2rem;
 }

@@ -11,51 +11,53 @@
 
   <script src="../libs/zepto.js"></script>
   <script src="../libs/pixi/pixi.js"></script>
-  <script src="../js/app-ts.js"></script>
-  <script src="../js/pixijs-functions.js"></script>
-  <script src="../api/data.min.morechannels.js"></script> 
+
 
   <script>
     $(document).ready( function() {   
-	  dataCount = jsonData.count;
-	  rawData = jsonData.data;
+
 
       $('#drawing').submit(function(){
-      	$('#myChartHolder').empty();
-    	init();
+    	  $('#myChartHolder').empty();
+    	  var renderer = PIXI.autoDetectRenderer(600, 400);
+    	    document.getElementById("myChartHolder").appendChild(renderer.view);
+    	    renderer.backgroundColor = 0xFFFFFF;
 
-    	clearInterval(interval); 
-        random=false;
-        indexValue = 0;
-        dataValues = [];
-    	lastYValue = 0;
-        lastXValue = 0;
+    	    var scene = new PIXI.Container();
+    	    
+    	 // create a new graphics object
+    	    var graphics = new PIXI.Graphics();
+    	    graphics.interactive = true;
+    	    graphics.lineStyle(10, 0x00FF00);
+    	    graphics.click = function (e) {
+    	 	    console.log(this, e);
+    	   }
+
+    	    // draw a triangle using lines
+    	   graphics.drawPolygon([0,0, 100,100, 200,200,0,100]); //a square
+
+   
     	
-    	if($('#randomData').is(':checked')){
-    	  random=true;
-    	}
-    	goDrawInterval();
-	    return false;
+
+    	    // add it the stage so we see it on our screens..
+    	    scene.addChild(graphics);
+    	    
+    	    renderer.render(scene);
+	   
+    	    
+    	    return false;
       });
-      
-      $('#stop').click(function(){
-        function stopDrawInterval(){
-          clearInterval(interval);      
-        }
-      });
-      
-    
     });
 
   </script>
 </head>
 <body>
-  <h1>Draw lines and line mouseover detect with pixi.js</h1>
+  <h1>Draw lines with two.js</h1>
   <form id="drawing">
   <table>
     <tr> 
       <td></td>
-      <td>Random Data: <input type="checkbox" name="randomData" id="randomData"></td>
+      <td></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
  
@@ -64,9 +66,6 @@
   <br />
 <div id="myChartHolder">
 </div>
-  <div class="lineData">
-    Current Line Path:
-  </div>
   <div class="download">
   	<a href='../Perf.zip'>Download source</a>
   </div>  
