@@ -153,3 +153,11 @@ p + p {
 .marginRight{
   padding-right:2rem;
 }
+
+.hidder{
+  display:none;
+}
+
+.marginTop{
+  padding-top:1rem;
+}

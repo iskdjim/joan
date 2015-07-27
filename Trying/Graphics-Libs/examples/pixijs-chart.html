@@ -34,14 +34,18 @@
     	if($('#randomData').is(':checked')){
     	  random=true;
     	}
+    	$('.controls').removeClass('hidder');
     	goDrawInterval();
+
 	    return false;
       });
       
       $('#stop').click(function(){
-        function stopDrawInterval(){
-          clearInterval(interval);      
-        }
+        clearInterval(interval);      
+      });
+      
+      $('#play').click(function(){
+    	goDrawInterval();    
       });
       
     
@@ -54,11 +58,12 @@
   <form id="drawing">
   <table>
     <tr> 
-      <td></td>
       <td>Random Data: <input type="checkbox" name="randomData" id="randomData"></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
- 
+    <tr> 
+      <td class="marginTop"><input type="button" class="hidder controls" id="stop" value="stop" /> <input type="button" class="hidder controls" id="play" value="play" /></td>
+    </tr>    
   </table>
   </form>
   <br />
