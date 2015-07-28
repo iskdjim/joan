@@ -19,11 +19,7 @@
 <script>
 $(function() {
 	var index = 0;
-	var data = [
-	      
-	            { label: 'Channel 2', values: [ {'time':1347927197173, 'value': 40} ] },
-	            { label: 'Channel 3', values: [ {'time':1347927197173, 'value': 30} ] }
-	          ];
+	var data = [{ label: 'Channel 2', values: [ {'time':1347927197173, 'value': 40} ] },{ label: 'Channel 3', values: [ {'time':1347927197173, 'value': 30} ] }];
 	
 	var lineChart = $('#myChartHolder').epoch({
 	    type: 'time.line',
@@ -35,44 +31,31 @@ $(function() {
 	    queueSize: 1,
 	    historySize : 1
 	});
-	
+
     interval = setInterval(function(){
     	var nextDataPoint = getNextPoints(index);
     	index++;
     	console.log(nextDataPoint);
     	lineChart.push(nextDataPoint);
 	}, 300);
-    
-
 });
  function getNextPoints(index) {
     var entry = [];
     for (var i = 1; i < 3; i++) {
         entry.push({ time: jsonData[i]['values'][index]['time'], y: jsonData[i]['values'][index]['y'] });
     }
-
     return entry;
 }
 </script>
- 
+
 </head>
 <body>
   <h1>Draw Realtime Time Series with epoch.js</h1>
-  <form id="drawing">
-  <table>
-    <tr> 
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
- 
-  </table>
-  </form>
   <br />
 <div id="myChartHolder">
 </div>
   <div class="download">
-  	<a href='../Perf.zip'>Download source</a>
-  </div>  
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
 </body>
 </html>

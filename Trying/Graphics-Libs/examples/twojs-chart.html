@@ -16,17 +16,17 @@
   <script src="../libs/two.js"></script>
   <script src="../js/twojs-functions.js"></script>
 
-  <script src="../api/data.min.morechannels.js"></script> 
+  <script src="../api/data.min.morechannels.js"></script>
 
   <script>
-    $(document).ready( function() {    
+    $(document).ready( function(){
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
 
       $('#drawing').submit(function(){
       	techType = $('#techType').val();
     	init();
-    	clearInterval(interval); 
+    	clearInterval(interval);
         random=false;
         indexValue = 0;
         dataValues = [];
@@ -47,13 +47,11 @@
   <h1>Draw lines with two.js</h1>
   <form id="drawing">
   <table>
-    <tr> 
+    <tr>
       <td class="marginRight">Technologie: <select id="techType"><option value="canvas">Canvas2D</option><option value="webgl">WebGL</option><option value="svg">SVG</option></select></td>
       <td class="marginRight">Random Data: <input type="checkbox" name="randomData" id="randomData"></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
-    </tr>
- 
   </table>
   </form>
   <br />
@@ -61,6 +59,6 @@
 </div>
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>
-  </div>  
+  </div>
 </body>
 </html>

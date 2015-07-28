@@ -13,10 +13,10 @@
   <script src="../libs/pixi/pixi.js"></script>
   <script src="../js/app-ts.js"></script>
   <script src="../js/pixijs-functions.js"></script>
-  <script src="../api/data.min.morechannels.js"></script> 
+  <script src="../api/data.min.morechannels.js"></script>
 
   <script>
-    $(document).ready( function() {   
+    $(document).ready( function(){
 	  dataCount = jsonData.count;
 	  rawData = jsonData.data;
 
@@ -24,13 +24,13 @@
       	$('#myChartHolder').empty();
     	init();
 
-    	clearInterval(interval); 
+    	clearInterval(interval);
         random=false;
         indexValue = 0;
         dataValues = [];
     	lastYValue = 0;
         lastXValue = 0;
-    	
+
     	if($('#randomData').is(':checked')){
     	  random=true;
     	}
@@ -39,29 +39,26 @@
 
 	    return false;
       });
-      
-      $('#stop').click(function(){
-        clearInterval(interval);      
-      });
-      
-      $('#play').click(function(){
-    	goDrawInterval();    
-      });
-      
-    
-    });
 
+      $('#stop').click(function(){
+        clearInterval(interval);  
+      });
+
+      $('#play').click(function(){
+    	goDrawInterval();
+      });
+    });
   </script>
 </head>
 <body>
   <h1>Draw lines and line mouseover detect with pixi.js</h1>
   <form id="drawing">
   <table>
-    <tr> 
+    <tr>
       <td>Random Data: <input type="checkbox" name="randomData" id="randomData"></td>
       <td><input type="submit" id="drawBtn" value="draw" /></td>
     </tr>
-    <tr> 
+    <tr>
       <td class="marginTop"><input type="button" class="hidder controls" id="stop" value="stop" /> <input type="button" class="hidder controls" id="play" value="play" /></td>
     </tr>    
   </table>
@@ -73,7 +70,7 @@
     Current Line Path:
   </div>
   <div class="download">
-  	<a href='../Perf.zip'>Download source</a>
+  	<a href='../graphicLibs.zip'>Download source</a>
   </div>  
 </body>
 </html>

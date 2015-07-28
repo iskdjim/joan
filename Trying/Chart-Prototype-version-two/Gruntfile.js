@@ -40,19 +40,20 @@ module.exports = function (grunt) {
 			      archive: 'lineDetection.zip'
 			    },
 			    files: [
-			      {src: ['index.html'], dest: '/'},  
-			      {src: ['package.json'], dest: '/'}, 
-			      {src: ['Gruntfile.js'], dest: '/'}, 
-			      {src: ['svg/**'], dest: '/'}, 
-			      {src: ['canvas2d/**'], dest: '/'}, 
-			      {src: ['webgl/**'], dest: '/'}, 
-			      {src: ['api/data.json'], dest: '/'}, 
-			      {src: ['api/data.min.js'], dest: '/'}, 
-			      {src: ['api/data_clean.json'], dest: '/'}, 
-			      {src: ['api/data_clean.min.js'], dest: '/'}, 		
-			      {src: ['css/**'], dest: '/'}, 
-			      {src: ['libs/**'], dest: '/'}, 
-			      {src: ['js/**'], dest: '/'}, 
+				  {src: ['ReadMe.txt'], dest: 'lineDetection/'},
+			      {src: ['index.html'], dest: 'lineDetection/'},  
+			      {src: ['package.json'], dest: 'lineDetection/'}, 
+			      {src: ['Gruntfile.js'], dest: 'lineDetection/'}, 
+			      {src: ['svg/**'], dest: 'lineDetection/'}, 
+			      {src: ['canvas2d/**'], dest: 'lineDetection/'}, 
+			      {src: ['webgl/**'], dest: 'lineDetection/'}, 
+			      {src: ['api/data.json'], dest: 'lineDetection/'}, 
+			      {src: ['api/data.min.js'], dest: 'lineDetection/'}, 
+			      {src: ['api/data_clean.json'], dest: 'lineDetection/'}, 
+			      {src: ['api/data_clean.min.js'], dest: 'lineDetection/'}, 		
+			      {src: ['css/**'], dest: 'lineDetection/'}, 
+			      {src: ['libs/**'], dest: 'lineDetection/'}, 
+			      {src: ['js/**'], dest: 'lineDetection/'}, 
 			    ]
 			  }
         }

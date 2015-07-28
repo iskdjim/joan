@@ -40,14 +40,14 @@ module.exports = function (grunt) {
 			      archive: 'graphicLibs.zip'
 			    },
 			    files: [
-			      {src: ['index.html'], dest: '/'},  
-			      {src: ['package.json'], dest: '/'}, 
-			      {src: ['Gruntfile.js'], dest: '/'}, 
-			      {src: ['api/data.json'], dest: '/'}, 
-			      {src: ['api/data.min.morechannels'], dest: '/'}, 			      
-			      {src: ['css/**'], dest: '/'}, 
-			      {src: ['libs/**'], dest: '/'}, 
-			      {src: ['js/**'], dest: '/'}, 
+			      {src: ['index.html'], dest: 'graphicLibs/'},  
+			      {src: ['package.json'], dest: 'graphicLibs/'}, 
+			      {src: ['Gruntfile.js'], dest: 'graphicLibs/'}, 
+			      {src: ['api/**'], dest: 'graphicLibs/'}, 	      
+			      {src: ['examples/**'], dest: 'graphicLibs/'}, 	
+			      {src: ['css/**'], dest: 'graphicLibs/'}, 
+			      {src: ['libs/**'], dest: 'graphicLibs/'}, 
+			      {src: ['js/**'], dest: 'graphicLibs/'}, 
 			    ]
 			  }
         }

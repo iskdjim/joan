@@ -28,6 +28,7 @@ function drawChart(type) {
     activeLines = [];
     linesDataDraw = [];
     linesData = [];
+    tolerance = linesWidth / 2;
     if (techType == "canvas2d") {
         contextData = initCanvasContext('myCanvas');
         generateLines();
