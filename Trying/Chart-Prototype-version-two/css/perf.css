@@ -37,11 +37,11 @@ table#resultTable{
 }
 
 table#resultTable, tr.tableBorder, tr.tableBorder td{
-  border:1px solid #000;
+  border:0.0625rem solid #000;
 }
 
 tr.tableBorder td td{
-  border:0px solid #000;
+  border:0 solid #000;
 }
 
 table .header{
@@ -82,7 +82,7 @@ p + p {
 }
 
 .legend p{
-  margin:0px;
+  margin:0;
   font-size:0.6rem;
 }
 
@@ -102,7 +102,7 @@ p + p {
 
 #chartWrapper,.svgHolder{
   float:left;
-  border:1px solid #000;
+  border:0.0625rem solid #000;
   width:37.6rem;
   height:25.1rem;
   position:relative;
@@ -113,7 +113,7 @@ p + p {
 }
 
 .selectBox{
-  border:1px solid red;
+  border:0.0625rem solid red;
   position:absolute;
 }
 
