@@ -58,7 +58,7 @@
                 
       }).mouseup(function(e){
 	    clickstop = e.timeStamp - clickstart
-	    if(clickstop >= 200){
+	    if(clickstop >= 300){
 	      removeBox(e,"mousedown");
 	    }else{
 	      $('.selectBox').hide();

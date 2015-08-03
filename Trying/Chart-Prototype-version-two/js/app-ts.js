@@ -28,7 +28,9 @@ function drawChart(type) {
     activeLines = [];
     linesDataDraw = [];
     linesData = [];
-    tolerance = linesWidth / 2;
+    console.log("linesWidth");
+    console.log(linesWidth);
+    tolerance = linesWidth;
     if (techType == "canvas2d") {
         contextData = initCanvasContext('myCanvas');
         generateLines();
@@ -56,8 +58,8 @@ function drawChart(type) {
 function handleMousemove(e, action) {
     e.preventDefault();
     e.stopPropagation();
-    mouseX = e.clientX - offsetX;
-    mouseY = e.clientY - offsetY;
+    mouseX = (e.clientX + document.body.scrollLeft) - offsetX;
+    mouseY = (e.clientY + document.body.scrollTop) - offsetY;
     // reset boundig box
     if (action == 'click') {
         $('#selectBox').css({ 'left': '0px', 'top': '0px', 'height': '0px', 'width': '0px' });
@@ -261,10 +263,10 @@ function checkPointsForAngle(lineData) {
 function createBox(e) {
     $('#chartWrapper').append("<div id='selectBox' class='selectBox'></div>");
     // get start positions of mouse in canvas
-    selectBoxX = e.clientX - offsetX;
-    selectBoxY = e.clientY - offsetY;
-    var selectBoxXCalc = e.clientX - offsetX;
-    var selectBoxYCalc = e.clientY - offsetY;
+    selectBoxX = (e.clientX + document.body.scrollLeft) - offsetX;
+    selectBoxY = (e.clientY + document.body.scrollTop) - offsetY;
+    var selectBoxXCalc = (e.clientX + document.body.scrollLeft) - offsetX;
+    var selectBoxYCalc = (e.clientY + document.body.scrollTop) - offsetY;
     $('#selectBox').css({ 'left': selectBoxXCalc, 'top': selectBoxYCalc, 'height': '0px', 'width': '0px' });
     $("#chartWrapper").mousemove(function (event) {
         // mousemove position
@@ -275,8 +277,8 @@ function createBox(e) {
             selectBoxWidth = xPositionMouseMove - selectBoxXCalc;
             selectBoxHeight = yPositionMouseMove - selectBoxYCalc;
             $('#selectBox').css({ 'left': selectBoxXCalc, 'top': selectBoxYCalc, 'height': selectBoxHeight, 'width': selectBoxWidth });
-            selectBoxX = e.clientX - offsetX;
-            selectBoxY = e.clientY - offsetY;
+            selectBoxX = (e.clientX + document.body.scrollLeft) - offsetX;
+            selectBoxY = (e.clientY + document.body.scrollTop) - offsetY;
         }
         else if (xPositionMouseMove < selectBoxXCalc && yPositionMouseMove > selectBoxYCalc) {
             selectBoxWidth = selectBoxXCalc - xPositionMouseMove;
@@ -339,7 +341,13 @@ function generateLines() {
         var x1 = Math.floor((Math.random() * canvasWidth) + 1);
         var y1 = Math.floor((Math.random() * canvasHeight) + 1);
         var x2 = Math.floor(Math.random() * (canvasWidth - x1 + 1) + x1);
+        if (x1 == x2) {
+            var x2 = Math.floor(Math.random() * (canvasWidth - x1 + 1) + x1);
+        }
         var y2 = Math.floor((Math.random() * canvasHeight) + 1);
+        if (y1 == y2) {
+            var y2 = Math.floor((Math.random() * canvasHeight) + 1);
+        }
         // web gl triangle points
         if (triangles && techType == "webgl") {
             var pTriangles = new Array();
@@ -348,27 +356,55 @@ function generateLines() {
                 lastPointY = y1;
             }
             var lineWidth = linesWidth;
+            console.log(lineWidth);
             var angleforLineWidth = Math.atan2((y2 - y1), (x2 - x1)) * (180 / Math.PI);
+            console.log("angleforLineWidth");
             console.log(angleforLineWidth);
             var xWidthValue = lineWidth;
             var yWidthValue = lineWidth;
             // minus angle => y2 > y1
             // generate x,y position for vertikal lines
             if (angleforLineWidth < 0) {
-                xWidthValue = (5 / 90) * (Math.abs(angleforLineWidth));
+                xWidthValue = (lineWidth / 90) * (Math.abs(angleforLineWidth)); // Math.abs for positiv values
                 yWidthValue = lineWidth;
             }
             else {
-                xWidthValue = (5 / 90) * (Math.abs(angleforLineWidth));
+                xWidthValue = (lineWidth / 90) * (Math.abs(angleforLineWidth)); // Math.abs for positiv values
                 yWidthValue = lineWidth * -1;
             }
+            console.log("xWidthValue");
+            console.log(xWidthValue);
+            console.log("yWidthValue");
+            console.log(yWidthValue);
             var angleValue = 1;
-            pTriangles[0] = new Array(x1 + xWidthValue, y1 + yWidthValue);
-            pTriangles[1] = new Array(x2 + xWidthValue, y2 + yWidthValue);
-            pTriangles[2] = new Array(x2, y2);
-            pTriangles[3] = new Array(x1 + xWidthValue, y1 + yWidthValue);
-            pTriangles[4] = new Array(x2, y2);
-            pTriangles[5] = new Array(x1, y1);
+            var linePointsCorrectionY = 1;
+            var linePointsCorrectionX = 0;
+            if (xWidthValue > 10) {
+                linePointsCorrectionY = (0.044444 * xWidthValue);
+                linePointsCorrectionX = linePointsCorrectionY * 2;
+            }
+            angleforLineWidth = Math.abs(angleforLineWidth);
+            if (xWidthValue > 10) {
+                if (angleforLineWidth > 20 && angleforLineWidth < 45) {
+                    linePointsCorrectionY = ((2.3 / angleforLineWidth) * xWidthValue);
+                }
+                else if (angleforLineWidth >= 45 && angleforLineWidth < 60) {
+                    linePointsCorrectionY = ((3 / angleforLineWidth) * xWidthValue);
+                }
+                else if (angleforLineWidth >= 60 && angleforLineWidth < 75) {
+                    linePointsCorrectionY = ((6.6 / angleforLineWidth) * xWidthValue);
+                }
+                else if (angleforLineWidth >= 75 && angleforLineWidth < 90) {
+                    linePointsCorrectionY = ((9 / angleforLineWidth) * xWidthValue);
+                }
+            }
+            // set points an use linewidth for correct hit area
+            pTriangles[0] = new Array((x1 - (lineWidth / 2)) + xWidthValue + linePointsCorrectionX, y1 + (lineWidth / 2) + (yWidthValue / linePointsCorrectionY));
+            pTriangles[1] = new Array(x2 - (lineWidth / 2) + xWidthValue + linePointsCorrectionX, y2 + (lineWidth / 2) + (yWidthValue / linePointsCorrectionY));
+            pTriangles[2] = new Array(x2 - (lineWidth / 2), y2 + (lineWidth / 2));
+            pTriangles[3] = new Array(x1 - (lineWidth / 2) + xWidthValue + linePointsCorrectionX, y1 + (lineWidth / 2) + (yWidthValue / linePointsCorrectionY));
+            pTriangles[4] = new Array(x2 - (lineWidth / 2), y2 + (lineWidth / 2));
+            pTriangles[5] = new Array(x1 - (lineWidth / 2), y1 + (lineWidth / 2));
             for (var j = 0; j < pTriangles.length; j++) {
                 linesDataDraw.push(new Array(new Array(pTriangles[j][0], pTriangles[j][1])));
             }
