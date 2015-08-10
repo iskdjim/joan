@@ -30,7 +30,9 @@ function drawChart(type) {
     linesData = [];
     console.log("linesWidth");
     console.log(linesWidth);
-    tolerance = linesWidth;
+    tolerance = linesWidth / 2;
+    if (linesWidth < 8)
+        tolerance = linesWidth;
     if (techType == "canvas2d") {
         contextData = initCanvasContext('myCanvas');
         generateLines();
@@ -141,7 +143,7 @@ function handleMousemove(e, action) {
                 }
                 else {
                     for (var j = (6 * i); j < (6 * i + 6); j++) {
-                        webGLPoints[(j * 7) + 3] = 0; // r
+                        webGLPoints[(j * 7) + 3] = 0; // b
                     }
                 }
             });
@@ -358,8 +360,6 @@ function generateLines() {
             var lineWidth = linesWidth;
             console.log(lineWidth);
             var angleforLineWidth = Math.atan2((y2 - y1), (x2 - x1)) * (180 / Math.PI);
-            console.log("angleforLineWidth");
-            console.log(angleforLineWidth);
             var xWidthValue = lineWidth;
             var yWidthValue = lineWidth;
             // minus angle => y2 > y1
@@ -372,19 +372,17 @@ function generateLines() {
                 xWidthValue = (lineWidth / 90) * (Math.abs(angleforLineWidth)); // Math.abs for positiv values
                 yWidthValue = lineWidth * -1;
             }
-            console.log("xWidthValue");
-            console.log(xWidthValue);
-            console.log("yWidthValue");
-            console.log(yWidthValue);
             var angleValue = 1;
             var linePointsCorrectionY = 1;
             var linePointsCorrectionX = 0;
             if (xWidthValue > 10) {
-                linePointsCorrectionY = (0.044444 * xWidthValue);
-                linePointsCorrectionX = linePointsCorrectionY * 2;
             }
             angleforLineWidth = Math.abs(angleforLineWidth);
-            if (xWidthValue > 10) {
+            console.log("angleforLineWidth");
+            console.log(angleforLineWidth);
+            console.log(xWidthValue);
+            if (xWidthValue >= 10) {
+                console.log("------------------------------");
                 if (angleforLineWidth > 20 && angleforLineWidth < 45) {
                     linePointsCorrectionY = ((2.3 / angleforLineWidth) * xWidthValue);
                 }
@@ -396,6 +394,8 @@ function generateLines() {
                 }
                 else if (angleforLineWidth >= 75 && angleforLineWidth < 90) {
                     linePointsCorrectionY = ((9 / angleforLineWidth) * xWidthValue);
+                    console.log("muhuhu");
+                    console.log(linePointsCorrectionY);
                 }
             }
             // set points an use linewidth for correct hit area
