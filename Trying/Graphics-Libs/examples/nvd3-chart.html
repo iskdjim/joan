@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/epoch.min.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.js'></script>
+  <script src='http://nvd3.org/assets/js/data/stream_layers.js'></script>  
+  
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css' rel='stylesheet'>
+  <script src="../api/data.min.js"></script> 
+
+<script>
+  var data = [];
+  var chart;
+  var index = 0;
+  var testdata;
+  var updatestate = true;
+  $(function() {
+	  $(document).ready(function () { 
+		   testdata = [
+							 {'series': 0,
+							 'x': 0,
+							 'y': 144}
+							
+			  	]
+					
+		   testdata2 = [
+						 {'series': 0,
+						 'x': 0,
+						 'y': 40}
+						
+		  	]
+				
+	  nv.addGraph(function() {
+		  chart = nv.models.lineWithFocusChart();
+
+		  chart.xAxis
+		      .tickFormat(d3.format(',f'));
+
+		  chart.yAxis
+		      .tickFormat(d3.format(',.2f'));
+
+		  chart.y2Axis
+		      .tickFormat(d3.format(',.2f'));
+		
+		  d3.select('#myChartHolder svg')
+		      .datum(data)
+		      .transition().duration(500)
+		      .call(chart);
+
+		  nv.utils.windowResize(chart.update);
+
+		  return chart;
+		});
+		/**************************************
+		 * Simple test data generator
+		 */
+
+	  interval = setInterval(function(){
+		  index++;
+
+		  
+		  testdata.push( {'series': 0,
+				 'x': index,
+				 'y': jsonData[0]['values'][index]['y']});
+		  
+		  testdata2.push( {'series': 0,
+				 'x': index,
+				 'y': jsonData[1]['values'][index]['y']});
+		  
+		  if(index > 10){
+			  testdata.shift();
+			  testdata2.shift();
+		  }
+		  
+		  data = [{ 
+		      key: 'Stream 1',
+		      values: testdata
+		    }];
+		  
+		  
+		 
+		  if(updatestate){
+		 	 d3.select('#myChartHolder svg')
+	     	 .datum(data)
+	      	  .transition().duration(500)
+	     	 .call(chart);
+		  }
+			
+		}, 1000);
+		
+
+	    });
+	
+	  
+	  $('#stop').click(function(){
+		  updatestate = false;
+	      });
+
+	      $('#play').click(function(){
+	    	  updatestate = true;
+	      });
+  });
+
+</script>
+
+</head>
+<body>
+  <h1>Draw Realtime Time Series with nvd3.js</h1>
+  <p><input type="button"  id="stop" value="stop" /> <input type="button"  id="play" value="play" /></p>
+  <br />
+<div id="myChartHolder">
+	<svg></svg>
+</div>
+  <div class="download">
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
+</body>
+</html>
