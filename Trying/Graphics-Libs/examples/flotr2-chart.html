@@ -18,29 +18,24 @@
 <script>
 var render = true;
 var index = 0;
+var graph;
 var hidder= [false,false];
+
 $(document).ready(function () {
-	(function download_image(container) {
+  (function drawChart(container) {
+    var 
+      d1 = [],
+      d2 = [],
+      d3 = [],
+      show = [true, true], // Display array
+      start = new Date("2012/01/01 01:00").getTime(),
+      options,
+      i, x, o;
 
-		  var
-		    d1    = [],
-		    d2    = [],
-		    d3    = [],
-		    show = [true, true], // Display array
-		    start = new Date("2012/01/01 01:00").getTime(),
-		    options,
-		    graph,
-		    i, x, o;
-
-	        
-	  options = {
-	    xaxis : {
-	      mode : 'time', 
-	      labelsAngle : 45
-	    },
-	    yaxis : {
-	      min : '30',
-	      max : '160'
+      options = {
+        xaxis : {
+          mode : 'time',
+          labelsAngle : 45
 	    },
 	    selection : {
 	      mode : 'x'
@@ -48,77 +43,79 @@ $(document).ready(function () {
 	    HtmlText : false,
 	    title : 'Time'
 	  };
-	        
+
 	  // Draw graph with default options, overwriting with passed options
 	  function drawGraph (opts) {
-
-	    // Clone the options, so the 'options' variable always keeps intact.
-	    o = Flotr._.extend(Flotr._.clone(options), opts || {});
+        // Clone the options, so the 'options' variable always keeps intact.
+        o = Flotr._.extend(Flotr._.clone(options), opts || {});
 
 	    // Return a new graph.
-	    return Flotr.draw(
-	      container,
+        return Flotr.draw(
+          container,
 	      data = [
-	              {
-	                data : d1,
-	                hide : hidder[0],
-	                lines : { show : true }, points : { show : true }
-	              }, {
-	                data : d2,
-	                hide : hidder[1],
-	                lines : { show : true }, points : { show : true }
-	              }, {
-		             data : d3,
-		             hide : hidder[2],
-		             lines : { show : true }, points : { show : true }
-		          }
-	            ],
+            {
+              data : d1,
+              hide : hidder[0],
+              lines : { show : true }, points : { show : true }
+            },
+            {
+              data : d2,
+              hide : hidder[1],
+              lines : { show : true }, points : { show : true }
+            },
+            {
+              data : d3,
+              hide : hidder[2],
+              lines : { show : true }, points : { show : true }
+            }],
 	      o
 	    );
 	  }
 
 	  interval = setInterval(function(){
-		//d1    = [];
-		
-		 if(render){
-			 index++;
-		     var x = jsonData[0]['values'][index]['time'];
-     		 var y1 = jsonData[0]['values'][index]['y'];
-     		 var y2 = jsonData[1]['values'][index]['y'];
-     		 var y3 = jsonData[2]['values'][index]['y'];
+	    if(render){
+		  index++;
+          var x = jsonData[0]['values'][index]['time'];
+          var y1 = jsonData[0]['values'][index]['y'];
+          var y2 = jsonData[1]['values'][index]['y'];
+          var y3 = jsonData[2]['values'][index]['y'];
 
-		    d1.push([x, y1]);
-		    d2.push([x, y2]);
-		    d3.push([x, y3]);
-		  
+          d1.push([x, y1]);
+          d2.push([x, y2]);
+          d3.push([x, y3]);
 
-		    graph = drawGraph();      
-		
-	  	  }
-		  
+          graph = drawGraph();      
+        }  
       }, 800);
 
-	
-    $('#stop').click(function(){
-    	render = false;  
+      $('#stop').click(function(){
+        render = false;
       });
 
       $('#play').click(function(){
-    	render = true;
+        render = true;
       });
-      
-     $('.legende input').change(function(){
-    	 var hiddenId = $(this).attr('id').replace("tank_","");
-    	 if( $(this).attr('checked')){
-    		console.log(hiddenId);
-    		 hidder[hiddenId] = false;
-    	 }else{
-    		 hidder[hiddenId] = true;
-    	 }
 
-		    graph = drawGraph();      
-     });
-  
+      $('.legende input').change(function(){
+        var hiddenId = $(this).attr('id').replace("tank_","");
+        if( $(this).attr('checked')){
+          hidder[hiddenId] = false;
+        }else{
+          hidder[hiddenId] = true;
+        }
+        graph = drawGraph();
+      });
+
+      Flotr.EventAdapter.observe(container, 'flotr:select', function(area){
+        // Draw selected area
+        graph = drawGraph({
+          xaxis : { min : area.x1, max : area.x2, mode : 'time', labelsAngle : 45 },
+          yaxis : { min : area.y1, max : area.y2 }
+        });
+      });
+
+      // When graph is clicked, draw the graph with default area.
+      Flotr.EventAdapter.observe(container, 'flotr:click', function () { graph = drawGraph(); });
 	})(document.getElementById("myChartHolder"));
 });
 
@@ -128,7 +125,6 @@ $(document).ready(function () {
 <body>
   <h1>Draw Realtime Time Series with dygraph.js</h1>
   <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />
-  
   <br />
 <div id="myChartHolder">
 </div>
@@ -136,10 +132,10 @@ $(document).ready(function () {
   	<a href='../graphicLibs.zip'>Download source</a>
   </div>
   <div class="legende">
-  	 <p>Time Series</p>
-  	 <input type="checkbox" name="tank_0" value="" id="tank_0" checked> Tank 1 <br />
-  	 <input type="checkbox" name="tank_1" value="" id="tank_1" checked> Tank 2 <br />
-  	 <input type="checkbox" name="tank_2" value="" id="tank_2" checked> Tank 3
+    <p>Time Series</p>
+    <input type="checkbox" name="tank_0" value="" id="tank_0" checked> Tank 1 <br />
+    <input type="checkbox" name="tank_1" value="" id="tank_1" checked> Tank 2 <br />
+    <input type="checkbox" name="tank_2" value="" id="tank_2" checked> Tank 3
   </div>
 </body>
 </html>
