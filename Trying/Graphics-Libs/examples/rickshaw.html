@@ -37,25 +37,11 @@ $(document).ready(function () {
           mode : 'time',
           labelsAngle : 45
 	    },
-	    yaxis : {
-	    	min : '20',
-	    	max : '160'
-	    },
 	    selection : {
 	      mode : 'x'
 	    },
 	    HtmlText : false,
-		    title : 'Time',
-		    mouse:{
-				track: true,
-				lineColor: 'purple',
-				relative: true,
-				position: 'ne',
-				sensibility: 2, // => The smaller this value, the more precise you've to point
-				trackDecimals: 1,
-				trackFormatter: function(obj){ return 'x = ' + obj.x +', y = ' + obj.y; }
-			}
-
+	    title : 'Time'
 	  };
 
 	  // Draw graph with default options, overwriting with passed options
@@ -124,7 +110,7 @@ $(document).ready(function () {
         // Draw selected area
         graph = drawGraph({
           xaxis : { min : area.x1, max : area.x2, mode : 'time', labelsAngle : 45 },
-          yaxis : { min : area.y1, max : 160 }
+          yaxis : { min : area.y1, max : area.y2 }
         });
       });
 
@@ -137,7 +123,7 @@ $(document).ready(function () {
 
 </head>
 <body>
-  <h1>Draw Realtime Time Series with flotr2.js</h1>
+  <h1>Draw Realtime Time Series with rickshaw.js</h1>
   <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />
   <br />
 <div id="myChartHolder">
