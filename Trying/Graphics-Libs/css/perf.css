@@ -34,6 +34,14 @@ table tr td{
   margin-top:1rem;
 }
 
+.legende{
+  border:0.1rem solid #000;
+  width:20rem;
+  float:left;
+  margin-left:1rem;
+  margin-top:1rem;
+}
+
 .lineData{
   border:0.1rem solid #000;
   width:20rem;
@@ -162,3 +170,8 @@ p + p {
   padding-top:1rem;
 }
 
+#flotr2chart{
+	    margin: 0 26px 24px 26px;
+    width: auto;
+    height: auto;
+}
