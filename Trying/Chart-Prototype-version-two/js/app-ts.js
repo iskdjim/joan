@@ -38,6 +38,11 @@ function drawChart(type) {
         generateLines();
         drawCanvasLines(linesData, 0, 0);
     }
+    else if (techType == "webGL") {
+        contextData = initCanvasContext('myCanvas');
+        generateLines();
+        drawCanvasLines(linesData, 0, 0);
+    }
     else if (techType == "svg") {
         generateLines();
         drawSvgLines(linesData, $(".svgHolder"));
@@ -126,7 +131,7 @@ function handleMousemove(e, action) {
                 }
             }
         }
-        if (techType == "canvas2d") {
+        if (techType == "canvas2d" || techType == "webGL") {
             drawCanvasLines(linesData, linepoint.x, linepoint.y);
         }
         else if (techType == "svg") {
@@ -208,7 +213,7 @@ function handleBoxSelect(e) {
             }
         }
     }
-    if (techType == "canvas2d") {
+    if (techType == "canvas2d" || techType == "webGL") {
         drawCanvasLines(linesData, 1, 1);
     }
     else if (techType == "svg") {
@@ -350,6 +355,9 @@ function generateLines() {
         if (y1 == y2) {
             var y2 = Math.floor((Math.random() * canvasHeight) + 1);
         }
+        console.log("-------------------");
+        console.log("x1:" + x1 + " y1:" + y1 + " x2:" + x2 + " y2:" + y2);
+        console.log("-------------------");
         // web gl triangle points
         if (triangles && techType == "webgl") {
             var pTriangles = new Array();
@@ -381,23 +389,21 @@ function generateLines() {
             console.log("angleforLineWidth");
             console.log(angleforLineWidth);
             console.log(xWidthValue);
-            if (xWidthValue >= 10) {
-                console.log("------------------------------");
-                if (angleforLineWidth > 20 && angleforLineWidth < 45) {
-                    linePointsCorrectionY = ((2.3 / angleforLineWidth) * xWidthValue);
-                }
-                else if (angleforLineWidth >= 45 && angleforLineWidth < 60) {
-                    linePointsCorrectionY = ((3 / angleforLineWidth) * xWidthValue);
-                }
-                else if (angleforLineWidth >= 60 && angleforLineWidth < 75) {
-                    linePointsCorrectionY = ((6.6 / angleforLineWidth) * xWidthValue);
-                }
-                else if (angleforLineWidth >= 75 && angleforLineWidth < 90) {
-                    linePointsCorrectionY = ((9 / angleforLineWidth) * xWidthValue);
-                    console.log("muhuhu");
-                    console.log(linePointsCorrectionY);
-                }
-            }
+            /*if(xWidthValue >= 10 ){
+             console.log("------------------------------");
+                 if(angleforLineWidth > 20 && angleforLineWidth < 45){
+                linePointsCorrectionY = ((2.3/angleforLineWidth)*xWidthValue)
+              }else if(angleforLineWidth >= 45 && angleforLineWidth < 60){
+                linePointsCorrectionY = ((3/angleforLineWidth)*xWidthValue)
+              }else if(angleforLineWidth >= 60 && angleforLineWidth < 75){
+                linePointsCorrectionY = ((8.6/angleforLineWidth)*xWidthValue);
+                console.log("test");
+              }else if(angleforLineWidth >= 75 && angleforLineWidth < 90){
+                linePointsCorrectionY = ((9/angleforLineWidth)*xWidthValue);
+                console.log("muhuhu");
+                console.log(linePointsCorrectionY);
+              }
+            }*/
             // set points an use linewidth for correct hit area
             pTriangles[0] = new Array((x1 - (lineWidth / 2)) + xWidthValue + linePointsCorrectionX, y1 + (lineWidth / 2) + (yWidthValue / linePointsCorrectionY));
             pTriangles[1] = new Array(x2 - (lineWidth / 2) + xWidthValue + linePointsCorrectionX, y2 + (lineWidth / 2) + (yWidthValue / linePointsCorrectionY));

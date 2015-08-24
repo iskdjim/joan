@@ -31,6 +31,12 @@ $(document).ready(function () {
       start = new Date("2012/01/01 01:00").getTime(),
       options,
       i, x, o;
+    
+
+   // for (i = 0; i < 100; i++) {
+   //   x = start+(i*1000*3600*24*36.5);
+   //    d1.push([x, i+Math.random()*30+Math.sin(i/20+Math.random()*2)*20+Math.sin(i/10+Math.random())*10]);
+   //  }
 
       options = {
         xaxis : {
@@ -110,6 +116,34 @@ $(document).ready(function () {
         render = true;
       });
 
+      function downloadCanvas(link, canvasId, filename) {
+    	  var canElement = document.getElementsByClassName("flotr-canvas");
+    	    link.href =  canElement[0].toDataURL();
+    	    link.download = filename;
+    	}
+
+    	/** 
+    	 * The event handler for the link's onclick event. We give THIS as a
+    	 * parameter (=the link element), ID of the canvas and a filename.
+    	*/
+    	document.getElementById('download').addEventListener('click', function() {
+    		
+    	    downloadCanvas(this, 'canvas', 'test.png');
+    	}, false);
+      
+      $('#myChartHolder').mousedown(function(){
+    	  $('#stop').trigger("click");
+      })
+      
+            
+      $('#myChartHolder').mouseover(function(){
+    	 console.log(graph);
+      })
+      
+      /// Flotr.EventAdapter.observe(document, 'mouseout', function(){
+    	//   $('#play').trigger("click");
+      // });
+
       $('.legende input').change(function(){
         var hiddenId = $(this).attr('id').replace("tank_","");
         if( $(this).attr('checked')){
@@ -128,8 +162,17 @@ $(document).ready(function () {
         });
       });
 
-      // When graph is clicked, draw the graph with default area.
-      Flotr.EventAdapter.observe(container, 'flotr:click', function () { graph = drawGraph(); });
+      // reset zoom on double click
+      container.addEventListener("dblclick", function (e) { 
+    	  graph = drawGraph();
+    	  $('#play').trigger("click");   
+    	  if (window.getSelection)
+         	 window.getSelection().removeAllRanges();
+     		 else if (document.selection)
+          document.selection.empty(); 
+    	 });
+
+    // Flotr.EventAdapter.observe(container, 'flotr:click', function () { graph = drawGraph(); });
 	})(document.getElementById("myChartHolder"));
 });
 
@@ -143,7 +186,8 @@ $(document).ready(function () {
 <div id="myChartHolder">
 </div>
   <div class="download">
-  	<a href='../graphicLibs.zip'>Download source</a>
+  	<a href='../graphicLibs.zip'>Download source</a> <br />
+  	<a id="download">Download Image</a>
   </div>
   <div class="legende">
     <p>Time Series</p>

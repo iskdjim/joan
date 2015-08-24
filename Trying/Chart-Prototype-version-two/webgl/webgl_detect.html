@@ -43,11 +43,10 @@
       canvasWidth = 600;
       canvasHeight = 400;	
       $('form').submit(function(e){
-        linesCount = $("#linesCount").val();
-    	webglStuff('webGLCanvas');
-        linesWidth = parseInt($("#linesWidth").val()*16);
-    	e.preventDefault();   	
-    	drawChart("webgl");
+          linesCount = $("#linesCount").val();
+          linesWidth = parseInt($("#linesWidth").val()*16);
+          e.preventDefault();   	
+          drawChart("webGL",linesCount,linesWidth);
       });
       var clickstart;
       var clickstop;
@@ -96,7 +95,7 @@
   </form>
   <br />
   <div id="chartWrapper">
-    <canvas id="webGLCanvas" width="600" height="400">
+    <canvas id="myCanvas" width="600" height="400">
       Your browser does not support the HTML5 canvas tag.
     </canvas>
   </div>  
