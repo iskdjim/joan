@@ -26,6 +26,13 @@ table tr td{
   float:left;
 }
 
+
+#download{
+  cursor:pointer;
+  color:blue;
+  text-decoration:underline;
+}
+
 .download{
   border:0.1rem solid #000;
   width:20rem;

@@ -31,12 +31,6 @@ $(document).ready(function () {
       start = new Date("2012/01/01 01:00").getTime(),
       options,
       i, x, o;
-    
-
-   // for (i = 0; i < 100; i++) {
-   //   x = start+(i*1000*3600*24*36.5);
-   //    d1.push([x, i+Math.random()*30+Math.sin(i/20+Math.random()*2)*20+Math.sin(i/10+Math.random())*10]);
-   //  }
 
       options = {
         xaxis : {
@@ -51,17 +45,16 @@ $(document).ready(function () {
 	      mode : 'x'
 	    },
 	    HtmlText : false,
-		    title : 'Time',
-		    mouse:{
-				track: true,
-				lineColor: 'purple',
-				relative: true,
-				position: 'ne',
-				sensibility: 2, // => The smaller this value, the more precise you've to point
-				trackDecimals: 1,
-				trackFormatter: function(obj){ return 'x = ' + obj.x +', y = ' + obj.y; }
-			}
-
+		  title : 'Time',
+		  mouse:{
+		    track: true,
+		    lineColor: 'purple',
+		    relative: true,
+		    position: 'ne',
+		    sensibility: 2, // => The smaller this value, the more precise you've to point
+	        trackDecimals: 1,
+		    trackFormatter: function(obj){ return 'x = ' + obj.x +', y = ' + obj.y; }
+		  }
 	  };
 
 	  // Draw graph with default options, overwriting with passed options
@@ -76,17 +69,17 @@ $(document).ready(function () {
             {
               data : d1,
               hide : hidder[0],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true }, points : { show : false }
             },
             {
               data : d2,
               hide : hidder[1],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true }, points : { show : false }
             },
             {
               data : d3,
               hide : hidder[2],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true }, points : { show : false }
             }],
 	      o
 	    );
@@ -95,6 +88,7 @@ $(document).ready(function () {
 	  interval = setInterval(function(){
 	    if(render){
 		  index++;
+		  console.log(index);
           var x = jsonData[0]['values'][index]['time'];
           var y1 = jsonData[0]['values'][index]['y'];
           var y2 = jsonData[1]['values'][index]['y'];
@@ -104,9 +98,9 @@ $(document).ready(function () {
           d2.push([x, y2]);
           d3.push([x, y3]);
 
-          graph = drawGraph();      
-        }  
-      }, 800);
+          graph = drawGraph();
+        }
+      }, 200);
 
       $('#stop').click(function(){
         render = false;
@@ -117,29 +111,23 @@ $(document).ready(function () {
       });
 
       function downloadCanvas(link, canvasId, filename) {
-    	  var canElement = document.getElementsByClassName("flotr-canvas");
-    	    link.href =  canElement[0].toDataURL();
-    	    link.download = filename;
-    	}
+        var canElement = document.getElementsByClassName("flotr-canvas");
+        link.href =  canElement[0].toDataURL();
+        link.download = filename;
+      }
 
-    	/** 
-    	 * The event handler for the link's onclick event. We give THIS as a
-    	 * parameter (=the link element), ID of the canvas and a filename.
-    	*/
-    	document.getElementById('download').addEventListener('click', function() {
-    		
-    	    downloadCanvas(this, 'canvas', 'test.png');
-    	}, false);
-      
+      document.getElementById('download').addEventListener('click', function() {
+        downloadCanvas(this, 'canvas', 'test.png');
+      }, false);
+
       $('#myChartHolder').mousedown(function(){
     	  $('#stop').trigger("click");
       })
-      
-            
+
       $('#myChartHolder').mouseover(function(){
     	 console.log(graph);
       })
-      
+
       /// Flotr.EventAdapter.observe(document, 'mouseout', function(){
     	//   $('#play').trigger("click");
       // });
