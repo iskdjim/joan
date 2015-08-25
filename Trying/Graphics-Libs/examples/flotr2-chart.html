@@ -9,10 +9,8 @@
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/perf.css"/>
 
-
   <script src="../libs/zepto.js"></script>
   <script src="../libs/flotr2.js"></script>
-
   <script src="../api/data.min.js"></script> 
 
 <script>
@@ -69,17 +67,17 @@ $(document).ready(function () {
             {
               data : d1,
               hide : hidder[0],
-              lines : { show : true }, points : { show : false }
+              lines : { show : true }, points : { show : true }
             },
             {
               data : d2,
               hide : hidder[1],
-              lines : { show : true }, points : { show : false }
+              lines : { show : true }, points : { show : true }
             },
             {
               data : d3,
               hide : hidder[2],
-              lines : { show : true }, points : { show : false }
+              lines : { show : true }, points : { show : true }
             }],
 	      o
 	    );
@@ -128,8 +126,8 @@ $(document).ready(function () {
     	 console.log(graph);
       })
 
-      /// Flotr.EventAdapter.observe(document, 'mouseout', function(){
-    	//   $('#play').trigger("click");
+      // Flotr.EventAdapter.observe(document, 'mouseout', function(){
+      //   $('#play').trigger("click");
       // });
 
       $('.legende input').change(function(){
