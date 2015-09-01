@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/epoch.min.css"/>
+  <link rel="stylesheet" type="text/css" hrf="../css/jquery.jqplot.css" />  
+  
+  <script src="../libs/zepto.js"></script>
+  <script src="../api/data.min.js"></script> 
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../libs/jqplot/jquery.jqplot.js"></script>
+  <script type="text/javascript" src="../libs/jqplot/jqplot.dateAxisRenderer.js"></script>
+  <script type="text/javascript" src="../libs/jqplot/jqplot.cursor.js"></script>
+  <script type="text/javascript" src="../libs/jqplot/jqplot.highlighter.js"></script>
+
+
+<script>
+var data = [];
+var render = true;
+$(document).ready(function(){
+    // Enable plugins like cursor and highlighter by default.
+    $.jqplot.config.enablePlugins = true;
+    // For these examples, don't show the to image button.
+    $.jqplot._noToImageButton = true;
+    data.push(["2012-8-2 2:13:17", 40]);
+
+  opts = {
+      title: 'Data',
+      series: [{
+          neighborThreshold: 0
+      }],
+      axes: {
+          xaxis: {
+              renderer: $.jqplot.DateAxisRenderer,
+              tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+              tickOptions: {
+                  angle: -90,
+                  fontSize: '8pt',
+              }
+          },
+          yaxis: {
+              tickOptions: {
+                  formatString: '%.2f',
+                  fontSize: '8pt'
+              }
+          }
+      },
+      cursor:{zoom:true}
+  };
+ 
+  plot1 = $.jqplot('myChartHolder', [data], opts);
+  
+  $('#stop').click(function(){
+      render = false;
+    });
+
+    $('#play').click(function(){
+      render = true;
+    });
+
+    $('#myChartHolder').mousedown(function(){
+  	  $('#stop').trigger("click");
+    })
+
+  
+  var index = 0;
+  interval = setInterval(function(){
+	  if(render){
+      var nextDataPoint = getNextPoints(index);
+      index++;
+	  console.log(nextDataPoint);
+	  data.push(nextDataPoint);
+	  console.log(data);
+	  if (plot1) {
+	        plot1.destroy();
+	    }
+	  plot1 = $.jqplot('myChartHolder', [data], opts);
+	  }
+    }, 1000);
+  });
+  
+  function getNextPoints(index){
+    for (var i = 1; i < 2; i++){
+      var x = jsonData[i]['values'][index]['time'];
+      var y = jsonData[i]['values'][index]['y'];
+      var x_date = new Date(parseInt(x));
+      var datum = x_date.getFullYear()+"-"+x_date.getMonth()+"-"+x_date.getDay()+" "+x_date.getHours()+":"+x_date.getMinutes()+":"+x_date.getSeconds();
+     return [datum, y];
+    }
+
+  }
+</script>
+
+</head>
+<body>
+  <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <button value="reset" type="button" onclick="plot1.resetZoom();">Reset Zoom</button>
+  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
+  <br />
+<div id="myChartHolder">
+</div>
+
+  <div class="download">
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
+</body>
+</html>
