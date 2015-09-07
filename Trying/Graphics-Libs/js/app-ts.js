@@ -42,5 +42,5 @@ function goDrawInterval(){
       dataValues.push(newPoints);
       drawChart(dataValues, indexValue);
     }
-  }, 750);
+  }, 500);
 }

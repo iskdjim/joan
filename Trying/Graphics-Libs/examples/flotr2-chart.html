@@ -130,7 +130,7 @@ $(document).ready(function () {
       //   $('#play').trigger("click");
       // });
 
-      $('.legende input').change(function(){
+      $('.seriesLegend input').change(function(){
         var hiddenId = $(this).attr('id').replace("tank_","");
         if( $(this).attr('checked')){
           hidder[hiddenId] = false;
@@ -175,7 +175,7 @@ $(document).ready(function () {
   	<a href='../graphicLibs.zip'>Download source</a> <br />
   	<a id="download">Download Image</a>
   </div>
-  <div class="legende">
+  <div class="seriesLegend">
     <p>Time Series</p>
     <input type="checkbox" name="tank_0" value="" id="tank_0" checked> Tank 1 <br />
     <input type="checkbox" name="tank_1" value="" id="tank_1" checked> Tank 2 <br />
