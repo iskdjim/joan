@@ -20,82 +20,79 @@
   <script type="text/javascript" src="../libs/jqplot/jqplot.cursor.js"></script>
   <script type="text/javascript" src="../libs/jqplot/jqplot.highlighter.js"></script>
 
-
 <script>
 var data = [];
 var render = true;
 $(document).ready(function(){
-    // Enable plugins like cursor and highlighter by default.
-    $.jqplot.config.enablePlugins = true;
-    // For these examples, don't show the to image button.
-    $.jqplot._noToImageButton = true;
-    data.push(["2012-8-2 2:13:17", 40]);
+  // Enable plugins like cursor and highlighter by default.
+  $.jqplot.config.enablePlugins = true;
+  // For these examples, don't show the to image button.
+  $.jqplot._noToImageButton = true;
+  data.push(["2012-8-2 2:13:17", 40]);
 
   opts = {
-      title: 'Data',
-      series: [{
-          neighborThreshold: 0
-      }],
-      axes: {
-          xaxis: {
-              renderer: $.jqplot.DateAxisRenderer,
-              tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-              tickOptions: {
-                  angle: -90,
-                  fontSize: '8pt',
-              }
-          },
-          yaxis: {
-              tickOptions: {
-                  formatString: '%.2f',
-                  fontSize: '8pt'
-              }
-          }
+    title: 'Data',
+    series: [{
+      neighborThreshold: 0
+    }],
+    axes: {
+      xaxis: {
+        renderer: $.jqplot.DateAxisRenderer,
+        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+        tickOptions: {
+          angle: -90,
+          fontSize: '8pt',
+        }
       },
-      cursor:{zoom:true}
+      yaxis: {
+        tickOptions: {
+          formatString: '%.2f',
+          fontSize: '8pt'
+        }
+      }
+    },
+    cursor:{zoom:true}
   };
- 
+
   plot1 = $.jqplot('myChartHolder', [data], opts);
-  
+
   $('#stop').click(function(){
-      render = false;
-    });
+    render = false;
+  });
 
-    $('#play').click(function(){
-      render = true;
-    });
+  $('#play').click(function(){
+    render = true;
+  });
 
-    $('#myChartHolder').mousedown(function(){
-  	  $('#stop').trigger("click");
-    })
+  $('#myChartHolder').mousedown(function(){
+    $('#stop').trigger("click");
+  })
 
-  
   var index = 0;
   interval = setInterval(function(){
-	  if(render){
+    if(render){
       var nextDataPoint = getNextPoints(index);
       index++;
-	  console.log(nextDataPoint);
-	  data.push(nextDataPoint);
-	  console.log(data);
-	  if (plot1) {
-	        plot1.destroy();
-	    }
-	  plot1 = $.jqplot('myChartHolder', [data], opts);
-	  }
-    }, 1000);
-  });
-  
-  function getNextPoints(index){
-    for (var i = 1; i < 2; i++){
-      var x = jsonData[i]['values'][index]['time'];
-      var y = jsonData[i]['values'][index]['y'];
-      var x_date = new Date(parseInt(x));
-      var datum = x_date.getFullYear()+"-"+x_date.getMonth()+"-"+x_date.getDay()+" "+x_date.getHours()+":"+x_date.getMinutes()+":"+x_date.getSeconds();
-     return [datum, y];
-    }
+      console.log(nextDataPoint);
+      data.push(nextDataPoint);
+      console.log(data);
+      if(plot1) {
+        plot1.destroy();
+      }
+      plot1 = $.jqplot('myChartHolder', [data], opts);
+	}
+  }, 600);
+});
 
+function getNextPoints(index){
+  for (var i = 1; i < 2; i++){
+    var x = jsonData[i]['values'][index]['time'];
+    var y = jsonData[i]['values'][index]['y'];
+    var x_date = new Date(parseInt(x));
+    var datum = x_date.getFullYear()+"-"+x_date.getMonth()+"-"+x_date.getDay()+" "+x_date.getHours()+":"+x_date.getMinutes()+":"+x_date.getSeconds();
+    return [datum, y];
   }
+}
 </script>
 
 </head>
@@ -106,7 +103,6 @@ $(document).ready(function(){
   <br />
 <div id="myChartHolder">
 </div>
-
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>
   </div>

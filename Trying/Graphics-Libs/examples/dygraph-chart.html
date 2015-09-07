@@ -11,12 +11,14 @@
   <link rel="stylesheet" href="../css/epoch.min.css"/>
 
   <script src="../libs/zepto.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
+  <script src="../libs/dygraph.js"></script>
   <script src="../api/data.min.js"></script> 
 
 <script>
   var data = [];
   var g;
+  var render = true;
+  var timeInterval = 200;
   $(function() {
     var index = 0;
     data.push([new Date(parseInt(1347927197173)), 40]);
@@ -24,22 +26,34 @@
     $(document).ready(function () {
       var t = new Date();
       interval = setInterval(function(){
-        var nextDataPoint = getNextPoints(index);
-	    index++;
-	    if(index > 100){
-	      data.shift();
-	    }
-      }, 100);
+    	if(render){
+
+          var nextDataPoint = getNextPoints(index);
+	      index++;
+	      if(index > 100){
+	        data.shift();
+	      }
+    	}
+      }, timeInterval);
 
       g = new Dygraph(document.getElementById("myChartHolder"), data,{
         drawPoints: true,
         showRoller: true,
         valueRange: [0.0, 50],
           labels: ['Time', 'Random']
-        });
-      }
-    );
+      });
+   
+      $('#stop').click(function(){
+        render = false;
+      });
+
+      $('#play').click(function(){
+        render = true;
+      });
+      
+    });
   });
+
   function getNextPoints(index){
     for (var i = 1; i < 2; i++){
       var x = jsonData[i]['values'][index]['time'];
@@ -53,6 +67,7 @@
 </head>
 <body>
   <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
   <br />
 <div id="myChartHolder">
 </div>

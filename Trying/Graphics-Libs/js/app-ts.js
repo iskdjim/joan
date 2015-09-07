@@ -7,6 +7,7 @@ var lastXValue = 0;
 var rawData;
 var dataCount;
 
+
 // draw Polygon Lines with real or random data
 function goDrawInterval(){
   interval = setInterval(function(){
