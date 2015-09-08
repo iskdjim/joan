@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="css/charts.css"/>
 </head>
 <body>
-<h1>Graphic Libs Test</h1>
 
+<h1>Graphic Libs Comparison</h1>
+<p> Goal was visualization of time series with mouseover line detection</p>
+<br />
 <h3>Two.js</h3>
 <a href="examples/twojs-chart.html">Draw lines with two.js</a>
 <br /><br />
@@ -27,37 +29,140 @@
 <a href="examples/plexx-chart.html">Not used yet, waiting for last bug fixes</a>
 <br /><br /><br />
 
-<h3>flotr2.js</h3>
-<a href="examples/flotr2-chart.html">Time Series with flotr2.js</a>
-<p>Nice Canvas Lib, easy to use and expand. Favorite for building the Prototype</p>
+
+
+<h1>Chart Libs Comparison</h1>
+<p> Goal was visualization of time series with dynamic axis labels and a zoom functionality</p>
 <br /><br />
+<table class="chartLibsComparison">
+  <tbody>
+    <tr>
+      <td class="width15"></td>
+      <td><b>Flotr2</b></td>  
+      <td><b>Dygraph</b></td>
+      <td><b>Jqplot</b></td>
+      <td><b>Epoch</b></td>
+      <td><b>nvd3</b></td>
+    <tr>
+    <tr>
+      <td>Technologie:</td>
+      <td>Canvas Only</td>  
+      <td>Canvas Only</td>
+      <td>Canvas Only</td>
+      <td>Canvas Only</td>
+      <td>SVG</td>
+    <tr>
+    <tr>
+      <td>jQuery needed:</td>
+      <td>No</td>  
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+    <tr>    
+    <tr>
+      <td>Axis labels/ticks:</td>
+      <td>supported</td>  
+      <td>supported</td>
+      <td>supported</td>
+      <td>supported</td>
+      <td>supported</td>
+    <tr>
+    <tr>
+      <td>Zoom:</td>
+      <td>supported</td>  
+      <td>supported</td>
+      <td>supported</td>
+      <td>not supported</td>
+      <td>supported</td>
+    <tr>
+    <tr>
+    <td>Save image:</td>
+      <td>supported for JPG, PNG</td>  
+      <td><p>no official support</p><p>some user extentions</p></td>
+      <td>not supported</td>
+      <td>not supported</td>
+      <td>not supported</td>
+    <tr>  
+    <tr>
+      <td>Usage:</td>
+      <td>easy</td>  
+      <td>easy</td>
+      <td>medium</td>
+      <td>medium</td>
+      <td>medium</td>
+    <tr>      
+    <tr>
+      <td>Summary:</td>
+      <td>
+        <ul>
+          <li>Good canvas lib</li>
+          <li>Many useful functions in the core like zoom, axis labels, save image</li>
+          <li>Easy to combine with custome code</li>
+        </ul>
+      </td>  
+      <td>
+         <ul>
+          <li>Highly customizable</li>
+          <li>Zoom, pan, and mouseover in the core</li>
+          <li>Good for large amount of data</li>
+          <li>Also easy to combine with custome code</li>
+        </ul>     
+      </td>
+      <td>
+         <ul>
+          <li>Nice zoom function</li>
+          <li>Sometimes chart draw doing strange stuff, dont know why</li>
+          <li>jQuery is needed</li>
+        </ul>     
+      </td>      
+      <td>
+        <ul>
+          <li>Nice smooth rendering of the chart</li>
+          <li>Only less functions in core</li>
+          <li>Not so easy to adapte</li>
+          <li>Think it is not ready yet to use it for more complex systems</li>
+        </ul>     
+      </td>
+      <td>
+        <ul>
+          <li>SVG only</li>
+          <li>depends on d3</li>
+          <li>Setup could be easier</li>
+          <li>Zoom with dynamic data reload does not work fine</li>
+        </ul>     
+      </td>
+    <tr> 
+    <tr>
+      <td>Grade:</td>
+      <td>2</td>  
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>3-4</td>
+    <tr> 
+    <tr>
+      <td>Website:</td>
+      <td><a href="http://humblesoftware.com/flotr2/">http://humblesoftware.com/flotr2/</a></td>  
+      <td><a href="http://dygraphs.com/">http://dygraphs.com/</a></td>
+      <td><a href="http://www.jqplot.com/">http://www.jqplot.com/</a></td>
+      <td><a href="http://fastly.github.io/epoch/">http://fastly.github.io/epoch/</a></td>
+      <td><a href="http://nvd3.org/">http://nvd3.org/</a></td>
+    <tr>
+    <tr>
+      <td>Example:</td>
+      <td><b><a href="examples/flotr2-chart.html">Flotr2</a></b></td>  
+      <td><b><a href="examples/dygraph-chart.html">Dygraph</a></td>
+      <td><b><a href="examples/jqplot-chart.html">Jqplot</a></td>
+      <td><b><a href="examples/epoch-chart.html">Epoch</a></td>
+      <td><b><a href="examples/examples/nvd3-chart.html">nvd3</a></td>
+    <tr>    
+  </tbody>
+</table>
 
-<h3>dygraph.js</h3>
-<a href="examples/dygraph-chart.html">Time Series with Dygraph.js</a>
-<p>Also a nice Canvas Lib, has nice modules. Zoom for example. Is my second favorite after flotr2.js</p>
-<br /><br />
 
-<h3>jqplot.js</h3>
-<a href="examples/jqplot-chart.html">Time Series with jqplot.js</a>
-<p>Many functionality, i like the zoom and axes function. Could also be a good lib for the Prototype</p>
-<br /><br />
-
-<h3>epoch.js</h3>
-<a href="examples/epoch-chart.html">Time Series with epoch.js</a>
-<p>In some kind a nice Canvas Lib, has low functionality and the axes ticks also could be better. </p>
-<br /><br />
-
-<h3>nvd3.js</h3>
-<a href="examples/nvd3-chart.html">Time Series with nvd3.js</a>
-<p> SVG Lib with good functionality. Individual modules could be better seperated. Easy to use.</p>
-<br /><br />
-
-<h3>rickshaw.js,chartkick.js,flotcharts and many more</h3>
-<p>tried...but did not convinced me of the technology and usage</p>
-<br /><br />
-
-
-<h1>Chart Libs Comparison:</h1>
+<br /> <br />
+<h3>Detailed comparisons:</h3>
 <a href="http://socialcompare.com/en/comparison/javascript-graphs-and-charts-libraries" target="_blank">http://socialcompare.com/en/comparison/javascript-graphs-and-charts-libraries</a><br />
 <a href="https://codegeekz.com/javascript-chart-and-graph-libraries/" target="_blank">https://codegeekz.com/javascript-chart-and-graph-libraries/</a><br />
 <br />

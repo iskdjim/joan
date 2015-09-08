@@ -1,3 +1,8 @@
 p{
   margin:0px;
 }
+
+.chartLibsComparison, .chartLibsComparison tr, .chartLibsComparison td{
+	border:0.1rem solid #000;
+	font-size:0.7rem;
+}

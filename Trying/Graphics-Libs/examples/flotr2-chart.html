@@ -67,17 +67,23 @@ $(document).ready(function () {
             {
               data : d1,
               hide : hidder[0],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true, lineWidth: '3' }, 
+              points : { show : true },
+              color: '#00FF00'
             },
             {
               data : d2,
               hide : hidder[1],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true, lineWidth: '3' }, 
+              points : { show : true },
+              color: '#FF0000'
             },
             {
               data : d3,
               hide : hidder[2],
-              lines : { show : true }, points : { show : true }
+              lines : { show : true, lineWidth: '3' }, 
+              points : { show : true },
+              color: '#0000FF'
             }],
 	      o
 	    );
@@ -98,7 +104,7 @@ $(document).ready(function () {
 
           graph = drawGraph();
         }
-      }, 200);
+      }, 500);
 
       $('#stop').click(function(){
         render = false;
