@@ -27,7 +27,7 @@ function drawChart(data, index){
         $('.lineData').html("Current Line Path: "+this.currentPath.points.join());
       }
 
-      lineElement.lineStyle(3, colors[j]);
+      lineElement.lineStyle(5, colors[j]);
       // line from old value to new one
       if(index == "1"){
     	lineElement.drawPolygon([600,data[0][0][1], x1, data[i+1][j][1]]);

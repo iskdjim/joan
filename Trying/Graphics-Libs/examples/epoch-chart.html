@@ -19,7 +19,7 @@
 <script>
 $(function() {
 	var index = 0;
-	var data = [{ label: 'Channel 2', values: [ {'time':1347927197173, 'value': 40} ] },{ label: 'Channel 3', values: [ {'time':1347927197173, 'value': 30} ] }];
+	var data = [{ label: 'Time Series 1', values: [ {'time':1347927197173, 'value': 144} ] },{ label: 'Time Series 2', values: [ {'time':1347927197173, 'value': 44} ] },{ label: 'Time Series 3', values: [ {'time':1347927197173, 'value': 50} ] }];
 	
 	var lineChart = $('#myChartHolder').epoch({
 	    type: 'time.line',
@@ -41,7 +41,7 @@ $(function() {
 });
  function getNextPoints(index) {
     var entry = [];
-    for (var i = 1; i < 3; i++) {
+    for (var i = 0; i < 3; i++) {
         entry.push({ time: jsonData[i]['values'][index]['time'], y: jsonData[i]['values'][index]['y'] });
     }
     return entry;
@@ -52,7 +52,7 @@ $(function() {
 <body>
   <h1>Draw Realtime Time Series with epoch.js</h1>
   <br />
-<div id="myChartHolder">
+<div id="myChartHolder" class="epoch category10">
 </div>
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>

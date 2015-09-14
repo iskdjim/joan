@@ -25,7 +25,7 @@ function drawChart(data){
     	  console.log("hello");
       })
       line.stroke = colors[j]; // Accepts all valid css color
-      line.linewidth = 3;
+      line.linewidth = 5;
 	}
   }
   two.render();

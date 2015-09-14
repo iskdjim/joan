@@ -21,15 +21,20 @@
   <script type="text/javascript" src="../libs/jqplot/jqplot.highlighter.js"></script>
 
 <script>
-var data = [];
+var data_1 = [];
+var data_2 = [];
+var data_3 = [];
 var render = true;
+var hidder = [true,true,true];
 $(document).ready(function(){
   // Enable plugins like cursor and highlighter by default.
   $.jqplot.config.enablePlugins = true;
   // For these examples, don't show the to image button.
   $.jqplot._noToImageButton = true;
-  data.push(["2012-8-2 2:13:17", 40]);
-
+  data_1.push(["2012-8-2 2:13:17", 146]);
+  data_2.push(["2012-8-2 2:13:17", 40]);
+  data_3.push(["2012-8-2 2:13:17", 54]);
+  
   opts = {
     title: 'Data',
     series: [{
@@ -51,10 +56,11 @@ $(document).ready(function(){
         }
       }
     },
+    seriesColors: [ "#00ff00", "#ff0000", "#0000ff"],
     cursor:{zoom:true}
   };
 
-  plot1 = $.jqplot('myChartHolder', [data], opts);
+  plot1 = $.jqplot('myChartHolder', [data_1], opts);
 
   $('#stop').click(function(){
     render = false;
@@ -67,6 +73,15 @@ $(document).ready(function(){
   $('#myChartHolder').mousedown(function(){
     $('#stop').trigger("click");
   })
+  
+  $('.seriesLegend input').change(function(){
+    var hiddenId = $(this).attr('id').replace("tank_","");
+    if(hidder[hiddenId]){
+      hidder[hiddenId] = false;
+    }else{
+      hidder[hiddenId] = true;
+    }
+  });
 
   var index = 0;
   interval = setInterval(function(){
@@ -74,24 +89,36 @@ $(document).ready(function(){
       var nextDataPoint = getNextPoints(index);
       index++;
       console.log(nextDataPoint);
-      data.push(nextDataPoint);
-      console.log(data);
+      data_1.push(nextDataPoint[0]);
+      data_2.push(nextDataPoint[1]);
+      data_3.push(nextDataPoint[2]);
+      console.log(data_1);
       if(plot1) {
         plot1.destroy();
       }
-      plot1 = $.jqplot('myChartHolder', [data], opts);
+      var all_datas = [data_1,data_2,data_3];
+      console.log(hidder);
+      for(var i=0;i<3;i++){
+        if(!hidder[i]){
+          all_datas[i] = []; 
+        }
+      }
+
+      plot1 = $.jqplot('myChartHolder', all_datas, opts);
 	}
   }, 600);
 });
 
 function getNextPoints(index){
-  for (var i = 1; i < 2; i++){
+  var datas = [[],[]];	
+  for (var i = 0; i < 3; i++){
     var x = jsonData[i]['values'][index]['time'];
     var y = jsonData[i]['values'][index]['y'];
     var x_date = new Date(parseInt(x));
     var datum = x_date.getFullYear()+"-"+x_date.getMonth()+"-"+x_date.getDay()+" "+x_date.getHours()+":"+x_date.getMinutes()+":"+x_date.getSeconds();
-    return [datum, y];
+    datas[i] = [datum, y];
   }
+  return datas;
 }
 </script>
 
@@ -106,5 +133,11 @@ function getNextPoints(index){
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>
   </div>
+  <div class="seriesLegend">
+    <p>Time Series</p>
+    <input type="checkbox" class="timeseries" name="tank_0" value="" id="tank_0" checked><p class="green" > Time series 1 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_1" value="" id="tank_1" checked><p class="red" > Time series 2 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_2" value="" id="tank_2" checked><p class="blue" > Time series 3 </p><div class="clearer"></div>
+  </div>  
 </body>
 </html>

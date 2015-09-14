@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../libs/chartkick.js"></script>
+  <script src="../api/data.min.js"></script> 
+
+<script>
+  var data = [];
+  var g;
+  var render = true;
+  var timeInterval = 500;
+  var hidder = [true,true,true];
+  $(function() {
+    var index = 0;
+    data.push([new Date(parseInt(1347927197173)), 144, 40,54]);
+
+    $(document).ready(function () {
+    
+        new Chartkick.LineChart("myChartHolder", [{"name":"Workout","data":{"2013-02-10 00:00:00 -0800":3,"2013-02-17 00:00:00 -0800":3,"2013-02-24 00:00:00 -0800":3,"2013-03-03 00:00:00 -0800":1,"2013-03-10 00:00:00 -0800":4,"2013-03-17 00:00:00 -0700":3,"2013-03-24 00:00:00 -0700":2,"2013-03-31 00:00:00 -0700":3}},{"name":"Go to concert","data":{"2013-02-10 00:00:00 -0800":0,"2013-02-17 00:00:00 -0800":0,"2013-02-24 00:00:00 -0800":0,"2013-03-03 00:00:00 -0800":0,"2013-03-10 00:00:00 -0800":2,"2013-03-17 00:00:00 -0700":1,"2013-03-24 00:00:00 -0700":0,"2013-03-31 00:00:00 -0700":0}},{"name":"Wash face","data":{"2013-02-10 00:00:00 -0800":0,"2013-02-17 00:00:00 -0800":1,"2013-02-24 00:00:00 -0800":0,"2013-03-03 00:00:00 -0800":0,"2013-03-10 00:00:00 -0800":0,"2013-03-17 00:00:00 -0700":1,"2013-03-24 00:00:00 -0700":0,"2013-03-31 00:00:00 -0700":1}},{"name":"Call parents","data":{"2013-02-10 00:00:00 -0800":5,"2013-02-17 00:00:00 -0800":3,"2013-02-24 00:00:00 -0800":2,"2013-03-03 00:00:00 -0800":0,"2013-03-10 00:00:00 -0800":0,"2013-03-17 00:00:00 -0700":1,"2013-03-24 00:00:00 -0700":1,"2013-03-31 00:00:00 -0700":0}},{"name":"Eat breakfast","data":{"2013-02-10 00:00:00 -0800":3,"2013-02-17 00:00:00 -0800":2,"2013-02-24 00:00:00 -0800":1,"2013-03-03 00:00:00 -0800":0,"2013-03-10 00:00:00 -0800":2,"2013-03-17 00:00:00 -0700":2,"2013-03-24 00:00:00 -0700":3,"2013-03-31 00:00:00 -0700":0}}]);
+ 
+
+    	
+    	
+    });
+  });
+
+  function getNextPoints(index){
+      var x = jsonData[0]['values'][index]['time'];
+      var y_1 = jsonData[0]['values'][index]['y'];
+      var y_2 = jsonData[1]['values'][index]['y'];
+      var y_3 = jsonData[2]['values'][index]['y'];
+      data.push([new Date(parseInt(x)), y_1,y_2,y_3]);
+    g.updateOptions( { 'file': data } );
+  }
+</script>
+
+</head>
+<body>
+    <div id="chart-1" style="height: 300px;"></div>
+    <script>
+      new Chartkick.LineChart("chart-1", {"2013-02-10 00:00:00 -0800":11,"2013-02-11 00:00:00 -0800":6,"2013-02-12 00:00:00 -0800":3,"2013-02-13 00:00:00 -0800":2,"2013-02-14 00:00:00 -0800":5,"2013-02-15 00:00:00 -0800":3,"2013-02-16 00:00:00 -0800":8,"2013-02-17 00:00:00 -0800":6,"2013-02-18 00:00:00 -0800":6,"2013-02-19 00:00:00 -0800":12,"2013-02-20 00:00:00 -0800":5,"2013-02-21 00:00:00 -0800":5,"2013-02-22 00:00:00 -0800":3,"2013-02-23 00:00:00 -0800":1,"2013-02-24 00:00:00 -0800":10,"2013-02-25 00:00:00 -0800":1,"2013-02-26 00:00:00 -0800":3,"2013-02-27 00:00:00 -0800":2,"2013-02-28 00:00:00 -0800":3,"2013-03-01 00:00:00 -0800":2,"2013-03-02 00:00:00 -0800":8});
+    </script>
+  <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
+  <br />
+<div id="myChartHolder">
+</div>
+  <div class="download">
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
+  <div class="seriesLegend">
+    <p>Time Series</p>
+    <input type="checkbox" class="timeseries" name="tank_0" value="" id="tank_0" checked><p class="green" > Time series 1 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_1" value="" id="tank_1" checked><p class="red" > Time series 2 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_2" value="" id="tank_2" checked><p class="blue" > Time series 3 </p><div class="clearer"></div>
+  </div>  
+</body>
+</html>
