@@ -8,51 +8,119 @@
   <link rel="stylesheet" href="../css/normalise.css"/>
   <link rel="stylesheet" href="../css/base.css"/>
   <link rel="stylesheet" href="../css/perf.css"/>
-  <link rel="stylesheet" href="http://code.shutterstock.com/rickshaw/rickshaw.min.css"/>
-
+  <link rel="stylesheet" href="../css/graph.css"/>
+  
   <script src="../libs/jquery.min.js"></script>
-  <script src="../libs/d3v3.js"></script>
+  <script src="../libs/d3.v3.js"></script>
   <script src="../libs/rickshaw.js"></script>
+  
+  <script src="../api/data.min.js"></script> 
+  
+<style>
+  #chart {
+    position: relative;
+    left: 40px;
+  }
+  #y_axis {
+    position: absolute;
+    top: 73px;
+    bottom: 0;
+    width: 40px;
+  }
 
+  #x_axis {
+    position: relative;
+    left: 40px;
+	height: 40px;
+  }
+</style>
 <script>
   var data = [];
-  var g;
+  var graph;
+  var render = true;
+  var hidder = [true,true,true];
   $(function() {
     var index = 0;
-    data.push([new Date(parseInt(1347927197173)), 40]);
+    data = [
+      {
+        name: "Time1",
+        data: [ { x: 1347927197173, y: 144 },{ x: 1347927199173, y: 134 } ],
+        color: '#00ff00'
+      },
+      {
+        name: "Time2",
+        data: [ { x: 1347927197173, y: 40 } ,{ x: 1347927199173, y: 30 } ],
+        color: '#ff0000'
+      },
+      {
+        name: "Time3",
+        data: [ { x: 1347927197173, y: 54 },{ x: 1347927199173, y: 50 } ],
+        color: '#ff0000'
+      }
+    ];
 
     $(document).ready(function () {
-      var graph = new Rickshaw.Graph( {
-      element: document.querySelector("#chart"),
-      width: 540,
-      height: 240,
-      series: [{
-        data: [{ x: -1893456000, y: 92228531 }, { x: -1577923200, y: 106021568 }, { x: -1262304000, y: 123202660 }, { x: -946771200, y: 132165129 }, { x: -631152000, y: 151325798 }, { x: -315619200, y: 179323175 }, { x: 0, y: 203211926 }, { x: 315532800, y: 226545805 }, { x: 631152000, y: 248709873 }, { x: 946684800, y: 281421906 }, { x: 1262304000, y: 308745538 }],
-        color: 'steelblue'
-      }]
-    });
+      var palette = new Rickshaw.Color.Palette();
 
-    var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
-    var y_axis = new Rickshaw.Graph.Axis.Y( {
-      graph: graph,
-      orientation: 'left',
-      tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
-      element: document.getElementById('y_axis'),
-    });
+      graph = new Rickshaw.Graph( {
+        element: document.querySelector("#chart"),
+        width: 540,
+        height: 400,
+        renderer: 'line',
+        series: new Rickshaw.Series.FixedDuration([{ name: 'one' }], undefined, {
+          timeInterval: 500,
+          maxDataPoints: 100,
+          timeBase: new Date().getTime() / 1000
+        }) 
+      });
+      
+      $('#stop').click(function(){
+        render = false;
+      });
 
-    graph.render();
+      $('#play').click(function(){
+        render = true;
+      });
+
+      var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+
+      var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: graph,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y_axis'),
+      });
+
+      interval = setInterval(function(){
+        if(render){
+          index++;
+          console.log(index);
+          var x = jsonData[0]['values'][index]['time'];
+          var y1 = jsonData[0]['values'][index]['y'];
+          var y2 = jsonData[1]['values'][index]['y'];
+          var y3 = jsonData[2]['values'][index]['y'];
+          var data = { one: y1 };
+
+          data.two = y2;
+          data.three = y3;
+          graph.series.addData(data);
+          graph.render();
+
+          }
+        }, 500);
     });
-  }); 
+  });
 </script>
 
 </head>
 <body>
   <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <input type="button" class="" id="stop" value="stop" style="margin-left:2.5rem;" /> <input type="button" class="" id="play" value="play" />
   <br />
 <div id="myChartHolder">
-   <div id="y_axis"></div>
-        <div id="chart"></div>
-
+	<div id="y_axis"></div>
+	<div id="chart"></div>
+	<div id="x_axis"></div>
 </div>
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>

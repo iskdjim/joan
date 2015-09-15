@@ -22,93 +22,109 @@
   var data = [];
   var chart;
   var index = 0;
-  var testdata;
+  var data_1, data_2, data_3;
   var updatestate = true;
   $(function() {
-	  $(document).ready(function () { 
-		   testdata = [
-							 {'series': 0,
-							 'x': 0,
-							 'y': 144}
-							
-			  	]
-					
-		   testdata2 = [
-						 {'series': 0,
-						 'x': 0,
-						 'y': 40}
-						
-		  	]
-				
-	  nv.addGraph(function() {
-		  chart = nv.models.lineWithFocusChart();
+    $(document).ready(function () {
+      data_1 = [
+        {
+          'series': 0,
+		  'x': 0,
+          'y': 144
+        }
+      ]
 
-		  chart.xAxis
-		      .tickFormat(d3.format(',f'));
+      data_2 = [
+        {
+          'series': 0,
+          'x': 0,
+          'y': 40
+        }
+      ]
 
-		  chart.yAxis
-		      .tickFormat(d3.format(',.2f'));
+      data_3 = [
+        {
+          'series': 0,
+          'x': 0,
+          'y': 54
+        }
+      ]
+      
+      nv.addGraph(function() {
+        chart = nv.models.lineChart();
 
-		  chart.y2Axis
-		      .tickFormat(d3.format(',.2f'));
-		
-		  d3.select('#myChartHolder svg')
-		      .datum(data)
-		      .transition().duration(500)
-		      .call(chart);
+        chart.yAxis.tickFormat(d3.format(',.2f'));
+        chart.y2Axis.tickFormat(d3.format(',.2f'));
 
-		  nv.utils.windowResize(chart.update);
+        
+        chart.xAxis.tickFormat(function(d) {
+            return d3.time.format('%H:%M:%S')(new Date(d));
+          });
+        
+        d3.select('#myChartHolder svg')
+          .datum(data)
+          .transition().duration(500)
+          .call(chart);
 
-		  return chart;
-		});
-		/**************************************
-		 * Simple test data generator
-		 */
+        nv.utils.windowResize(chart.update);
+		return chart;
+      });
 
 	  interval = setInterval(function(){
-		  index++;
+        index++;
 
-		  
-		  testdata.push( {'series': 0,
-				 'x': index,
-				 'y': jsonData[0]['values'][index]['y']});
-		  
-		  testdata2.push( {'series': 0,
-				 'x': index,
-				 'y': jsonData[1]['values'][index]['y']});
-		  
-		  if(index > 10){
-			  testdata.shift();
-			  testdata2.shift();
-		  }
-		  
-		  data = [{ 
-		      key: 'Stream 1',
-		      values: testdata
-		    }];
-		  
-		  
-		 
-		  if(updatestate){
-		 	 d3.select('#myChartHolder svg')
-	     	 .datum(data)
-	      	  .transition().duration(500)
-	     	 .call(chart);
-		  }
-			
-		}, 1000);
-		
+        data_1.push( {'series': 0,
+          'x': index,
+          'y': jsonData[0]['values'][index]['y']});
 
-	    });
-	
-	  
-	  $('#stop').click(function(){
-		  updatestate = false;
-	      });
+        data_2.push( {'series': 1,
+          'x': index,
+          'y': jsonData[1]['values'][index]['y']});
 
-	      $('#play').click(function(){
-	    	  updatestate = true;
-	      });
+        data_3.push( {'series': 2,
+          'x': index,
+          'y': jsonData[2]['values'][index]['y']});
+
+        if(index > 50){
+          data_1.shift();
+          data_2.shift();
+          data_3.shift();
+        }
+
+        data = [
+          { 
+            key: 'Time Series 1',
+            values: data_1,
+            color: '#00ff00'
+          },
+          { 
+            key: 'Time Series 2',
+            values: data_2,
+            color: '#ff0000'
+          },
+          { 
+            key: 'Time Series 3',
+            values: data_3,
+            color: '#0000ff'
+          }              
+        ];
+
+        if(updatestate){
+          d3.select('#myChartHolder svg')
+          .datum(data)
+          .transition().duration(500)
+         .call(chart);
+        }
+      }, 500);
+    });
+
+    $('#stop').click(function(){
+      updatestate = false;
+    });
+
+    $('#play').click(function(){
+      updatestate = true;
+    });
   });
 
 </script>

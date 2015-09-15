@@ -214,6 +214,14 @@ p + p {
   clear:both;
 }
 
+.nvd3 g.nv-groups path.nv-line {
+  stroke-width: 4px;
+}
+
 .dygraph-axis-label.dygraph-axis-label-x{
   font-size:10px;
+}
+
+#myChartHolder.envis div input{
+  display:none !important;
 }
