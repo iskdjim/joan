@@ -27,7 +27,6 @@
       var t = new Date();
       interval = setInterval(function(){
     	if(render){
-
           var nextDataPoint = getNextPoints(index);
 	      index++;
 	      if(index > 100){
@@ -46,10 +45,10 @@
         pointSize : 4,
         strokeWidth: 3,
         /*highlightSeriesOpts: {
-            strokeWidth: 3,
-            strokeBorderWidth: 1,
-            highlightCircleSize: 5
-          }*/
+          strokeWidth: 3,
+          strokeBorderWidth: 1,
+          highlightCircleSize: 5
+        }*/
       });
    
       $('#stop').click(function(){
@@ -72,11 +71,11 @@
   });
 
   function getNextPoints(index){
-      var x = jsonData[0]['values'][index]['time'];
-      var y_1 = jsonData[0]['values'][index]['y'];
-      var y_2 = jsonData[1]['values'][index]['y'];
-      var y_3 = jsonData[2]['values'][index]['y'];
-      data.push([new Date(parseInt(x)), y_1,y_2,y_3]);
+    var x = jsonData[0]['values'][index]['time'];
+    var y_1 = jsonData[0]['values'][index]['y'];
+    var y_2 = jsonData[1]['values'][index]['y'];
+    var y_3 = jsonData[2]['values'][index]['y'];
+    data.push([new Date(parseInt(x)), y_1,y_2,y_3]);
     g.updateOptions( { 'file': data } );
   }
 </script>
