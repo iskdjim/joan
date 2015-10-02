@@ -12,12 +12,13 @@
   <script src="libs/zepto.js"></script>
   <script src="libs/dygraph.js"></script>
   <script src="api/data.min.js"></script> 
+  <script type="text/javascript" src="libs/dygraph-extras.js"></script>
 
 <script>
   var data = [];
   var g;
   var render = true;
-  var timeInterval = 500;
+  var timeInterval = 1000;
   var hidder = [true,true,true];
   $(function() {
     var index = 0;
@@ -59,16 +60,38 @@
         render = true;
       });
       
+
+      document.getElementById('download').addEventListener('click', function() {
+      	  // g.resetZoom();
+
+  	  //
+  	      Dygraph.Export.asPNG(g,imgExport);
+  	     // console.log($(imgExport)));
+  	     // console.log(imgExport);
+  	  
+  	  	var canvas = document.createElement("canvas");
+  	  	canvas.setAttribute('id', "saveIMG");
+  	  	canvas.setAttribute('class', "download-canvas");
+  	  
+  	  	$('body').append(canvas);
+  	  	
+  	  	var image=document.createElement("img");
+  	  	image.setAttribute('src', $(imgExport).attr("src"));
+  	  	//console.log(image);
+  		canvas.width = image.width;
+  		canvas.height = image.height;
+  		canvas.getContext("2d").drawImage(image, 0, 0);
+
+          downloadCanvas(this, 'canvas', 'test.png');
+      });    
+      
       function downloadCanvas(link, canvasId, filename) {
-          var canElement = document.getElementsByClassName("flotr-canvas");
+          var canElement = document.getElementsByClassName("download-canvas");
           link.href =  canElement[0].toDataURL();
           link.download = filename;
+          console.log(link);
+          $('#saveIMG').remove();
         }
-
-        document.getElementById('download').addEventListener('click', function() {
-          downloadCanvas(this, 'canvas', 'test.png');
-        }, false);
-      
       $('.seriesLegend input').change(function(){
         var hiddenId = $(this).attr('id').replace("tank_","");
         if(hidder[hiddenId]){
@@ -97,6 +120,7 @@
   <br />
 <div id="myChartHolder" class="envis">
 </div>
+ <image id="imgExport" style="display:none;width:600px; height:400px;" />
   <div class="download">
   	<a href='../graphicLibs.zip'>Download source</a>
   	<a id="download">Download Image</a>  	
