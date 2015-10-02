@@ -1,0 +1,1805 @@
+{
+    "data": [
+        {
+            "time": "1347927197173",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927197672",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927198172",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 30
+                }
+            ]
+        },
+        {
+            "time": "1347927198672",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 33
+                }
+            ]
+        },
+        {
+            "time": "1347927199172",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927199671",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 16
+                }
+            ]
+        },
+        {
+            "time": "1347927200171",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927200671",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927201171",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 13
+                }
+            ]
+        },
+        {
+            "time": "1347927201672",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 8
+                }
+            ]
+        },
+        {
+            "time": "1347927202171",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927202671",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927203171",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 29
+                }
+            ]
+        },
+        {
+            "time": "1347927203670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 33
+                }
+            ]
+        },
+        {
+            "time": "1347927204170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927204670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 33
+                }
+            ]
+        },
+        {
+            "time": "1347927205170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927205670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 32
+                }
+            ]
+        },
+        {
+            "time": "1347927206174",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927206670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927207170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 24
+                }
+            ]
+        },
+        {
+            "time": "1347927207670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927208170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927208672",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927209170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927209669",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927210169",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927210670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927211169",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927211670",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 13
+                }
+            ]
+        },
+        {
+            "time": "1347927212169",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927212669",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927213169",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927213668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 30
+                }
+            ]
+        },
+        {
+            "time": "1347927214168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927214668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927215168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927215668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 29
+                }
+            ]
+        },
+        {
+            "time": "1347927216168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927216667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927217168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927217667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 23
+                }
+            ]
+        },
+        {
+            "time": "1347927218168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927218667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927219167",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927219668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927220168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 36
+                }
+            ]
+        },
+        {
+            "time": "1347927220668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 38
+                }
+            ]
+        },
+        {
+            "time": "1347927221167",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927221668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 23
+                }
+            ]
+        },
+        {
+            "time": "1347927222168",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 26
+                }
+            ]
+        },
+        {
+            "time": "1347927222667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927223169",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927223668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927224167",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927224666",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 19
+                }
+            ]
+        },
+        {
+            "time": "1347927225167",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 38
+                }
+            ]
+        },
+        {
+            "time": "1347927225667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927226166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927226667",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927227166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927227673",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927228166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927228666",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927229166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 16
+                }
+            ]
+        },
+        {
+            "time": "1347927229665",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927230170",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927230666",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927231165",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 24
+                }
+            ]
+        },
+        {
+            "time": "1347927231666",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927232165",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927232665",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927233166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 14
+                }
+            ]
+        },
+        {
+            "time": "1347927233665",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 15
+                }
+            ]
+        },
+        {
+            "time": "1347927234165",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927234665",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 12
+                }
+            ]
+        },
+        {
+            "time": "1347927235166",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 29
+                }
+            ]
+        },
+        {
+            "time": "1347927235665",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927236164",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 30
+                }
+            ]
+        },
+        {
+            "time": "1347927236664",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927237164",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 23
+                }
+            ]
+        },
+        {
+            "time": "1347927237664",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927238164",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927238663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927239163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927239663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 16
+                }
+            ]
+        },
+        {
+            "time": "1347927240164",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927240663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927241163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927241663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927242163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 19
+                }
+            ]
+        },
+        {
+            "time": "1347927242664",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927243164",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 13
+                }
+            ]
+        },
+        {
+            "time": "1347927243663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927244163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927244663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927245163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 38
+                }
+            ]
+        },
+        {
+            "time": "1347927245663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927246163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 13
+                }
+            ]
+        },
+        {
+            "time": "1347927246663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927247163",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927247663",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 24
+                }
+            ]
+        },
+        {
+            "time": "1347927248162",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927248662",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927249162",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 26
+                }
+            ]
+        },
+        {
+            "time": "1347927249662",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927250162",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 15
+                }
+            ]
+        },
+        {
+            "time": "1347927250662",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927251162",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927251662",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 24
+                }
+            ]
+        },
+        {
+            "time": "1347927252161",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 19
+                }
+            ]
+        },
+        {
+            "time": "1347927252662",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 16
+                }
+            ]
+        },
+        {
+            "time": "1347927253161",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927253661",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927254161",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927254661",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927255161",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927255661",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927256161",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927256661",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927257160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927257661",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 33
+                }
+            ]
+        },
+        {
+            "time": "1347927258160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927258660",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927259160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927259660",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927260160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927260660",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927261160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 19
+                }
+            ]
+        },
+        {
+            "time": "1347927261659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 10
+                }
+            ]
+        },
+        {
+            "time": "1347927262159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927262659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 23
+                }
+            ]
+        },
+        {
+            "time": "1347927263159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 26
+                }
+            ]
+        },
+        {
+            "time": "1347927263659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927264159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927264658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927265159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 33
+                }
+            ]
+        },
+        {
+            "time": "1347927265660",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927266159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927266659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927267160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927267659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 36
+                }
+            ]
+        },
+        {
+            "time": "1347927268159",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927268659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927269160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 22
+                }
+            ]
+        },
+        {
+            "time": "1347927269659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927270158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927270659",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927271158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 38
+                }
+            ]
+        },
+        {
+            "time": "1347927271658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 15
+                }
+            ]
+        },
+        {
+            "time": "1347927272158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 29
+                }
+            ]
+        },
+        {
+            "time": "1347927272658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 34
+                }
+            ]
+        },
+        {
+            "time": "1347927273157",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 12
+                }
+            ]
+        },
+        {
+            "time": "1347927273658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927274158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927274658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 12
+                }
+            ]
+        },
+        {
+            "time": "1347927275158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 26
+                }
+            ]
+        },
+        {
+            "time": "1347927275668",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "time": "1347927276157",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927276658",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927277157",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 32
+                }
+            ]
+        },
+        {
+            "time": "1347927277657",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927278156",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927278657",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927279156",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 39
+                }
+            ]
+        },
+        {
+            "time": "1347927279657",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927280157",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 29
+                }
+            ]
+        },
+        {
+            "time": "1347927280657",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927281158",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 36
+                }
+            ]
+        },
+        {
+            "time": "1347927281657",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 37
+                }
+            ]
+        },
+        {
+            "time": "1347927282157",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927282655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 40
+                }
+            ]
+        },
+        {
+            "time": "1347927283156",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927283656",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 25
+                }
+            ]
+        },
+        {
+            "time": "1347927284156",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 21
+                }
+            ]
+        },
+        {
+            "time": "1347927284655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 12
+                }
+            ]
+        },
+        {
+            "time": "1347927285155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 14
+                }
+            ]
+        },
+        {
+            "time": "1347927285655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 14
+                }
+            ]
+        },
+        {
+            "time": "1347927286155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927286654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 30
+                }
+            ]
+        },
+        {
+            "time": "1347927287155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 30
+                }
+            ]
+        },
+        {
+            "time": "1347927287654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 35
+                }
+            ]
+        },
+        {
+            "time": "1347927288160",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927288655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 7
+                }
+            ]
+        },
+        {
+            "time": "1347927289155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 31
+                }
+            ]
+        },
+        {
+            "time": "1347927289655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927290155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 18
+                }
+            ]
+        },
+        {
+            "time": "1347927290655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 17
+                }
+            ]
+        },
+        {
+            "time": "1347927291188",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 26
+                }
+            ]
+        },
+        {
+            "time": "1347927291654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 20
+                }
+            ]
+        },
+        {
+            "time": "1347927292155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 19
+                }
+            ]
+        },
+        {
+            "time": "1347927292654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927293155",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "time": "1347927293654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 28
+                }
+            ]
+        },
+        {
+            "time": "1347927294154",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927294654",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 27
+                }
+            ]
+        },
+        {
+            "time": "1347927295154",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "time": "1347927295655",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 9
+                }
+            ]
+        },
+        {
+            "time": "1347927296154",
+            "chanels": [
+                {
+                    "chanel": "1",
+                    "value": 6
+                }
+            ]
+        }
+    ],
+    "start_time": "",
+    "end_time": "",
+    "count": "200",
+    "limits": [
+        {
+            "chanel": "1",
+            "min": "",
+            "max": ""
+        }
+    ]
+}

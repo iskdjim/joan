@@ -1,0 +1,120 @@
+.hider{
+  display:none;
+}
+
+.marginSpan{
+  margin-left:1rem;
+}
+
+#moveLeft,#moveRight{
+  cursor:pointer;
+}
+
+.yAxe{
+  height:25rem;
+  width:2rem;
+  border:1px solid #000;
+  float:left;
+  position:relative;
+}
+
+.xAxe{
+  width:600px;
+  height:2rem;
+  margin-left:2.1rem;
+  border:1px solid #000;  
+  position:relative;
+}
+
+.clearer{
+	clear:both;
+}
+
+.xAxeValue{
+  position:absolute;
+  bottom:0rem;
+  height:27rem;
+  width:2rem;
+  border-left:0.0625rem solid #ddd;
+  text-align:center;
+}
+
+.xAxeValue span{
+  bottom:0rem;
+  left:0rem;
+  position:absolute;
+}
+
+.yAxeValue{
+  position:absolute;
+  left:0rem;
+  height:1rem;
+  width:2rem;
+  border-bottom:0.0625rem solid #000;
+  text-align:center;
+}
+
+#y0{
+  bottom:0px;
+}
+
+#y1{
+  bottom:80px;	
+}
+
+#y2{
+  bottom:160px;	
+}
+
+#y3{
+  bottom:240px;	
+}
+
+#y4{
+  bottom:320px;	
+}
+
+#x0{
+  left:0px;	
+}
+
+#x1{
+  left:60px;	
+}
+
+#x2{
+  left:120px;	
+}
+
+#x3{
+  left:180px;	
+}
+
+#x4{
+  left:240px;	
+}
+
+#x5{
+  left:300px;	
+}
+
+#x6{
+  left:360px;	
+}
+
+#x7{
+  left:420px;	
+}
+
+#x8{
+  left:480px;	
+}
+
+#x9{
+  left:540px;	
+}
+
+.naviButtons{
+  padding-top:1rem;
+}
+
