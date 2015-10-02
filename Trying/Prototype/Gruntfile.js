@@ -31,21 +31,18 @@ module.exports = function (grunt) {
         },
         open: {
             dev: {
-                path: 'http://localhost/www/Diplarbeit/joan/Trying/Chart-Prototype/'
+                path: 'http://localhost/www/Diplarbeit/joan/Trying/Prototype/'
             }
         },
         compress: {
 			 main: {
 			    options: {
-			      archive: 'chart.zip'
+			      archive: 'prototype.zip'
 			    },
 			    files: [
 			      {src: ['index.html'], dest: '/'},  
 			      {src: ['package.json'], dest: '/'}, 
 			      {src: ['Gruntfile.js'], dest: '/'}, 
-			      {src: ['svg/**'], dest: '/'}, 
-			      {src: ['canvas2d/**'], dest: '/'}, 
-			      {src: ['webgl/**'], dest: '/'}, 
 			      {src: ['api/data.json'], dest: '/'}, 
 			      {src: ['api/data.min.js'], dest: '/'}, 
 			      {src: ['api/data_clean.json'], dest: '/'}, 
