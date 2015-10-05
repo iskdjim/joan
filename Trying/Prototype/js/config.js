@@ -1,9 +1,9 @@
 var data = [];
 var dataIndex;
 var g; // graph
-var shownSamples = 25; //  data points per timeseries
+var shownSamples = 500; //  data points per timeseries
 var render = true; // flag for stopping rerender of chart
-var timeInterval = 1000; // time interval for new data points
+var timeInterval = 500; // time interval for new data points
 var timeseriesCount = 3; // counter for time series
 var seriesHidder = []; // needed do hide single time series
 var seriesColors = ["#00ff00", "#ff0000", "#0000ff"];

@@ -11,7 +11,12 @@ function init(){
     }
 	    
     startInterval();
-   
+    
+    // play and stop button definition
+    $('#stop').click(function(){ render = false; });
+    $('#play').click(function(){ render = true; });
+    $('#myChartHolder').dblclick(function(){ render = true; });
+         
     // create graph
     g = new Dygraph(document.getElementById(chartDestinationId), data,{
       drawPoints: true,
@@ -24,19 +29,18 @@ function init(){
       visibility: seriesHidder,
       labels: seriesLabels,
       colors: seriesColors,
-      pointSize : 4,
+      pointSize :3,
       strokeWidth: 3,
-        highlightSeriesOpts: {
-          /*strokeWidth: 3,
-          strokeBorderWidth: 1,*/
-          highlightCircleSize: 6
-        }
+      highlightSeriesOpts: {
+        /*strokeWidth: 3,
+        strokeBorderWidth: 1,*/
+        highlightCircleSize:4
+      },
+      zoomCallback: function(minX, maxX, yRanges) {
+        $('#stop').trigger("click");
+ 
+      }
     });
-      
-    // play and stop button definition
-    $('#stop').click(function(){ render = false; });
-    $('#play').click(function(){ render = true; });
-      
     // create event listener for a download button
     // used for download image of chart
     document.getElementById(downloadImageElementId).addEventListener('click', function() {
@@ -69,6 +73,8 @@ function init(){
   });
 }
 
+
+
 // function for getting new data point 
 function startInterval(){
   interval = setInterval(function(){
@@ -76,7 +82,7 @@ function startInterval(){
       var nextDataPoint = getNextPoints(dataIndex);
       dataIndex++;
       if(dataIndex > shownSamples){ 
-        //data.shift();
+        data.shift();
       }
      }
   }, timeInterval);	
