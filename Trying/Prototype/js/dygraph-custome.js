@@ -7,7 +7,7 @@ function init(){
     // use time series counter to fill seriesHidder
     for(var i=0;i<timeseriesCount;i++){
       seriesHidder[i] = true;
-      $('.serieslegenHolder').append('<input type="checkbox" class="timeseries" name="series_'+i+'" value="" id="series_'+i+'" checked><p class="legenColor" style="color:'+seriesColors[i]+'">'+seriesLabels[i+1]+'</p><div class="clearer"></div>')
+      $(seriesLegendElement).append('<input type="checkbox" class="timeseries" name="series_'+i+'" value="" id="series_'+i+'" checked><p class="legenColor" style="color:'+seriesColors[i]+'">'+seriesLabels[i+1]+'</p><div class="clearer"></div>')
     }
 	    
     startInterval();

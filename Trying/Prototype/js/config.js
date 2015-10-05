@@ -12,6 +12,7 @@ var minYAxis =  0.0;
 var maxYAxis = 170;
 var chartDestinationId = "myChartHolder"; // id of div element
 var downloadImageElementId = "download"; // id of download element
+var seriesLegendElement = ".serieslegenHolder"; // class or id
 var imageName = "graph.jpg";
 var yAxisLabel = "Value";
 var xAxisLabel = "Time";
