@@ -13,123 +13,28 @@
   <script src="libs/dygraph.js"></script>
   <script src="api/data.min.js"></script> 
   <script type="text/javascript" src="libs/dygraph-extras.js"></script>
-
-<script>
-  var data = [];
-  var g;
-  var render = true;
-  var timeInterval = 1000;
-  var hidder = [true,true,true];
-  $(function() {
-    var index = 0;
-    data.push([new Date(parseInt(1347927197173)), 144, 40,54]);
-
-    $(document).ready(function () {
-      var t = new Date();
-      interval = setInterval(function(){
-    	if(render){
-          var nextDataPoint = getNextPoints(index);
-	      index++;
-	      if(index > 100){
-	        data.shift();
-	      }
-    	}
-      }, timeInterval);
-
-      g = new Dygraph(document.getElementById("myChartHolder"), data,{
-        drawPoints: true,
-        showRoller: true,
-        valueRange: [0.0, 160],
-        visibility: hidder,
-        labels: ['Time', 'Time Series 1', 'Time Series 2','Time Series 3'],
-        colors: ["#00ff00", "#ff0000", "#0000ff"],
-        pointSize : 4,
-        strokeWidth: 3,
-        /*highlightSeriesOpts: {
-          strokeWidth: 3,
-          strokeBorderWidth: 1,
-          highlightCircleSize: 5
-        }*/
-      });
-   
-      $('#stop').click(function(){
-        render = false;
-      });
-
-      $('#play').click(function(){
-        render = true;
-      });
-      
-
-      document.getElementById('download').addEventListener('click', function() {
-      	  // g.resetZoom();
-
-  	  //
-  	      Dygraph.Export.asPNG(g,imgExport);
-  	     // console.log($(imgExport)));
-  	     // console.log(imgExport);
-  	  
-  	  	var canvas = document.createElement("canvas");
-  	  	canvas.setAttribute('id', "saveIMG");
-  	  	canvas.setAttribute('class', "download-canvas");
-  	  
-  	  	$('body').append(canvas);
-  	  	
-  	  	var image=document.createElement("img");
-  	  	image.setAttribute('src', $(imgExport).attr("src"));
-  	  	//console.log(image);
-  		canvas.width = image.width;
-  		canvas.height = image.height;
-  		canvas.getContext("2d").drawImage(image, 0, 0);
-
-          downloadCanvas(this, 'canvas', 'test.png');
-      });    
-      
-      function downloadCanvas(link, canvasId, filename) {
-          var canElement = document.getElementsByClassName("download-canvas");
-          link.href =  canElement[0].toDataURL();
-          link.download = filename;
-          console.log(link);
-          $('#saveIMG').remove();
-        }
-      $('.seriesLegend input').change(function(){
-        var hiddenId = $(this).attr('id').replace("tank_","");
-        if(hidder[hiddenId]){
-          hidder[hiddenId] = false;
-        }else{
-          hidder[hiddenId] = true;
-        }
-      });
-    });
-  });
-
-  function getNextPoints(index){
-    var x = jsonData[0]['values'][index]['time'];
-    var y_1 = jsonData[0]['values'][index]['y'];
-    var y_2 = jsonData[1]['values'][index]['y'];
-    var y_3 = jsonData[2]['values'][index]['y'];
-    data.push([new Date(parseInt(x)), y_1,y_2,y_3]);
-    g.updateOptions( { 'file': data } );
-  }
-</script>
+  <script type="text/javascript" src="js/dygraph-custome.js"></script>
+  <script type="text/javascript" src="js/config.js"></script>
+  <script>
+  	init();
+  </script>
 
 </head>
 <body>
-  <h1>Draw Realtime Time Series with dygraph.js</h1>
-  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
-  <br />
 <div id="myChartHolder" class="envis">
 </div>
- <image id="imgExport" style="display:none;width:600px; height:400px;" />
-  <div class="download">
-  	<a href='../prototype.zip'>Download source</a>
-  	<a id="download">Download Image</a>  	
-  </div>
+  <image id="imgExport" />
   <div class="seriesLegend">
     <p>Time Series</p>
-    <input type="checkbox" class="timeseries" name="tank_0" value="" id="tank_0" checked><p class="green" > Time series 1 </p><div class="clearer"></div>
-    <input type="checkbox" class="timeseries" name="tank_1" value="" id="tank_1" checked><p class="red" > Time series 2 </p><div class="clearer"></div>
-    <input type="checkbox" class="timeseries" name="tank_2" value="" id="tank_2" checked><p class="blue" > Time series 3 </p><div class="clearer"></div>
+    <div class="serieslegenHolder">
+    </div>
   </div>  
+  <div class="download">
+  	<a href='../prototype.zip'>Download source</a> <br />
+  	<a id="download">Download Image</a>  	
+  </div>
+  <div class="controllButtons">
+   <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
+  </div>
 </body>
 </html>
