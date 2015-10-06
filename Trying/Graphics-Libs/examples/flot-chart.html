@@ -56,11 +56,27 @@
 				//position: position,
 				//tickFormatter: euroFormatter
         }],
+		grid: {
+			hoverable: true
+		},
         legend: { position: "sw" },
         lines: {
           lineWidth: 4,
-        }
+          show: true
+        },
+		points: {
+			show: true
+		}
       });
+
+	  $("<div id='tooltip'></div>").css({
+        position: "absolute",
+        display: "none",
+        border: "1px solid #000",
+        padding: "2px",
+        "background-color": "#fff",
+        opacity: 0.90
+      }).appendTo("body");
 
       $('#stop').click(function(){
         render = false;
@@ -77,8 +93,19 @@
         }else{
           hidder[hiddenId] = true;
         }
-      });        
-      
+      });      
+
+      $("#placeholder").bind("plothover", function (event, pos, item) {
+        if (item) {
+          var x = item.datapoint[0].toFixed(2),
+          y = item.datapoint[1].toFixed(2);
+
+          $("#tooltip").html(item.series.label + " of " + x + " = " + y).css({top: item.pageY+5, left: item.pageX+5}).fadeIn(200);
+        }else{
+          $("#tooltip").hide();
+        }
+      });
+
       function update() {
         if(render){
           var nextDataPoint = getNextPoints(index);

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+  <link rel="stylesheet" href="../css/d3.css" type="text/css">
+
+		<script src="http://d3js.org/d3.v2.js"></script>
+  <script src="../libs/zepto.js"></script>
+  <script src="../libs/dygraph.js"></script>
+  <script src="../api/data.min.js"></script> 
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="../api/sample_data.js"></script>
+  <script src="../libs/line-graph.js"></script>
+		
+		
+<script>
+$(document).ready(function () {
+	var render = true;
+		/* 
+		 * If running inside bl.ocks.org we want to resize the iframe to fit both graphs
+		 */
+		 if(parent.document.getElementsByTagName("iframe")[0]) {
+			 parent.document.getElementsByTagName("iframe")[0].setAttribute('style', 'height: 650px !important');
+		 }
+	
+		 /*
+		 * Note how the 'data' object is added to here before rendering to provide decoration information.
+		 * <p>
+		 * This is purposefully done here instead of in data.js as an example of how data would come from a server
+		 * and then have presentation information injected into it (rather than as separate arguments in another object)
+		 * and passed into LineGraph.
+		 *
+		 * Also, CSS can be used to style colors etc, but this is also doable via the 'data' object so that the styling
+		 * of different data points can be done in code which is often more natural for display names, legends, line colors etc
+		 */
+		 // add presentation logic for 'data' object using optional data arguments
+		 data["displayNames"] = ["Time Series 1:","Time Series 2:","Time Series 3:"];
+		 data["colors"] = ["green","blue","red"];
+		 data["scale"] = "linear";
+		 
+
+		 // create graph now that we've added presentation config
+		var l1 = new LineGraph({containerId: 'myChartHolder', data: data});
+
+		   
+	      $('#stop').click(function(){
+	        render = false;
+	      });
+
+	      $('#play').click(function(){
+	        render = true;
+	      });
+		 
+	setInterval(function() {
+    	if(render){
+		/*
+		* The following will simulate live updating of the data (see dataA, dataB, dataC etc in data.js which are real examples)
+		* This is being simulated so this example functions standalone without a backend server which generates data such as data.js contains.
+		*/
+		// for each data series ...
+		var newData = [];
+		data.values.forEach(function(dataSeries, index) {
+			// take the first value and move it to the end
+			// and capture the value we're moving so we can send it to the graph as an update
+			console.log(dataSeries);
+			var v = dataSeries.shift();
+			dataSeries.push(v);
+			// put this value in newData as an array with 1 value
+			newData[index] = [v];
+		})
+		
+		// we will reuse dataA each time
+		dataA.values = newData;
+		// increment time 1 step
+		dataA.start = dataA.start + dataA.step;
+		dataA.end = dataA.end + dataA.step; 
+					
+		l1.slideData(dataA);
+    	}
+	}, 500);
+
+
+});			
+	</script>
+
+
+
+</head>
+<body>
+  <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
+  <br />
+<div id="myChartHolder">
+</div>
+  <div class="download">
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
+  <div class="seriesLegend">
+    <p>Time Series</p>
+    <input type="checkbox" class="timeseries" name="tank_0" value="" id="tank_0" checked><p class="green" > Time series 1 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_1" value="" id="tank_1" checked><p class="red" > Time series 2 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="tank_2" value="" id="tank_2" checked><p class="blue" > Time series 3 </p><div class="clearer"></div>
+  </div>  
+</body>
+</html>

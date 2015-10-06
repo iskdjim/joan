@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../css/reset.css"/>
+  <link rel="stylesheet" href="../css/normalise.css"/>
+  <link rel="stylesheet" href="../css/base.css"/>
+  <link rel="stylesheet" href="../css/perf.css"/>
+
+  <script src="../libs/zepto.js"></script>
+  <script src="../api/data.min.js"></script> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<style>
+
+</style>
+
+<script>
+
+var index = 0;
+var render = true;
+var data_values = [{name:'Series 1', id: 'series_0' , values:[]},{name:'Series 2', id: 'series_1', values:[]},{name:'Series 3', id: 'series_2', values:[]}];
+var data_date = [];
+var render = true;
+var seriesHidder = [false,false,false];
+$(document).ready(function () {
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+
+interval = setInterval(function(){
+	if(render){
+	
+      var nextDataPoint = getNextPoints(index);
+	      index++;
+	      //console.log(data_new);
+	      if(index > 100){
+	    	  data_new.shift();
+	      }
+
+
+var parseDate = d3.time.format("%Y%m%d").parse;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.wert); });
+    
+$("#myChartHolder").find("svg").remove();
+var svg = d3.select("#myChartHolder").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+	  console.log(data_date);
+	  x.domain(d3.extent(data_date, function(d) { return d.date; }));
+
+	  y.domain([
+	    d3.min(data_values, function(c) { return d3.min(c.values, function(v) { return v.wert; }); }),
+	    d3.max(data_values, function(c) { return d3.max(c.values, function(v) { return v.wert; }); })
+	  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Value");
+
+
+  
+  var element = svg.selectAll(".element")
+      .data(data_values)
+    .enter().append("g")
+      .attr("class", function(d) { var hidderClass = ""; if(seriesHidder[d.id.replace("series_","")]){ hidderClass="hidder"; } return "element "+hidderClass; })
+  	  .attr("id", function(d) { return d.id; });
+
+  element.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .attr('stroke-width', "3")
+      .style("stroke", function(d) { return colors(d.name); });
+
+
+  element.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.wert) + ")"; })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+  	}
+
+
+  }, 500);
+  
+  $('.timeseries').click(function(){
+	 var id = $(this).attr('id');
+	 var id = id.replace("serieslegend_","");
+	
+	 if(!$("#series_"+id).hasClass("hidder")){
+		 seriesHidder[id] = true;
+	 	$("#series_"+id).addClass("hidder");
+  	 }else{
+  		 seriesHidder[id] = false;
+	 	$("#series_"+id).removeClass("hidder");
+  	}
+  });
+  
+  $('#stop').click(function(){
+      render = false;
+    });
+
+    $('#play').click(function(){
+      render = true;
+    });
+	 
+
+  function getNextPoints(index){
+	  var x = jsonData[0]['values'][index]['time'];
+	  var date = (new Date(parseInt(x)));
+	  data_date.push({date:date});
+	  var y_values = [];
+	  for(var i=0;i<3;i++){
+		  data_values[i].values.push({date: date, wert: jsonData[i]['values'][index]['y']});
+	  }
+	  // refactor => find a way to used auto generated y data array
+	  
+  }
+  
+  function colors(name){
+     var colors = [];
+     colors["Series 1"] = "#00ff00";
+     colors["Series 2"] = "#ff0000";
+     colors["Series 3"] = "#0000ff";
+
+     return colors[name];
+  }
+});
+</script>
+
+</head>
+<body>
+  <h1>Draw Realtime Time Series with dygraph.js</h1>
+  <input type="button" class="" id="stop" value="stop" /> <input type="button" class="" id="play" value="play" />  
+  <br />
+<div id="myChartHolder" class="envis">
+</div>
+  <div class="download">
+  	<a href='../graphicLibs.zip'>Download source</a>
+  </div>
+  <div class="seriesLegend">
+    <p>Time Series</p>
+    <input type="checkbox" class="timeseries" name="series_0" value="" id="serieslegend_0" checked><p class="green" > Time series 1 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="series_1" value="" id="serieslegend_1" checked><p class="red" > Time series 2 </p><div class="clearer"></div>
+    <input type="checkbox" class="timeseries" name="series_2" value="" id="serieslegend_2" checked><p class="blue" > Time series 3 </p><div class="clearer"></div>
+  </div>  
+</body>
+</html>

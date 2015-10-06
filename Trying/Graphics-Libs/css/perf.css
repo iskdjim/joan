@@ -184,30 +184,29 @@ p + p {
 }
 
 .timeseries{
-  margin:5px;
+  margin:0.25rem;
   float:left;
 }
 
 .red{
   color:#ff0000;
   float:left;
-  font-size:14px;
-  margin:0px;
+  font-size:1rem;
+  margin:0;
 }
 
 .green{
   color:#00ff00;
   float:left;
-  font-size:14px;
-  margin:0px;
+  font-size:1rem;
+  margin:0;
 }
 
 .blue{
   color:#0000ff;
   float:left;
-  font-size:14px;
-  margin:0px;
-
+  font-size:1rem;
+  margin:0;
 }
 
 .clearer{
@@ -215,7 +214,7 @@ p + p {
 }
 
 .nvd3 g.nv-groups path.nv-line {
-  stroke-width: 4px;
+  stroke-width: 0.25rem;
 }
 
 .dygraph-axis-label.dygraph-axis-label-x{
@@ -224,4 +223,20 @@ p + p {
 
 #myChartHolder.envis div input{
   display:none !important;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
 }
