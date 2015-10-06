@@ -46,7 +46,6 @@ table tr td{
   width:20rem;
   float:left;
   margin-left:1rem;
-  margin-top:1rem;
 }
 
 .lineData{
@@ -188,40 +187,54 @@ p + p {
   float:left;
 }
 
-.red{
-  color:#ff0000;
+.legenColor{
   float:left;
   font-size:14px;
   margin:0px;
 }
 
-.green{
-  color:#00ff00;
-  float:left;
-  font-size:14px;
-  margin:0px;
-}
-
-.blue{
-  color:#0000ff;
-  float:left;
-  font-size:14px;
-  margin:0px;
-
-}
 
 .clearer{
   clear:both;
 }
 
-.nvd3 g.nv-groups path.nv-line {
-  stroke-width: 4px;
-}
 
 .dygraph-axis-label.dygraph-axis-label-x{
   font-size:10px;
 }
 
-#myChartHolder.envis div input{
+#imgExport{
+  display:none;
+  width:600px;
+  height:400px;	
+}
+
+#myChartHolder input{
   display:none !important;
+}
+
+.controllButtons{
+  width:20rem;
+  float:left;
+  margin-left:1rem;
+  margin-top:1rem;
+}
+
+.dygraph-legend{
+  width:190px !important;
+  padding:10px !important;
+  margin-left:50px !important;
+  background-color:rgba(255,255,255,.6) !important;
+  font-family: Arial, Verdana, serif !important;
+}
+
+.dygraph-legend span{
+	width:190px !important;
+	display:inherit !important;
+}
+
+
+
+.dygraph-legend .highlight {
+	border:1px solid black  !important;
 }
